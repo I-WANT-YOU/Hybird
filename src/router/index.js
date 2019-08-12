@@ -12,6 +12,11 @@ const router = new Router({
       component: () => import('../views/Testing.vue'),
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/login/Login.vue'),
+    },
+    {
       path: '/activity',
       name: 'activity',
       component: () => import('../views/activity/ActivityCenter.vue'),

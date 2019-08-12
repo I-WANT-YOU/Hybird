@@ -7,6 +7,7 @@ import 'amfe-flexible';
 import 'normalize.css';
 import './assets/css/common.css';
 
+import './assets/scripts/geetest';
 import './icons';
 
 import vVisible from '@/directive/v-visible';
