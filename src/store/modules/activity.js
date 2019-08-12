@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import * as Auth from '@utils/auth';
 import ActivityService from '@api/activity';
 import * as types from '../mutationTypes';
@@ -5,9 +6,13 @@ import * as types from '../mutationTypes';
 const state = {
   sign: {},
   products: {},
+  product: {},
 };
 
 const getters = {
+  isEnoughBgp: state => get(state.product, 'fbpis_enough', true),
+  isEnoughLevel: state => get(state.product, 'in_membership_level', true),
+  isEnoughStock: state => get(state.product, 'stock', -1) !== 0,
 };
 
 const mutations = {
@@ -16,6 +21,9 @@ const mutations = {
   },
   [types.GET_BGP_PRODUCTS](state, payload) {
     state.products = payload;
+  },
+  [types.GET_BGP_PRODUCT_DETAIL](state, payload) {
+    state.product = payload;
   },
 };
 
