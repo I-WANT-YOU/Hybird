@@ -21,6 +21,11 @@ const router = new Router({
       name: 'activity',
       component: () => import('../views/activity/ActivityCenter.vue'),
     },
+    {
+      path: '/activity/product/:id',
+      name: 'product-detail',
+      component: () => import('../views/activity/product/ProductDetail.vue'),
+    },
   ],
 });
 
