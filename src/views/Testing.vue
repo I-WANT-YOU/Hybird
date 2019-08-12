@@ -41,6 +41,11 @@ export default {
           text: '活动中心',
           to: '/activity',
         },
+        {
+          icon: 'free-postage',
+          text: '会员中心',
+          to: '/member',
+        },
       ],
     };
   },

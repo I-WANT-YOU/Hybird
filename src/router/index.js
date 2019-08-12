@@ -26,6 +26,16 @@ const router = new Router({
       name: 'product-detail',
       component: () => import('../views/activity/product/ProductDetail.vue'),
     },
+    {
+      path: '/member',
+      name: 'member',
+      component: () => import('../views/member/Member.vue'),
+    },
+    {
+      path: '/more-welfare',
+      name: 'welfare',
+      component: () => import('../views/member/MoreWelfare.vue'),
+    },
   ],
 });
 
