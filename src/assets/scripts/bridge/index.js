@@ -6,7 +6,7 @@ const Bridge = {
   ...Core,
 };
 
-export default function init() {
+export function init() {
   if (window && !window.Bridge) {
     window.Bridge = Bridge;
   }
