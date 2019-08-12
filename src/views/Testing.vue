@@ -26,7 +26,6 @@ import { Grid, GridItem, Toast } from 'vant';
 import { mapActions } from 'vuex';
 import BgainNavBar from '@/components/BgainNavBar.vue';
 
-
 export default {
   name: 'Testing',
   components: {
@@ -37,61 +36,6 @@ export default {
   data() {
     return {
       options: [
-        {
-          icon: 'like-o',
-          text: '登陆页',
-          to: '/login',
-        },
-        {
-          icon: 'phone-o',
-          text: '注册页',
-          to: '/register',
-        },
-        {
-          icon: 'friends-o',
-          text: '国籍选择页',
-          to: '/country',
-        },
-        {
-          icon: 'manager-o',
-          text: '找回登陆密码',
-          to: '/forgetpassword',
-        },
-        {
-          icon: 'bill-o',
-          text: '活期产品页',
-          to: '/product/current',
-        },
-        {
-          icon: 'shop-o',
-          text: '定期产品页',
-          to: '/product/fixed',
-        },
-        {
-          icon: 'chart-trending-o',
-          text: '基金产品页',
-          to: '/product/fund',
-        },
-        {
-          icon: 'user-o',
-          text: '我的',
-          to: '/mine',
-        },
-        {
-          icon: 'comment-o',
-          text: 'KYC',
-          to: '/mine/safety/kyc',
-        },
-        {
-          icon: 'label-o',
-          text: '密码设置',
-          to: '/mine/safety/password',
-        },
-        {
-          icon: 'info-o',
-          text: '安全中心',
-          to: '/mine/safety',
-        },
         {
           icon: 'free-postage',
           text: '活动中心',
