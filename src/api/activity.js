@@ -2,16 +2,54 @@ import request from '@utils/request';
 import { handlerResponse } from '@/utils/auth';
 
 class ActivityService {
-  static async login({ username, password, geetestOptions }) {
+  static async sign() {
     try {
       const requestOptions = {
-        url: '/auth/signin',
+        url: '/membership/sign',
+        method: 'post',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  static async getBgpProducts() {
+    try {
+      const requestOptions = {
+        url: '/integral-product/list-on-sale',
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  static async getBgpProductDetail(id) {
+    try {
+      const requestOptions = {
+        url: `/integral-product/product-details/${id}`,
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  // BGP 明细
+  static async getBgpTransferDetails() {
+    try {
+      const requestOptions = {
+        url: '/balance/get-user-balance-transfer-details',
         headers: { 'Content-Type': 'application/json' },
         method: 'post',
         data: {
-          username,
-          password,
-          ...geetestOptions,
+          currency: 'FBP',
         },
       };
       const response = await request(requestOptions);
@@ -21,11 +59,28 @@ class ActivityService {
     }
   }
 
-  static async getGeetestOptions() {
+  // BGP 兑换交易记录
+  static async getBgpTransferHistory() {
     try {
       const requestOptions = {
-        url: '/auth/get-geetest-settings',
+        url: '/integral-product/buy-history',
         method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  // 添加或更新收货地址
+  static async addOrUpdateAddress(options) {
+    try {
+      const requestOptions = {
+        url: '/address/insert-update-address',
+        headers: { 'Content-Type': 'application/json' },
+        method: 'post',
+        data: options,
       };
       const response = await request(requestOptions);
       return handlerResponse(response);
