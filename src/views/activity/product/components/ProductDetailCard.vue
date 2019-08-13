@@ -15,10 +15,13 @@
 </template>
 
 <script>
+import { isEmpty } from 'lodash';
 import { createNamespacedHelpers } from 'vuex';
+import Bridge from '@/config/bridge';
 import BgainButton from '@/components/BgainButton.vue';
 
 const { mapGetters } = createNamespacedHelpers('activity');
+const { mapState: mapUserState, mapActions: mapUserActions } = createNamespacedHelpers('user');
 
 export default {
   name: 'ProductDetailCard',
@@ -30,9 +33,14 @@ export default {
       type: Object,
       required: true,
     },
+    onShowDialog: {
+      type: Function,
+      required: true,
+    },
   },
   computed: {
     ...mapGetters(['isEnoughBgp', 'isEnoughLevel', 'isEnoughStock']),
+    ...mapUserState(['basicInfo']),
     buttonText() {
       if (!this.isEnoughBgp) {
         return '您的当前积分不足';
@@ -47,14 +55,24 @@ export default {
       return !this.isEnoughBgp || !this.isEnoughLevel || !this.isEnoughStock;
     },
   },
+  async mounted() {
+    try {
+      await this.getUserSummary();
+    } catch (error) {
+      throw error;
+    }
+  },
   methods: {
+    ...mapUserActions(['getUserSummary']),
     onClick() {
-      this.$router.push({
-        name: 'product-buy',
-        params: {
-          id: this.dataSource.id,
-        },
-      });
+      if (isEmpty(this.basicInfo)) {
+        Bridge.sendMessage({
+          module: 'auth',
+          action: 'goSignIn',
+        });
+      } else {
+        this.onShowDialog();
+      }
     },
   },
 };
