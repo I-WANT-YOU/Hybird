@@ -31,6 +31,18 @@ const router = new Router({
       name: 'product-buy',
       component: () => import('../views/activity/product/ProductBuy.vue'),
     },
+    // 会员中心
+    {
+      path: '/member',
+      name: 'member',
+      component: () => import('../views/member/Member.vue'),
+    },
+    // 更多福利
+    {
+      path: '/more-welfare',
+      name: 'welfare',
+      component: () => import('../views/member/MoreWelfare.vue'),
+    },
   ],
 });
 
