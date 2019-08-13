@@ -21,9 +21,6 @@
 </template>
 <script>
 import { level } from '../javascript/level';
-// "memberShipLevel": "V1", 当前等级
-// "membershipAmount": 0, 会员值
-// "nextMinMembershipNum": 1000, 到下一级
 
 export default {
   name: 'Progress',
