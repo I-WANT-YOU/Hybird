@@ -13,7 +13,13 @@
       />
       <Field v-model="tel" label-width="90px" label="+86" placeholder="请输入您的手机号码" />
       <div class="address__area" @click="showPop">
-        <Field v-model="addressText" disabled label-width="90px" label="所在地区" placeholder="请选择您的所在地" />
+        <Field
+          v-model="addressText"
+          disabled
+          label-width="90px"
+          label="所在地区"
+          placeholder="请选择您的所在地"
+        />
         <div class="address__area__icon">
           <svg-icon icon-class="next" class="icon__next" />
         </div>
