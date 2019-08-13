@@ -1,6 +1,6 @@
 <template>
   <div class="buy-card__container">
-    <div class="buy-card__title van-hairline--bottom">兑换信息</div>
+    <div class="buy-card__title van-hairline--bottom">{{title}}</div>
     <div class="buy-card__content">
       <div class="content__info--wrapper">
         <VanImage
@@ -33,6 +33,11 @@ export default {
     dataSource: {
       type: Object,
       required: true,
+    },
+    title: {
+      type: String,
+      required: false,
+      default: '兑换信息',
     },
   },
   computed: {

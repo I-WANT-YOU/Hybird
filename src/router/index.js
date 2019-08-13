@@ -31,6 +31,16 @@ const router = new Router({
       name: 'product-buy',
       component: () => import('../views/activity/product/ProductBuy.vue'),
     },
+    {
+      path: '/activity/product/:id/result/:orderId',
+      name: 'product-result',
+      component: () => import('../views/activity/product/ProductResult.vue'),
+    },
+    {
+      path: '/activity/product/:id/result-fail',
+      name: 'product-result-fail',
+      component: () => import('../views/activity/product/ProductResultFail.vue'),
+    },
     // 会员中心
     {
       path: '/member',

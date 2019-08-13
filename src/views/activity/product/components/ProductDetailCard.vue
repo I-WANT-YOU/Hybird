@@ -4,7 +4,11 @@
     <div class="detail__content">
       <div class="content__text">{{dataSource.description}}</div>
       <div class="content__button-wrapper">
-        <Button type="info" :fluid="true" :disabled="buttonDisabled">{{buttonText}}</Button>
+        <Button
+          type="info"
+          :fluid="true"
+          :disabled="buttonDisabled"
+          @click="onClick">{{buttonText}}</Button>
       </div>
     </div>
   </div>
@@ -41,6 +45,16 @@ export default {
     },
     buttonDisabled() {
       return !this.isEnoughBgp || !this.isEnoughLevel || !this.isEnoughStock;
+    },
+  },
+  methods: {
+    onClick() {
+      this.$router.push({
+        name: 'product-buy',
+        params: {
+          id: this.dataSource.id,
+        },
+      });
     },
   },
 };
