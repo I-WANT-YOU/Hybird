@@ -1,7 +1,7 @@
 <template>
   <div class="product-buy__container">
     <nav-bar title="兑换确认" />
-    <address-card :data-source="address" v-if="isShowAddress"/>
+    <address-card :data-source="address" v-if="isShowAddress" />
     <product-buy-info-card :data-source="product"/>
     <div class="buy__button--wrapper">
       <Button type="info" :fluid="true" @click="onBuyClick">确认兑换</Button>
