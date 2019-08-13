@@ -75,6 +75,11 @@ export default {
     };
   },
   async mounted() {
+    Toast.loading({
+      duration: 0,
+      forbidClick: true,
+      message: '加载中...',
+    });
     try {
       await this.getAddressDetail();
       if (this.address) {
@@ -93,7 +98,9 @@ export default {
         this.region = this.address.region;
         this.receiver = this.address.username;
       }
+      Toast.clear();
     } catch (error) {
+      Toast.clear();
       Toast(error);
     }
   },
