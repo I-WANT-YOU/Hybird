@@ -7,6 +7,7 @@ const state = {
   sign: {},
   products: {},
   product: {},
+  address: {},
 };
 
 const getters = {
@@ -24,6 +25,9 @@ const mutations = {
   },
   [types.GET_BGP_PRODUCT_DETAIL](state, payload) {
     state.product = payload;
+  },
+  [types.GET_ADDRESS_DETAIL](state, payload) {
+    state.address = payload;
   },
 };
 
@@ -83,6 +87,16 @@ const actions = {
       const response = await ActivityService.addOrUpdateAddress(params);
       const data = await Auth.handlerSuccessResponseV2(response);
       commit(types.GET_BGP_TRANSFER_HISTORY, data);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getAddressDetail({ commit }) {
+    try {
+      const response = await ActivityService.getAddressDetail();
+      const data = await Auth.handlerSuccessResponseV2(response);
+      commit(types.GET_ADDRESS_DETAIL, data);
     } catch (error) {
       throw error;
     }
