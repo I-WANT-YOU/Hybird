@@ -78,13 +78,13 @@ export default {
     try {
       await this.getAddressDetail();
       if (this.address) {
-        this.addressText = `${this.address.province}\\${this.address.city}\\${this.address.region}`;
+        this.addressText = `${this.address.province} ${this.address.city} ${this.address.region}`;
         if (this.address.province === '北京市'
           || this.address.province === '上海市'
           || this.address.province === '天津市'
           || this.address.province === '重庆市'
           || this.address.province === '澳门特别行政区') {
-          this.addressText = `${this.address.province}\\${this.address.region}`;
+          this.addressText = `${this.address.province} ${this.address.region}`;
         }
         this.username = this.address.receiver;
         this.tel = this.address.receiver_phone_num;
@@ -94,7 +94,7 @@ export default {
         this.receiver = this.address.username;
       }
     } catch (error) {
-      Toast(error.massage);
+      Toast(error);
     }
   },
   computed: {
@@ -120,9 +120,9 @@ export default {
         || area[0].code === '310000'
         || area[0].code === '820000'
         || area[0].code === '500000') {
-        str = `${area[0].name}\\${area[2].name}`;
+        str = `${area[0].name} ${area[2].name}`;
       } else {
-        str = `${area[0].name}\\${area[1].name}\\${area[2].name}`;
+        str = `${area[0].name} ${area[1].name} ${area[2].name}`;
       }
       this.province = area[0].name;
       this.city = area[1].name;
