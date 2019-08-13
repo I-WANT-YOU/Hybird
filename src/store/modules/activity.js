@@ -68,11 +68,10 @@ const actions = {
     }
   },
 
-  async buyBgpProduct({ commit }, id) {
+  async buyBgpProduct(context, id) {
     try {
       const response = await ActivityService.buyBgpProduct(id);
       const data = await Auth.handlerSuccessResponseV2(response);
-      commit(types.GET_PRODUCT_BUY_RESULT, data);
       router.push({
         name: 'product-result',
         params: {
