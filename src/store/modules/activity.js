@@ -1,6 +1,7 @@
 import { get } from 'lodash';
 import * as Auth from '@utils/auth';
 import ActivityService from '@api/activity';
+import router from '@router/index';
 import * as types from '../mutationTypes';
 
 const state = {
@@ -8,12 +9,14 @@ const state = {
   products: {},
   product: {},
   address: {},
+  buyResult: {},
 };
 
 const getters = {
   isEnoughBgp: state => get(state.product, 'fbpis_enough', true),
   isEnoughLevel: state => get(state.product, 'in_membership_level', true),
   isEnoughStock: state => get(state.product, 'stock', -1) !== 0,
+  orderId: state => get(state.buyResult, 'order_id', -1),
 };
 
 const mutations = {
@@ -28,6 +31,9 @@ const mutations = {
   },
   [types.GET_ADDRESS_DETAIL](state, payload) {
     state.address = payload;
+  },
+  [types.GET_PRODUCT_BUY_RESULT](state, payload) {
+    state.buyResult = payload;
   },
 };
 
@@ -57,6 +63,33 @@ const actions = {
       const response = await ActivityService.getBgpProductDetail(id);
       const data = await Auth.handlerSuccessResponseV2(response);
       commit(types.GET_BGP_PRODUCT_DETAIL, data);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async buyBgpProduct({ commit }, id) {
+    try {
+      const response = await ActivityService.buyBgpProduct(id);
+      const data = await Auth.handlerSuccessResponseV2(response);
+      commit(types.GET_PRODUCT_BUY_RESULT, data);
+      router.push({
+        name: 'product-result',
+        params: {
+          id,
+          orderId: data.order_id,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getBuyProductResultByOrderId({ commit }, id) {
+    try {
+      const response = await ActivityService.getBuyProductResultByOrderId(id);
+      const data = await Auth.handlerSuccessResponseV2(response);
+      commit(types.GET_PRODUCT_BUY_RESULT, data);
     } catch (error) {
       throw error;
     }

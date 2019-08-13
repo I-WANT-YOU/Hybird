@@ -41,6 +41,36 @@ class ActivityService {
     }
   }
 
+  static async buyBgpProduct(id) {
+    try {
+      const requestOptions = {
+        url: '/integral-product/buy',
+        headers: { 'Content-Type': 'application/json' },
+        method: 'post',
+        data: {
+          product_id: id,
+        },
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  static async getBuyProductResultByOrderId(id) {
+    try {
+      const requestOptions = {
+        url: `/integral-product/order-details/${id}`,
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   // BGP 明细
   static async getBgpTransferDetails() {
     try {
