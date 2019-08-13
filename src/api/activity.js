@@ -15,11 +15,55 @@ class ActivityService {
     }
   }
 
+  // 获取首页列表
   static async getBgpProducts() {
     try {
       const requestOptions = {
         url: '/integral-product/list-on-sale',
         method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  //  获取首页banner getBGPRecord
+  static async getBanner() {
+    try {
+      const requestOptions = {
+        url: '/integral-product/banners',
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  //  获取历史记录列表
+  static async getBGPRecord() {
+    try {
+      const requestOptions = {
+        url: '/integral-product/buy-history',
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  //  获取详情列表
+  static async getBGPDetailList() {
+    try {
+      const requestOptions = {
+        url: '/balance/get-user-balance-transfer-details',
+        method: 'post',
+        data: { currency: 'FBP' },
       };
       const response = await request(requestOptions);
       return handlerResponse(response);
