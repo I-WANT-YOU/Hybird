@@ -2,10 +2,12 @@
   <div class="more">
     <BgainNavBar title="更多福利" />
     <div class="more-con">
-      <div class="info-bg"></div>
+      <div class="info-bg">
+        <span class="text">Bgain平台会员介绍</span>
+      </div>
       <div class="getbgp">
         <div class="title">如何获取BGP会员值</div>
-        <div class="text">通过购买定期理财产品获得对应BGP外，还可以获得同等数量的BGp会员值，BGP会员值是提升会员等级的唯一标准。</div>
+        <div class="text">通过购买定期理财产品获得对应BGP外，还可以获得同等数量的BGP会员值，BGP会员值是提升会员等级的唯一标准。</div>
       </div>
       <div class="member">
         <div class="title">会员等级划分</div>
@@ -44,7 +46,25 @@ export default {
     .info-bg {
       width: 375px;
       height: 130px;
-      background: url("../../assets/images/member/member.svg");
+      background: url("../../assets/images/member/welfare.png");
+      background-size: 100% 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .text {
+        font-size: 26px;
+        height: 28px;
+        padding: 0;
+        background-image: -webkit-gradient(
+          linear,
+          0 0,
+          0 bottom,
+          from(rgba(240, 205, 140, 1)),
+          to(rgba(188, 151, 80, 1))
+        );
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
     }
     .title {
       font-size: 16px;
@@ -83,7 +103,7 @@ export default {
       font-size: 14px;
       color: #333333;
       letter-spacing: 0.2px;
-      padding: 28px 27px 0 24px;
+      padding: 28px 27px 30px 24px;
       line-height: 26px;
       .st {
         color: #151515;

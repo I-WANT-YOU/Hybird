@@ -5,11 +5,13 @@
       <div class="level">
         <div class="info">
           <div class="text">
-            <span>普通会员</span>
-            <span class="membership_amount">499/1000</span>
+            <span>{{levelText}}</span>
+            <span
+              class="membership_amount"
+            >{{option.membershipAmount}}/{{option.nextMinMembershipNum}}</span>
           </div>
           <div>
-            <svg-icon class="icon-level" :icon-class="`level${level}`" />
+            <svg-icon class="icon-level" :icon-class="`level${option.memberShipLevel}`" />
           </div>
         </div>
         <div class="progress">
@@ -32,11 +34,11 @@
         </div>
       </div>
       <div class="others">
-        <div class="get">
+        <div @click="onClick('获取')" class="get">
           <div class="text">快速获取BGP会员值</div>
           <div class="button">前往理财</div>
         </div>
-        <div class="get">
+        <div @click="onClick('邀友')" class="get">
           <div class="text">邀请好友赚BGP</div>
           <div class="button">分享好友</div>
         </div>
@@ -46,7 +48,11 @@
 </template>
 <script>
 import BgainNavBar from '@component/BgainNavBar.vue';
+import { createNamespacedHelpers } from 'vuex';
 import Progress from './components/Progress.vue';
+import { level, equitys } from './javascript/level';
+
+const { mapActions, mapState } = createNamespacedHelpers('user');
 
 export default {
   name: 'Member',
@@ -57,47 +63,39 @@ export default {
   data() {
     return {
       option: {
-        member_ship_level: 'V1',
-        membership_amount: 499,
-        next_min_membership_num: 1000,
+        memberShipLevel: 'V1',
+        membershipAmount: 0,
+        nextMinMembershipNum: 1000,
       },
-      level: 'V1',
-      equitys: [
-        {
-          icon: 'member-birthday',
-          text: '生日礼包',
-        },
-        {
-          icon: 'member-year',
-          text: '周年庆礼包',
-        },
-        {
-          icon: 'member-cash-withdrawal',
-          text: '提现手续费卷',
-        },
-        {
-          icon: 'member-conduct-financial',
-          text: '理财优惠卷',
-        },
-        {
-          icon: 'member-Investment',
-          text: '投资周报',
-        },
-        {
-          icon: 'member-gift',
-          text: '礼品卡',
-        },
-        {
-          icon: 'member-adviser',
-          text: '专属顾问',
-        },
-      ],
+      levelText: '普通会员',
+      equitys: [],
     };
   },
   methods: {
+    ...mapActions(['getUserSummary']),
     onSkip() {
       this.$router.push('/more-welfare');
     },
+    onClick(text) {
+      console.log(text);
+    },
+  },
+  computed: {
+    ...mapState(['basicInfo']),
+  },
+  async mounted() {
+    this.equitys = equitys;
+    try {
+      await this.getUserSummary();
+      this.option = {
+        memberShipLevel: this.basicInfo.member_ship_level,
+        membershipAmount: this.basicInfo.membership_amount,
+        nextMinMembershipNum: this.basicInfo.next_min_membership_num,
+      };
+      this.levelText = level.find(item => item.level === this.basicInfo.member_ship_level).text;
+    } catch (error) {
+      throw error;
+    }
   },
 };
 </script>
@@ -112,7 +110,8 @@ export default {
     .level {
       height: 160px;
       width: 375px;
-      background: #000;
+      background: url("../../assets/images/member/welfare.png");
+      background-size: 100% 100%;
       font-size: 14px;
       color: #e0c085;
       .info {
@@ -193,7 +192,8 @@ export default {
       .get {
         width: 345px;
         height: 80px;
-        background: url("../../assets/images/member/get.svg");
+        background: url("../../assets/images/member/get.svg") no-repeat;
+        background-size: 100% 100%;
         margin-top: 10px;
         display: flex;
         align-items: center;

@@ -42,7 +42,7 @@ export default {
           to: '/activity',
         },
         {
-          icon: 'free-postage',
+          icon: 'diamond-o',
           text: '会员中心',
           to: '/member',
         },

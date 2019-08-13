@@ -1,11 +1,11 @@
 <template>
   <div class="progress-wrap">
     <div class="progress">
-      <div class="level">V1</div>
+      <div class="level">{{option.memberShipLevel}}</div>
       <div class="progress-bar">
         <div class="bg"></div>
         <div class="show" :style="{width:progressNum}">
-          <div class="tip">{{option.membership_amount}}</div>
+          <div class="tip">{{option && option.membershipAmount}}</div>
         </div>
       </div>
       <div class="level-next">
@@ -20,31 +20,11 @@
   </div>
 </template>
 <script>
-// "member_ship_level": "V1", 当前等级
-// "membership_amount": 0, 会员值
-// "next_min_membership_num": 1000, 到下一级
-const level = [
-  {
-    level: 'V1',
-    text: '普通会员',
-  },
-  {
-    level: 'V2',
-    text: '初级会员',
-  },
-  {
-    level: 'V3',
-    text: '金牌会员',
-  },
-  {
-    level: 'V4',
-    text: '钻石会员',
-  },
-  {
-    level: 'V5',
-    text: '至尊会员',
-  },
-];
+import { level } from '../javascript/level';
+// "memberShipLevel": "V1", 当前等级
+// "membershipAmount": 0, 会员值
+// "nextMinMembershipNum": 1000, 到下一级
+
 export default {
   name: 'Progress',
   props: {
@@ -55,14 +35,14 @@ export default {
   },
   computed: {
     next() {
-      const index = level.findIndex(item => item.level === this.option.member_ship_level);
+      const index = level.findIndex(item => item.level === this.option.memberShipLevel);
       return level[index + 1];
     },
     level() {
-      return level.find(item => item.level === this.option.member_ship_level).text;
+      return level.find(item => item.level === this.option.memberShipLevel).text;
     },
     progressNum() {
-      return `${(this.option.membership_amount / this.option.next_min_membership_num) * 222}px`;
+      return `${(this.option.membershipAmount / this.option.nextMinMembershipNum) * 222}px`;
     },
   },
 };
