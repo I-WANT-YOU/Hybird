@@ -5,6 +5,7 @@ import * as types from '../mutationTypes';
 const state = {
   sign: {},
   products: {},
+  bannerList: {},
 };
 
 const getters = {
@@ -16,6 +17,9 @@ const mutations = {
   },
   [types.GET_BGP_PRODUCTS](state, payload) {
     state.products = payload;
+  },
+  [types.GET_BANNER_LIST](state, payload) {
+    state.bannerList = payload;
   },
 };
 
@@ -30,6 +34,7 @@ const actions = {
     }
   },
 
+  // 首页数据列表
   async getBgpProducts({ commit }) {
     try {
       const response = await ActivityService.getBgpProducts();
@@ -39,7 +44,16 @@ const actions = {
       throw error;
     }
   },
-
+  // 首页banner
+  async getBanner({ commit }) {
+    try {
+      const response = await ActivityService.getBanner();
+      const data = await Auth.handlerSuccessResponseV2(response);
+      commit(types.GET_BANNER_LIST, data);
+    } catch (error) {
+      throw error;
+    }
+  },
   async getBgpProductDetail({ commit }, id) {
     try {
       const response = await ActivityService.getBgpProductDetail(id);

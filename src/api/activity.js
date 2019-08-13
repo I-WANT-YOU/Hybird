@@ -15,10 +15,25 @@ class ActivityService {
     }
   }
 
+  // 获取首页列表
   static async getBgpProducts() {
     try {
       const requestOptions = {
         url: '/integral-product/list-on-sale',
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  //  获取首页banner
+  static async getBanner() {
+    try {
+      const requestOptions = {
+        url: '/integral-product/banners',
         method: 'get',
       };
       const response = await request(requestOptions);
