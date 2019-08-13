@@ -2,7 +2,7 @@
   <Field
     :label-width="labelWidth"
     label-class="bgain__field-override"
-    maxlength="50"
+    :maxlength="maxlength"
     :border="true"
     v-on="$listeners"
     v-bind="$attrs"
@@ -25,6 +25,11 @@ export default {
     labelWidth: {
       type: String,
       default: '80px',
+      required: false,
+    },
+    maxlength: {
+      type: String,
+      default: '50',
       required: false,
     },
   },
