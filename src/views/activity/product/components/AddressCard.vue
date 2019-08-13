@@ -1,7 +1,9 @@
 <template>
-  <div class="address-card__container">
+  <div class="address-card__container" @click="onGoAddress">
     <div class="address__wrapper" v-if="dataSource !== null">
-      <div class="address__name">{{dataSource.receiver}}</div>
+      <div class="address__name">{{dataSource.receiver}}
+        <span class="address__phone">{{dataSource.receiver_phone_num}}</span>
+      </div>
       <div class="address__address">{{dataSource.receiver_address}}</div>
     </div>
     <svg-icon icon-class="next" class="icon-next" v-if="dataSource !== null" />
@@ -19,6 +21,13 @@ export default {
     dataSource: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    onGoAddress() {
+      this.$router.push({
+        name: 'receiving-address',
+      });
     },
   },
 };
@@ -52,6 +61,13 @@ export default {
         font-size: 15px;
         color: #333333;
         line-height: 21px;
+      }
+
+      .address__phone {
+        font-size: 15px;
+        color: #999999;
+        line-height: 21px;
+        margin-left: 5px;
       }
     }
 
