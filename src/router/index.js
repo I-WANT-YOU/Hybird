@@ -21,6 +21,16 @@ const router = new Router({
       name: 'activity',
       component: () => import('../views/activity/ActivityCenter.vue'),
     },
+    {
+      path: '/BGPRecord',
+      name: 'BGPRecord',
+      component: () => import('../views/activity/BGPRecord.vue'),
+    },
+    {
+      path: '/BGPDetailList',
+      name: 'BGPDetailList',
+      component: () => import('../views/activity/BGPDetailList.vue'),
+    },
   ],
 });
 

@@ -36,7 +36,7 @@
             <span>FBP明细</span>
           </div>
         </div>
-        <div>
+        <div @click="toRecord">
           <img src="../../assets/images/active/integral.svg" alt="."/>
         </div>
       </div>
@@ -47,7 +47,7 @@
           <span>每日签到</span>
         </div>
         <div @click="signIn(isSign)">
-          <img :src="isSign?signIcon:unSignIcon" alt="."/>
+          <img :src="false?signIcon:unSignIcon" alt="."/>
         </div>
       </div>
     </div>
@@ -111,7 +111,7 @@ export default {
   data() {
     return {
       levelImg: '',
-      isLogin: false, // 是否登陆
+      isLogin: true, // 是否登陆
       isLoginText: '已签到',
       isSign: false, // 是否签到
       signIcon,
@@ -131,20 +131,27 @@ export default {
     ...mapActions('user', [
       'getUserSummary',
       'getUserIsSignIn',
-      'isSignInInfo',
     ]),
     ...mapActions('activity', [
       'getBgpProducts',
       'getBanner',
     ]),
 
+    // 跳往记录页面
+    toRecord() {
+      this.$router.push({
+        name: 'BGPRecord',
+      });
+    },
+
     // 签到
     signIn(hadSigned) {
-      if (hadSigned) { // 已签到
-        return false;
-      }
+      // if (hadSigned) { // 已签到
+      //   return false;
+      // }
       this.getUserIsSignIn().then(
         () => {
+          console.log(this.isSignInInfo);
           this.showSignIn = true;
           return false;
         },
@@ -197,6 +204,7 @@ export default {
   computed: {
     ...mapState('user', [
       'basicInfo',
+      'isSignInInfo',
     ]),
   },
   mounted() {
@@ -250,9 +258,7 @@ export default {
   .showPop{
     display: block!important;
   }
-  .hidePop{
-    isplay: none;
-  }
+  /*.set*/
 .activity__container{
   font-family: PingFangSC-Medium sans-serif;
   /*会员*/
@@ -411,7 +417,7 @@ export default {
     top: 0;
     .background{
       width: 100vw;
-      height: 100%;
+      height: 100vh;
       display: flex;
       opacity: 0.6;
       background: #000000;

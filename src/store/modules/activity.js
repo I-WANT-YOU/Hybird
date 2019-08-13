@@ -6,6 +6,8 @@ const state = {
   sign: {},
   products: {},
   bannerList: {},
+  recordList: {},
+  detailList: {},
 };
 
 const getters = {
@@ -20,6 +22,12 @@ const mutations = {
   },
   [types.GET_BANNER_LIST](state, payload) {
     state.bannerList = payload;
+  },
+  [types.GET_BGP_RECORD](state, payload) {
+    state.recordList = payload;
+  },
+  [types.GET_BGP_DETAIL_LIST](state, payload) {
+    state.detailList = payload;
   },
 };
 
@@ -54,6 +62,29 @@ const actions = {
       throw error;
     }
   },
+
+  // 获取用户BGP记录
+  async getBGPRecord({ commit }) {
+    try {
+      const response = await ActivityService.getBGPRecord();
+      const data = await Auth.handlerSuccessResponseV2(response);
+      commit(types.GET_BGP_RECORD, data);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // 获取用户BGP记录
+  async getBGPDetailList({ commit }) {
+    try {
+      const response = await ActivityService.getBGPDetailList();
+      const data = await Auth.handlerSuccessResponse(response);
+      commit(types.GET_BGP_DETAIL_LIST, data);
+    } catch (error) {
+      throw error;
+    }
+  },
+  //
   async getBgpProductDetail({ commit }, id) {
     try {
       const response = await ActivityService.getBgpProductDetail(id);
