@@ -31,6 +31,48 @@ const router = new Router({
       name: 'BGPDetailList',
       component: () => import('../views/activity/BGPDetailList.vue'),
     },
+    {
+      path: '/activity/product/:id',
+      name: 'product-detail',
+      component: () => import('../views/activity/product/ProductDetail.vue'),
+    },
+    {
+      path: '/activity/product/:id/buy',
+      name: 'product-buy',
+      component: () => import('../views/activity/product/ProductBuy.vue'),
+    },
+    {
+      path: '/activity/product/:id/result/:orderId',
+      name: 'product-result',
+      component: () => import('../views/activity/product/ProductResult.vue'),
+    },
+    {
+      path: '/activity/product/:id/result-fail',
+      name: 'product-result-fail',
+      component: () => import('../views/activity/product/ProductResultFail.vue'),
+    },
+    // 会员中心
+    {
+      path: '/member',
+      name: 'member',
+      component: () => import('../views/member/Member.vue'),
+    },
+    // 更多福利
+    {
+      path: '/more-welfare',
+      name: 'welfare',
+      component: () => import('../views/member/MoreWelfare.vue'),
+    },
+    {
+      path: '/address',
+      name: 'receiving-address',
+      component: () => import('../views/address/ReceivingAddress.vue'),
+    },
+    {
+      path: '/address-native',
+      name: 'receiving-address-native',
+      component: () => import('../views/address/ReceivingAddressCopy.vue'),
+    },
   ],
 });
 
