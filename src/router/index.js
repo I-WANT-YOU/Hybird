@@ -59,8 +59,8 @@ const router = new Router({
       component: () => import('../views/address/ReceivingAddress.vue'),
     },
     {
-      path: '/address1',
-      name: 'receiving-address1',
+      path: '/address-native',
+      name: 'receiving-address-native',
       component: () => import('../views/address/ReceivingAddressCopy.vue'),
     },
   ],
