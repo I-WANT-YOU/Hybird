@@ -411,7 +411,7 @@ export default {
     top: 0;
     .background{
       width: 100vw;
-      height: 100vh;
+      height: 100%;
       display: flex;
       opacity: 0.6;
       background: #000000;
