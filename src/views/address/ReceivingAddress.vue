@@ -77,7 +77,6 @@ export default {
   async mounted() {
     try {
       await this.getAddressDetail();
-      console.log(this.address);
       if (this.address) {
         this.addressText = `${this.address.province}\\${this.address.city}\\${this.address.region}`;
         if (this.address.province === '北京市'
@@ -110,7 +109,7 @@ export default {
       this.showAddress = false;
     },
     onConfirm(arr) {
-      this.address = this.formatArea(arr);
+      this.addressText = this.formatArea(arr);
       this.showAddress = false;
     },
     formatArea(area) {
@@ -133,10 +132,10 @@ export default {
     async onClick() {
       const telReg = /^\d{11}$/;
       const regu = /^[a-zA-Z\u4e00-\u9fa5]+$/;
-      if (!telReg.test(this.tel)) {
+      if (!regu.test(this.username)) {
+        Toast('收货人只能输入中英文');
+      } else if (!telReg.test(this.tel)) {
         Toast('手机号有误，请重新输入');
-      } else if (!regu.test(this.username)) {
-        Toast('用户名只能输入中英文');
       } else if (this.textarea.length < 5) {
         Toast('详情地址不少于5个字');
       } else {
@@ -152,7 +151,7 @@ export default {
           Toast('保存成功');
           this.$router.go(-1);
         } catch (error) {
-          Toast(error.massage);
+          Toast(error);
         }
       }
     },
