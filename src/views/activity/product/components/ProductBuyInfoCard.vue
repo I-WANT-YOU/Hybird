@@ -3,24 +3,45 @@
     <div class="buy-card__title van-hairline--bottom">兑换信息</div>
     <div class="buy-card__content">
       <div class="content__info--wrapper">
-        <VanImage height="86px" width="80px" src="https://img.yzcdn.cn/vant/cat.jpeg" style="margin-right: 16px"/>
+        <VanImage
+          height="86px"
+          width="80px"
+          :src="dataSource.thumbnail_url"
+          style="margin-right: 16px"/>
         <div class="content__info">
-          <div class="content__info-text van-ellipsis">米家驱蚊器基础版米家驱蚊版</div>
-          <div class="content__info-text"><span class="content__info-number">x1</span>90,000积分</div>
+          <div class="content__info-text van-ellipsis">{{dataSource.integral_product_name}}</div>
+          <div class="content__info-text">
+            <span class="content__info-number">x1</span>{{originPrice}}积分
+          </div>
         </div>
       </div>
-      <div class="content__price">8,0000</div>
+      <div class="content__price">{{price}}</div>
     </div>
   </div>
 </template>
 
 <script>
 import { Image } from 'vant';
+import { numberWithThousands } from '@utils/tools';
 
 export default {
   name: 'ProductBuyInfoCard',
   components: {
     VanImage: Image,
+  },
+  props: {
+    dataSource: {
+      type: Object,
+      required: true,
+    },
+  },
+  computed: {
+    price() {
+      return numberWithThousands(this.dataSource.fbpprice_record);
+    },
+    originPrice() {
+      return numberWithThousands(this.dataSource.origin_fbpprice_record);
+    },
   },
 };
 </script>
@@ -66,7 +87,7 @@ export default {
             font-size: 13px;
             color: #999999;
             line-height: 18px;
-            margin-right: 12px;
+            margin-right: 10px;
           }
         }
       }

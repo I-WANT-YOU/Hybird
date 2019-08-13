@@ -73,6 +73,20 @@ class ActivityService {
     }
   }
 
+  // 获取收货
+  static async getAddressDetail() {
+    try {
+      const requestOptions = {
+        url: '/address/address-detail',
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
   // 添加或更新收货地址
   static async addOrUpdateAddress(options) {
     try {
