@@ -74,15 +74,14 @@ export default {
   async mounted() {
     try {
       await this.getAddressDetail();
-      console.log(this.address);
       if (this.address) {
-        this.addressText = `${this.address.province}\\${this.address.city}\\${this.address.region}`;
+        this.addressText = `${this.address.province} ${this.address.city} ${this.address.region}`;
         if (this.address.province === '北京市'
           || this.address.province === '上海市'
           || this.address.province === '天津市'
           || this.address.province === '重庆市'
           || this.address.province === '澳门特别行政区') {
-          this.addressText = `${this.address.province}\\${this.address.region}`;
+          this.addressText = `${this.address.province} ${this.address.region}`;
         }
         this.username = this.address.receiver;
         this.tel = this.address.receiver_phone_num;
@@ -92,7 +91,7 @@ export default {
         this.receiver = this.address.username;
       }
     } catch (error) {
-      Toast(error.massage);
+      Toast(error);
     }
   },
   computed: {
@@ -107,7 +106,7 @@ export default {
       this.showAddress = false;
     },
     onConfirm(arr) {
-      this.address = this.formatArea(arr);
+      this.addressText = this.formatArea(arr);
       this.showAddress = false;
     },
     formatArea(area) {
@@ -118,9 +117,9 @@ export default {
         || area[0].code === '310000'
         || area[0].code === '820000'
         || area[0].code === '500000') {
-        str = `${area[0].name}\\${area[2].name}`;
+        str = `${area[0].name} ${area[2].name}`;
       } else {
-        str = `${area[0].name}\\${area[1].name}\\${area[2].name}`;
+        str = `${area[0].name} ${area[1].name} ${area[2].name}`;
       }
       this.province = area[0].name;
       this.city = area[1].name;
@@ -130,10 +129,10 @@ export default {
     async onClick() {
       const telReg = /^\d{11}$/;
       const regu = /^[a-zA-Z\u4e00-\u9fa5]+$/;
-      if (!telReg.test(this.tel)) {
+      if (!regu.test(this.username)) {
+        Toast('收货人只能输入中英文');
+      } else if (!telReg.test(this.tel)) {
         Toast('手机号有误，请重新输入');
-      } else if (!regu.test(this.username)) {
-        Toast('用户名只能输入中英文');
       } else if (this.textarea.length < 5) {
         Toast('详情地址不少于5个字');
       } else {
@@ -148,7 +147,7 @@ export default {
           });
           Toast('保存成功');
         } catch (error) {
-          Toast(error.massage);
+          Toast(error);
         }
       }
     },
