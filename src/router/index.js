@@ -43,6 +43,16 @@ const router = new Router({
       name: 'welfare',
       component: () => import('../views/member/MoreWelfare.vue'),
     },
+    {
+      path: '/address',
+      name: 'receiving-address',
+      component: () => import('../views/address/ReceivingAddress.vue'),
+    },
+    {
+      path: '/address1',
+      name: 'receiving-address1',
+      component: () => import('../views/address/ReceivingAddressCopy.vue'),
+    },
   ],
 });
 

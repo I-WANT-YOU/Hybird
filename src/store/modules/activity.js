@@ -91,7 +91,6 @@ const actions = {
       throw error;
     }
   },
-
   async getAddressDetail({ commit }) {
     try {
       const response = await ActivityService.getAddressDetail();
