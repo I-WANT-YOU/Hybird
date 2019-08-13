@@ -103,6 +103,9 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 0 20px;
+      text-align: center;
+      line-height: 24px;
 
       span {
         font-size: 16px;

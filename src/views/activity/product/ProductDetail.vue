@@ -15,8 +15,14 @@
       </swipe>
 
       <product-info-card :data-source="product" />
-      <product-detail-card :data-source="product" />
+      <product-detail-card :data-source="product" :on-show-dialog="onShow"/>
     </div>
+    <bgain-base-dialog
+      v-model="visible"
+      @cancel="onCancel"
+      @submit="onSubmit"
+      :content="content"
+    />
   </div>
 </template>
 
@@ -26,6 +32,8 @@ import { createNamespacedHelpers } from 'vuex';
 import {
   Swipe, SwipeItem, Image, Toast,
 } from 'vant';
+import { strip } from '@utils/tools';
+import BgainBaseDialog from '@/components/BgainBaseDialog.vue';
 import ProductDetailCard from './components/ProductDetailCard.vue';
 import ProductInfoCard from './components/ProductInfoCard.vue';
 import BgainNavBar from '@/components/BgainNavBar.vue';
@@ -35,6 +43,7 @@ const { mapActions, mapState } = createNamespacedHelpers('activity');
 export default {
   name: 'ProductDetail',
   components: {
+    BgainBaseDialog,
     NavBar: BgainNavBar,
     Swipe,
     SwipeItem,
@@ -45,12 +54,17 @@ export default {
   data() {
     return {
       current: 0,
+      visible: false,
     };
   },
   computed: {
     ...mapState(['product']),
     images() {
       return JSON.parse(get(this.product, 'detail_png_url', '[]'));
+    },
+    content() {
+      const { fbpprice_record: price, fbpamt_record: amount } = this.product;
+      return `该商品使用 ${price}BGP 兑换兑换后，剩余 ${strip(parseInt(amount, 10) - parseInt(price, 10))}BGP确定兑换？`;
     },
   },
   async mounted() {
@@ -69,6 +83,20 @@ export default {
     ...mapActions(['getBgpProductDetail']),
     onChange(index) {
       this.current = index;
+    },
+    onShow() {
+      this.visible = true;
+    },
+    onCancel() {
+      this.visible = false;
+    },
+    onSubmit() {
+      this.$router.push({
+        name: 'product-buy',
+        params: {
+          id: this.dataSource.id,
+        },
+      });
     },
   },
 };
