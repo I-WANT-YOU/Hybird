@@ -77,7 +77,7 @@ export default {
       this.$router.push({
         name: 'product-result',
         params: {
-          id,
+          orderId: id,
         },
       });
     },
@@ -113,7 +113,6 @@ export default {
   },
   mounted() {
     Toast.loading({
-      mask: true,
       message: '加载中...',
     });
     this.getBGPRecord().then(

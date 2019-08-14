@@ -42,7 +42,7 @@ const router = new Router({
       component: () => import('../views/activity/product/ProductBuy.vue'),
     },
     {
-      path: '/activity/product/:id/result/:orderId',
+      path: '/activity/product/result/:orderId',
       name: 'product-result',
       component: () => import('../views/activity/product/ProductResult.vue'),
     },

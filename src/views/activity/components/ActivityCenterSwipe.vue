@@ -42,9 +42,6 @@ export default {
       'bannerList',
     ]),
   },
-  mounted() {
-    console.log(this.bannerList);
-  },
 };
 </script>
 

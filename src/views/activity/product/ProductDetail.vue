@@ -1,6 +1,6 @@
 <template>
   <div class="product-detail__container">
-    <nav-bar title="商品详情页"/>
+    <nav-bar title="商品详情页" :on-arrow-click="onGoActivity"/>
     <div class="product-detail__content">
       <swipe @change="onChange" style="height: 240px">
         <swipe-item :key="image" v-for="image in images">
@@ -107,6 +107,11 @@ export default {
           },
         });
       }
+    },
+    onGoActivity() {
+      this.$router.push({
+        name: 'activity',
+      });
     },
   },
 };
