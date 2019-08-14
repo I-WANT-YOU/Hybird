@@ -2,21 +2,19 @@
   <div class="more">
     <BgainNavBar title="更多福利" />
     <div class="more-con">
-      <div class="info-bg">
-        <span class="text">Bgain平台会员介绍</span>
-      </div>
+      <img class="info-bg" src="../../assets/images/member/mask.png" alt />
       <div class="getbgp">
         <div class="title">如何获取BGP会员值</div>
         <div class="text">通过购买定期理财产品获得对应BGP外，还可以获得同等数量的BGP会员值，BGP会员值是提升会员等级的唯一标准。</div>
       </div>
       <div class="member">
         <div class="title">会员等级划分</div>
-        <svg-icon icon-class="member-level" class="member-level" />
+        <img class="member-level" src="../../assets/images/member/member-level-table.png" alt />
         <div class="text">BGP会员值自获取之日起有效期90天，每次回根据用户获取或失效BGP会员值实时计算用户会员等级。</div>
       </div>
       <div class="equity">
         <div class="title">会员权益</div>
-        <svg-icon icon-class="member-equity" class="member-level" />
+        <img class="member-level" src="../../assets/images/member/member-equity-table.png" alt />
         <div class="text">首次获得初级会员及更高级称谓，均可以获得对应的升级大礼包(红包、优惠卷等)奖励，升级礼包每个会员等级仅限领一次。</div>
       </div>
       <div class="follow">
@@ -46,25 +44,6 @@ export default {
     .info-bg {
       width: 375px;
       height: 130px;
-      background: url("../../assets/images/member/welfare.png");
-      background-size: 100% 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .text {
-        font-size: 26px;
-        height: 28px;
-        padding: 0;
-        background-image: -webkit-gradient(
-          linear,
-          0 0,
-          0 bottom,
-          from(rgba(240, 205, 140, 1)),
-          to(rgba(188, 151, 80, 1))
-        );
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
     }
     .title {
       font-size: 16px;

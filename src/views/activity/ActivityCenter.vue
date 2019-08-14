@@ -1,5 +1,5 @@
 <template>
-  <div class="activity__container">
+  <div class="activity__container" :class="{setContainer:showSignIn}">
     <nav-bar title="活动中心" :show-arrow="false" />
     <!--会员值 已登陆-->
     <div class="member-num" v-if="isLogin === true" @click="onGoMemberPage">
@@ -46,8 +46,8 @@
           <span>{{isSign?'已签到':'签到'}}</span>
           <span>每日签到</span>
         </div>
-        <div @click="signIn(isSign)">
-          <img :src="false?signIcon:unSignIcon" alt="."/>
+        <div @click="signIn(isSign)" >
+          <img :src="isSign?signIcon:unSignIcon" alt="." :class="{signInImage:isSign}"/>
         </div>
       </div>
     </div>
@@ -146,9 +146,9 @@ export default {
 
     // 签到
     signIn(hadSigned) {
-      // if (hadSigned) { // 已签到
-      //   return false;
-      // }
+      if (hadSigned) { // 已签到
+        return false;
+      }
       this.getUserIsSignIn().then(
         () => {
           console.log(this.isSignInInfo);
@@ -262,7 +262,16 @@ export default {
   .showPop{
     display: block!important;
   }
+  .signInImage{
+    width: 46px!important;
+    height: 46px!important;
+  }
   /*.set*/
+  .setContainer{
+    width: 100vw!important;
+    height: 100vh!important;
+    overflow: hidden;
+  }
 .activity__container{
   font-family: PingFangSC-Medium sans-serif;
   /*会员*/
@@ -338,7 +347,7 @@ export default {
   }
   /*积分和签到*/
   .member-account{
-    margin-top: 28px;
+    margin-top: 9px;
     display: flex;
     display: flex;
     justify-content: space-between;
@@ -347,6 +356,9 @@ export default {
       display: flex;
       justify-content: space-between;
       >div:nth-child(1){
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
         >div:nth-child(1){
           color: #333333;
           >span:nth-child(1){
@@ -369,6 +381,8 @@ export default {
       }
       >div:nth-child(2){
         margin-left: 14px;
+        display: flex;
+        align-items: flex-end;
         >img{
           width: 46px;
           height: 46px;
@@ -379,10 +393,11 @@ export default {
       padding-right: 30px;
       display: flex;
       justify-content: flex-end;
+      /*积分*/
       >div:nth-child(1){
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: flex-end;
         >span:nth-child(1){
           font-size: 13px;
           color: #333333;
@@ -394,11 +409,17 @@ export default {
           line-height: 17px;
         }
       }
+      /*签到*/
       >div:nth-child(2){
-        margin-left: 14px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        width: 55px;
+        height: 65px;
+        margin-left: 5px;
         >img{
-          width: 46px;
-          height: 46px;
+          width: 55px;
+          height: 65px;
         }
       }
     }
