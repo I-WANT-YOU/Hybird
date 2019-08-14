@@ -20,7 +20,9 @@
         交易记录
       </div>
       <div class="trade-content">
-        <div class ="trade-item" v-for="(item,index) in recordList" :key="index">
+        <div class ="trade-item" v-for="(item,index) in recordList" :key="index"
+             @click="toDetail(item.id)"
+        >
           <div class="image">
             <vant-image width="86px" height="80px" :src="item.thumbnail_url"/>
           </div>
@@ -70,6 +72,15 @@ export default {
     ...mapActions('activity', [
       'getBGPRecord',
     ]),
+    // 跳往详情页面
+    toDetail(id) {
+      this.$router.push({
+        name: 'product-result',
+        params: {
+          id,
+        },
+      });
+    },
 
     // 时间格式化
     createOrderDate(date) {

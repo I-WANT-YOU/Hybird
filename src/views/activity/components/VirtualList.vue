@@ -6,7 +6,8 @@
     </div>
     <div class="virtural-list">
       <ul>
-        <li v-for="(item,index) in products.VIRTUAL_WITH_BAR_CODES" :key="index">
+        <li v-for="(item,index) in products.VIRTUAL_WITH_BAR_CODES" :key="index"
+            @click="toGoodDetail(item.id)">
           <div>
             <van-image
               width="102"
@@ -38,13 +39,24 @@ export default {
       'products',
     ]),
   },
+  methods: {
+    /* 跳转实物详情 */
+    toGoodDetail(id) {
+      this.$router.push(
+        {
+          name: 'product-detail',
+          params: { id },
+        },
+      );
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
   /*已售磬*/
   .goodsState{
-    color:#FF5C5C;
+    color:#FF5C5C!important;
   }
   .textStyle{
     width:102px;

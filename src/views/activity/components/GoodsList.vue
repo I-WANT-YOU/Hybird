@@ -27,11 +27,6 @@ import { Image } from 'vant';
 
 export default {
   name: 'GoodsList',
-  data() {
-    return {
-      list: [1, 2, 3, 4, 5, 6, 7],
-    };
-  },
   components: {
     'van-image': Image,
   },
@@ -45,7 +40,7 @@ export default {
     toGoodDetail(id) {
       this.$router.push(
         {
-          name: '',
+          name: 'product-detail',
           params: { id },
         },
       );
@@ -57,7 +52,7 @@ export default {
 <style lang="scss" scoped>
   /*已售磬*/
   .goodsState{
-    color:#FF5C5C;
+    color:#FF5C5C!important;
   }
   .textStyle{
     width:150px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="activity__container">
+  <div class="activity__container" :class="{setContainer:showSignIn}">
     <nav-bar title="活动中心" :show-arrow="false" />
     <!--会员值 已登陆-->
     <div class="member-num" v-if="isLogin === true">
@@ -146,9 +146,9 @@ export default {
 
     // 签到
     signIn(hadSigned) {
-      // if (hadSigned) { // 已签到
-      //   return false;
-      // }
+      if (hadSigned) { // 已签到
+        return false;
+      }
       this.getUserIsSignIn().then(
         () => {
           console.log(this.isSignInInfo);
@@ -263,6 +263,11 @@ export default {
     height: 46px!important;
   }
   /*.set*/
+  .setContainer{
+    width: 100vw!important;
+    height: 100vh!important;
+    overflow: hidden;
+  }
 .activity__container{
   font-family: PingFangSC-Medium sans-serif;
   /*会员*/
