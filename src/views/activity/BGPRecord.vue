@@ -113,7 +113,6 @@ export default {
   },
   mounted() {
     Toast.loading({
-      mask: true,
       message: '加载中...',
     });
     this.getBGPRecord().then(

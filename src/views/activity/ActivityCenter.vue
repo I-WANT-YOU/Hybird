@@ -18,14 +18,14 @@
       <div class="background">
         <span>领取会员权益，获得更多奖励</span>
         <div>
-          <span>登录</span>
+          <span @click="onLogin">登录</span>
           <span>/</span>
-          <span>注册</span>
+          <span @click="onRegister">注册</span>
         </div>
       </div>
     </div>
     <!--会员积分和签到-->
-    <div class="member-account">
+    <div class="member-account" v-if="isLogin">
       <!--积分-->
       <div class="member-integral">
         <div>
@@ -91,6 +91,7 @@
 import Vue from 'vue';
 import { Toast } from 'vant';
 import { mapState, mapActions } from 'vuex';
+import Bridge from '@/config/bridge';
 import BgainNavBar from '@/components/BgainNavBar.vue';
 import ActivityCenterSwipe from './components/ActivityCenterSwipe.vue';
 import GoodList from './components/GoodsList.vue';
@@ -111,7 +112,7 @@ export default {
   data() {
     return {
       levelImg: '',
-      isLogin: true, // 是否登陆
+      isLogin: false, // 是否登陆
       isLoginText: '已签到',
       isSign: false, // 是否签到
       signIcon,
@@ -151,7 +152,6 @@ export default {
       }
       this.getUserIsSignIn().then(
         () => {
-          console.log(this.isSignInInfo);
           this.showSignIn = true;
           return false;
         },
@@ -163,6 +163,24 @@ export default {
         },
       );
       return false;
+    },
+    handleSetToken() {
+      this.getUserSummary().then(
+        () => {
+          Toast.clear();
+          this.formatUserInfo(this.basicInfo);// 获取数据
+          // 判断用户是否签到
+          this.isLogin = true;
+          this.isSign = this.basicInfo.had_membership_sign;
+        },
+        (err) => {
+          this.$toast.clear();
+          this.isLogin = false;
+          if (err.status) { this.$toast(errorMessage[err.status]); } else {
+            this.$toast('网络故障');
+          }
+        },
+      );
     },
     // 格式化用户会员数据
     formatUserInfo(userInfo) {
@@ -205,6 +223,18 @@ export default {
         name: 'member',
       });
     },
+    onLogin() {
+      Bridge.sendMessage({
+        module: 'auth',
+        action: 'goSignIn',
+      });
+    },
+    onRegister() {
+      Bridge.sendMessage({
+        module: 'auth',
+        action: 'goRegister',
+      });
+    },
   },
   computed: {
     ...mapState('user', [
@@ -216,23 +246,6 @@ export default {
     Toast.loading({
       message: '加载中...',
     });
-    // 判断用户是否登陆
-    //-------------------------
-    this.getUserSummary().then(
-      () => {
-        Toast.clear();
-        this.formatUserInfo(this.basicInfo);// 获取数据
-        // 判断用户是否签到
-        this.isSign = this.basicInfo.had_membership_sign;
-      },
-      (err) => {
-        this.$toast.clear();
-        if (err.status) { this.$toast(errorMessage[err.status]); } else {
-          this.$toast('网络故障');
-        }
-      },
-    );
-
     // 获取banner
     this.getBanner().then(
       () => {},
@@ -250,6 +263,13 @@ export default {
           this.$toast('网络故障');
         }
       },
+    );
+    Bridge.sendMessage(
+      {
+        module: 'active',
+        action: 'getToken',
+      },
+      this.handleSetToken,
     );
   },
   beforeDestroy() {

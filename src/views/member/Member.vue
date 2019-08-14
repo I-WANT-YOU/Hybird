@@ -34,21 +34,23 @@
         </div>
       </div>
       <div class="others">
-        <div @click="onClick('获取')" class="get">
+        <div class="get">
           <div class="text">快速获取BGP会员值</div>
-          <div class="button">前往理财</div>
+          <div class="button" @click="onGoFundPage">前往理财</div>
         </div>
-        <div @click="onClick('邀友')" class="get">
+        <div class="get">
           <div class="text">邀请好友赚BGP</div>
-          <div class="button">分享好友</div>
+          <div class="button" @click="onShare">分享好友</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { get } from 'lodash';
 import BgainNavBar from '@component/BgainNavBar.vue';
 import { createNamespacedHelpers } from 'vuex';
+import Bridge from '@/config/bridge';
 import Progress from './components/Progress.vue';
 import { level, equitys } from './javascript/level';
 
@@ -76,8 +78,28 @@ export default {
     onSkip() {
       this.$router.push('/more-welfare');
     },
-    onClick(text) {
-      console.log(text);
+    onGoFundPage() {
+      Bridge.sendMessage({
+        module: 'fund',
+        action: 'goFundPage',
+      });
+    },
+    onShare() {
+      const inviteCode = get(this.basicInfo, 'invitation_code', '');
+      if (inviteCode) {
+        Bridge.sendMessage({
+          module: 'active',
+          action: 'share',
+          params: {
+            type: 'web',
+            url: `${
+              window.location.origin
+            }/active/invitee?invite_code=${inviteCode}`,
+            title: '好友总动员，一起来赚钱，USDT免费送，独乐乐不如众乐乐~',
+            des: '邀请越多得越多，更有免费收益拿',
+          },
+        });
+      }
     },
   },
   computed: {

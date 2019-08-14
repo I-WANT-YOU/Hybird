@@ -44,6 +44,7 @@
 <script>
 import { Popup, Area, Toast } from 'vant';
 import { createNamespacedHelpers } from 'vuex';
+import Bridge from '@/config/bridge';
 import BgainBaseField from '@/components/BgainBaseField.vue';
 import BgainButton from '@/components/BgainButton.vue';
 import areaList from './area';
@@ -153,6 +154,10 @@ export default {
             receiver_address: this.textarea,
           });
           Toast('保存成功');
+          Bridge.sendMessage({
+            module: 'safety',
+            action: 'goSafetyCenter',
+          });
         } catch (error) {
           Toast(error);
         }
