@@ -84,6 +84,33 @@ const router = new Router({
       name: 'community-knowbgain',
       component: () => import('../views/community/KnowBgain.vue'),
     },
+    {
+      path: '/agreement',
+      name: 'agreement',
+      component: () => import('../views/agreement/Agreement.vue'),
+      children: [
+        {
+          path: 'privacy',
+          name: 'privacy',
+          component: () => import('../views/agreement/subpage/Privacy.vue'),
+        },
+        {
+          path: 'service',
+          name: 'service',
+          component: () => import('../views/agreement/subpage/Service.vue'),
+        },
+        {
+          path: 'disclaimer',
+          name: 'disclaimer',
+          component: () => import('../views/agreement/subpage/Disclaimer.vue'),
+        },
+        {
+          path: 'investment',
+          name: 'investment',
+          component: () => import('../views/agreement/subpage/Investment.vue'),
+        },
+      ],
+    },
   ],
 });
 
