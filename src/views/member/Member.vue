@@ -192,7 +192,7 @@ export default {
       .get {
         width: 345px;
         height: 80px;
-        background: url("../../assets/images/member/get.svg") no-repeat;
+        background: url("../../assets/images/member/get.png");
         background-size: 100% 100%;
         margin-top: 10px;
         display: flex;

@@ -114,7 +114,8 @@ export default {
           text-align: center;
           font-size: 11px;
           color: #654400;
-          background: url("../../../assets/images/member/progress.svg");
+          background: url("../../../assets/images/member/progress.png");
+          background-size: 100% 100%;
         }
       }
     }
