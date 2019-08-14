@@ -3,7 +3,7 @@
     <nav-bar title="兑换结果" :on-arrow-click="onContinue"/>
     <address-card :data-source="address" v-if="isShowAddress"/>
     <order-success-card :data-source="buyResult"/>
-    <product-buy-info-card title="兑换商品" :data-source="product"/>
+    <product-buy-info-card title="兑换商品" :data-source="buyResult"/>
     <div class="result__button--wrapper">
       <Button type="info" :fluid="true" @click="onContinue">继续兑换</Button>
     </div>
@@ -38,20 +38,19 @@ export default {
     Button: BgainButton,
   },
   computed: {
-    ...mapState(['address', 'product', 'buyResult']),
+    ...mapState(['address', 'buyResult']),
     isShowAddress() {
       return get(this.product, 'integral_product_type', 'VIRTUAL_WITH_BAR_CODES') === PRODUCT_TYPE.ENTITY;
     },
   },
   async mounted() {
-    const { id, orderId } = this.$route.params;
+    const { orderId } = this.$route.params;
     try {
       Toast.loading({
         duration: 0,
       });
       await Promise.all([
         this.getAddressDetail(),
-        this.getBgpProductDetail(id),
         this.getBuyProductResultByOrderId(orderId),
       ]);
       Toast.clear();
@@ -61,12 +60,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getAddressDetail', 'getBgpProductDetail', 'getBuyProductResultByOrderId']),
+    ...mapActions(['getAddressDetail', 'getBuyProductResultByOrderId']),
     onContinue() {
+      const { integral_product_id: productId = -1 } = this.buyResult;
       this.$router.push({
         name: 'product-detail',
         params: {
-          id: this.$route.params.id,
+          id: productId,
         },
       });
     },

@@ -120,7 +120,6 @@ const actions = {
       router.push({
         name: 'product-result',
         params: {
-          id,
           orderId: data.order_id,
         },
       });
