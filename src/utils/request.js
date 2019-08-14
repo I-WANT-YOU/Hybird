@@ -1,5 +1,4 @@
 import axios from 'axios';
-import router from '../router';
 
 import * as Auth from './auth';
 import baseUrl from '../config/baseUrl';
@@ -18,9 +17,9 @@ request.interceptors.request.use(
       requestConfig.headers.Authorization = `Bearer ${accessToken}`;
     }
 
-    // if (process.env.NODE_ENV === 'development') {
-    //   requestConfig.headers.Authorization = 'Bearer 10';
-    // }
+    if (process.env.NODE_ENV === 'development') {
+      requestConfig.headers.Authorization = 'Bearer 10';
+    }
 
     requestConfig.headers.language = 'ZH_CN';
 
@@ -34,9 +33,6 @@ request.interceptors.response.use(
   (error) => {
     if (error.response.status === 401) {
       Auth.removeToken();
-      router.replace({
-        path: '/login',
-      });
     }
     return Promise.reject(error);
   },
