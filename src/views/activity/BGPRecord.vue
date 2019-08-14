@@ -77,7 +77,7 @@ export default {
       this.$router.push({
         name: 'product-result',
         params: {
-          id,
+          orderId: id,
         },
       });
     },
