@@ -2,7 +2,7 @@
   <div class="activity__container">
     <nav-bar title="活动中心" :show-arrow="false" />
     <!--会员值 已登陆-->
-    <div class="member-num" v-if="isLogin === true">
+    <div class="member-num" v-if="isLogin === true" @click="onGoMemberPage">
       <div class="background">
         <div class="member-info">
           <span>{{userLevel}}</span>
@@ -200,6 +200,11 @@ export default {
       this.showSignIn = false;
       this.isSign = true;
     },
+    onGoMemberPage() {
+      this.$router.push({
+        name: 'member',
+      });
+    },
   },
   computed: {
     ...mapState('user', [
@@ -209,7 +214,6 @@ export default {
   },
   mounted() {
     Toast.loading({
-      mask: true,
       message: '加载中...',
     });
     // 判断用户是否登陆
