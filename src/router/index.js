@@ -73,6 +73,17 @@ const router = new Router({
       name: 'receiving-address-native',
       component: () => import('../views/address/ReceivingAddressCopy.vue'),
     },
+    // 加入社群
+    {
+      path: '/community/add',
+      name: 'community-add',
+      component: () => import('../views/community/AddCommunity.vue'),
+    },
+    {
+      path: '/community/knowbgain',
+      name: 'community-knowbgain',
+      component: () => import('../views/community/KnowBgain.vue'),
+    },
   ],
 });
 
