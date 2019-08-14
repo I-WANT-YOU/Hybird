@@ -6,7 +6,7 @@
     </div>
     <div class="goods-list">
       <ul>
-        <li v-for="(item,index) in products.ENTITY" :key="index">
+        <li v-for="(item,index) in products.ENTITY" :key="index" @click="toGoodDetail(item.id)">
           <van-image
             height="100"
             :src="item.thumbnail_url"
@@ -27,11 +27,6 @@ import { Image } from 'vant';
 
 export default {
   name: 'GoodsList',
-  data() {
-    return {
-      list: [1, 2, 3, 4, 5, 6, 7],
-    };
-  },
   components: {
     'van-image': Image,
   },
@@ -40,13 +35,24 @@ export default {
       'products',
     ]),
   },
+  methods: {
+    /* 跳转实物详情 */
+    toGoodDetail(id) {
+      this.$router.push(
+        {
+          name: 'product-detail',
+          params: { id },
+        },
+      );
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
   /*已售磬*/
   .goodsState{
-    color:#FF5C5C;
+    color:#FF5C5C!important;
   }
   .textStyle{
     width:150px;
