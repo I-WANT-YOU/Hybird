@@ -1,7 +1,7 @@
 <template>
   <div class="virtural">
     <div class="virtural-title">
-      <span>Bgain红包</span>
+      <span>Bgain虚拟物品</span>
       <span>甄选优质好生活</span>
     </div>
     <div class="virtural-list">

@@ -6,7 +6,7 @@
     </div>
     <div class="goods-list">
       <ul>
-        <li v-for="(item,index) in products.ENTITY" :key="index">
+        <li v-for="(item,index) in products.ENTITY" :key="index" @click="toGoodDetail(item.id)">
           <van-image
             height="100"
             :src="item.thumbnail_url"
@@ -39,6 +39,17 @@ export default {
     ...mapState('activity', [
       'products',
     ]),
+  },
+  methods: {
+    /* 跳转实物详情 */
+    toGoodDetail(id) {
+      this.$router.push(
+        {
+          name: '',
+          params: { id },
+        },
+      );
+    },
   },
 };
 </script>
