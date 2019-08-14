@@ -40,6 +40,11 @@ import BgainNavBar from '@/components/BgainNavBar.vue';
 
 const { mapActions, mapState } = createNamespacedHelpers('activity');
 
+const LIMIT_ERROR = {
+  TOTAL_BY_DAY: '今日已到达兑换上限',
+  TOTAL: '已到达兑换上限',
+};
+
 export default {
   name: 'ProductDetail',
   components: {
@@ -91,12 +96,17 @@ export default {
       this.visible = false;
     },
     onSubmit() {
-      this.$router.push({
-        name: 'product-buy',
-        params: {
-          id: this.dataSource.id,
-        },
-      });
+      const { is_reach_limit_time: isReach, purchase_limit_type: limitType } = this.product;
+      if (isReach) {
+        Toast(LIMIT_ERROR[limitType]);
+      } else {
+        this.$router.push({
+          name: 'product-buy',
+          params: {
+            id: this.product.id,
+          },
+        });
+      }
     },
   },
 };
