@@ -46,6 +46,11 @@ export default {
           text: '会员中心',
           to: '/member',
         },
+        {
+          icon: 'diamond-o',
+          text: '邀友返利',
+          to: '/refer',
+        },
       ],
     };
   },
