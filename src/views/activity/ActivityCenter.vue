@@ -27,7 +27,7 @@
     <!--会员积分和签到-->
     <div class="member-account">
       <!--积分-->
-      <div class="member-integral">
+      <div class="member-integral"  @click="toRecord">
         <div>
           <div>
             <span>{{basicInfo.fbp_amt}}</span><span>积分</span>
@@ -36,17 +36,17 @@
             <span>FBP明细</span>
           </div>
         </div>
-        <div @click="toRecord">
+        <div>
           <img src="../../assets/images/active/integral.svg" alt="."/>
         </div>
       </div>
       <!--签到-->
-      <div class="member-sign">
+      <div class="member-sign" @click="signIn(isSign)">
         <div>
           <span>{{isSign?'已签到':'签到'}}</span>
           <span>每日签到</span>
         </div>
-        <div @click="signIn(isSign)" >
+        <div>
           <img :src="isSign?signIcon:unSignIcon" alt="." :class="{signInImage:isSign}"/>
         </div>
       </div>
