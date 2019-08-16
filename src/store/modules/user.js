@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import * as Auth from '@utils/auth';
 import UserService from '@api/user';
 import * as types from '../mutationTypes';
@@ -6,9 +7,13 @@ const state = {
   basicInfo: {},
   balance: [],
   isSignInInfo: {},
+  referInfo: {},
 };
 
 const getters = {
+  bonusSummary: state => get(state.referInfo.bonus_summary, 'all', 0),
+  inviteeDetailsList: state => get(state.referInfo, 'invitee_details_list', []),
+  rewardRecordList: state => get(state.referInfo, 'reward_record_list', []),
 };
 
 const mutations = {
@@ -20,6 +25,9 @@ const mutations = {
   },
   [types.GET_USER_IS_SIGN_IN](state, payload) {
     state.isSignInInfo = payload;
+  },
+  [types.GET_USER_REFER](state, payload) {
+    state.referInfo = payload;
   },
 };
 
@@ -44,6 +52,18 @@ const actions = {
       throw error;
     }
   },
+  // 邀友返利
+  async getReferInfo({ commit }) {
+    try {
+      const response = await UserService.getReferInfo();
+      const data = await Auth.handlerSuccessResponse(response);
+      console.log(data);
+      commit(types.GET_USER_REFER, data);
+    } catch (error) {
+      throw error;
+    }
+  },
+
   async getUserBalanceSummary({ commit }) {
     try {
       const response = await UserService.getUserBalanceSummary();

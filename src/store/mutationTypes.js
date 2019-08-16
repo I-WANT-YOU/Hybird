@@ -5,6 +5,7 @@ export const UNAUTHENTICATED = 'UNAUTHENTICATED';
 // User
 export const GET_USER_SUMMARY = 'GET_USER_SUMMARY';
 export const GET_USER_BALANCE_SUMMARY = 'GET_USER_BALANCE_SUMMARY';
+export const GET_USER_REFER = 'GET_USER_REFER';
 
 // Activity
 export const GET_SIGN_INFO = 'GET_SIGN_INFO';
