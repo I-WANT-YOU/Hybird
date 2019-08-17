@@ -30,10 +30,10 @@
       <div class="member-integral"  @click="toRecord">
         <div>
           <div>
-            <span>{{basicInfo.fbp_amt}}</span><span>积分</span>
+            <span>{{Math.floor(basicInfo.fbp_amt*100)/100}}</span>
           </div>
           <div>
-            <span>FBP明细</span>
+            <span>BGP明细</span>
           </div>
         </div>
         <div>
@@ -72,7 +72,7 @@
         <div>
           <span>获得&nbsp;</span>
           <span>{{isSignInInfo.fbp_amount}}</span>
-          <span>&nbsp;FBP</span>
+          <span>&nbsp;BGP</span>
         </div>
         <div>
           <span>已连续签到&nbsp;</span>
@@ -240,6 +240,9 @@ export default {
     ...mapState('user', [
       'basicInfo',
       'isSignInInfo',
+    ]),
+    ...mapState('activity', [
+      'bannerList',
     ]),
   },
   mounted() {
@@ -447,11 +450,13 @@ export default {
   /*轮播图*/
   .swipe-container{
     padding-top: 29px;
+    width: 100%;
     display: flex;
     justify-content: center;
   }
   .goods-container{
     padding-top: 29px;
+    width: 100%;
   }
   .coupon-container{
   }

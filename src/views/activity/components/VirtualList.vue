@@ -10,13 +10,12 @@
             @click="toGoodDetail(item.id)">
           <div>
             <van-image
-              width="102"
-              height="60"
+              class="self-image"
               :src="item.thumbnail_url"
             />
             <span class="textStyle">{{item.integral_product_name}}</span>
             <span :class="{goodsState:item.stock === 0}" >
-            {{item.stock === 0?'已售磬':item.fbpprice+'积分'}}
+            {{item.stock === 0?'已售磬':item.fbpprice+'BGP'}}
           </span>
           </div>
         </li>
@@ -54,6 +53,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /*图片*/
+  .self-image{
+    width: 102px;
+    height: 60px;
+  }
   /*已售磬*/
   .goodsState{
     color:#FF5C5C!important;

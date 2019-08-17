@@ -1,15 +1,15 @@
 <template>
   <div class="swipe">
-    <Swipe
+    <Swipe class="swiper_image"
       :autoplay="3000"
       indicator-color="white"
-      :width = 335
-      :height= 88
     >
-      <SwipeItem v-for="(item,index) in bannerList" :key="index">
-        <van-image
-          width="335"
-          height="88"
+      <SwipeItem
+        v-for="(item,index) in bannerList"
+        :key="index"
+        @click="()=>{console.log(item.url)}"
+      >
+        <van-image class="swiper_item_image"
           :src="item.img_url"
         />
       </SwipeItem>
@@ -42,13 +42,27 @@ export default {
       'bannerList',
     ]),
   },
+  mounted() {
+    console.log(1111);
+    console.log(this.bannerList);
+  },
 };
 </script>
 
 <style lang="scss" scoped>
   .swipe{
-    width :335px;
+    width :100%;
     height:88px;
+    display: flex;
+    justify-content: center;
+    .swiper_image{
+      width : 335px;
+      height: 88px;
+    }
+    .swiper_item_image{
+      width : 335px;
+      height: 88px;
+    }
   }
 
 </style>
