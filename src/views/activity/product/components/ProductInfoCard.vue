@@ -30,7 +30,8 @@ export default {
   },
   computed: {
     price() {
-      return numberWithThousands(this.dataSource.fbpprice_record);
+      return (this.dataSource.fbpprice_record);
+      // return numberWithThousands(this.dataSource.fbpprice_record);
     },
     originPrice() {
       return numberWithThousands(this.dataSource.origin_fbpprice_record);

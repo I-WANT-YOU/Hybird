@@ -1,15 +1,11 @@
 <template>
   <div class="swipe">
-    <Swipe
+    <Swipe class="swiper_image"
       :autoplay="3000"
       indicator-color="white"
-      :width = 335
-      :height= 88
     >
-      <SwipeItem v-for="(item,index) in bannerList" :key="index">
-        <van-image
-          width="335"
-          height="88"
+      <SwipeItem v-for="(item,index) in {bannerList} || [0]" :key="index">
+        <van-image class="swiper_item_image"
           :src="item.img_url"
         />
       </SwipeItem>
@@ -47,8 +43,18 @@ export default {
 
 <style lang="scss" scoped>
   .swipe{
-    width :335px;
+    width :100%;
     height:88px;
+    display: flex;
+    justify-content: center;
+    .swiper_image{
+      width : 335px;
+      height: 88px;
+    }
+    .swiper_item_image{
+      width : 335px;
+      height: 88px;
+    }
   }
 
 </style>
