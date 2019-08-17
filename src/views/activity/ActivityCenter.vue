@@ -14,13 +14,13 @@
       </div>
     </div>
     <!--未登录-->
-    <div class="member-num-unLogin"  v-else>
+    <div class="member-num-unLogin"  v-else  @click="onLogin">
       <div class="background">
         <span>领取会员权益，获得更多奖励</span>
         <div>
-          <span @click="onLogin">登录</span>
+          <span>登录</span>
           <span>/</span>
-          <span @click="onRegister">注册</span>
+          <span>注册</span>
         </div>
       </div>
     </div>
