@@ -23,6 +23,7 @@
 <script>
 import { mapState } from 'vuex';
 import { Image } from 'vant';
+import Bridge from '@/config/bridge';
 
 export default {
   name: 'GoodsList',
@@ -37,12 +38,17 @@ export default {
   methods: {
     /* 跳转实物详情 */
     toGoodDetail(id) {
-      this.$router.push(
-        {
-          name: 'product-detail',
-          params: { id },
-        },
-      );
+      Bridge.sendMessage({
+        module: 'active',
+        action: 'getUrl',
+        params: `/activity/product/${id}`,
+      });
+      // this.$router.push(
+      //   {
+      //     name: 'product-detail',
+      //     params: { id },
+      //   },
+      // );
     },
   },
 };

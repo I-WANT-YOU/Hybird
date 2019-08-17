@@ -140,8 +140,10 @@ export default {
 
     // 跳往记录页面
     toRecord() {
-      this.$router.push({
-        name: 'BGPRecord',
+      Bridge.sendMessage({
+        module: 'active',
+        action: 'getUrl',
+        params: '/BGPRecord',
       });
     },
 
@@ -219,8 +221,10 @@ export default {
       this.isSign = true;
     },
     onGoMemberPage() {
-      this.$router.push({
-        name: 'member',
+      Bridge.sendMessage({
+        module: 'active',
+        action: 'getUrl',
+        params: '/member',
       });
     },
     onLogin() {

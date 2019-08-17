@@ -1,17 +1,12 @@
 <template>
   <div class="swipe">
-    <Swipe class="swiper_image"
-      :autoplay="3000"
-      indicator-color="white"
-    >
+    <Swipe class="swiper_image" :autoplay="3000" indicator-color="white">
       <SwipeItem
         v-for="(item,index) in bannerList"
         :key="index"
-        @click="()=>{console.log(item.url)}"
+        @click="onSkip(item.url)"
       >
-        <van-image class="swiper_item_image"
-          :src="item.img_url"
-        />
+        <van-image class="swiper_item_image" :src="item.img_url" />
       </SwipeItem>
     </Swipe>
   </div>
@@ -22,6 +17,7 @@ import {
   Swipe, SwipeItem, Image,
 } from 'vant';
 import { mapState } from 'vuex';
+import Bridge from '@/config/bridge';
 
 export default {
   name: 'ActivityCenterSwipe',
@@ -36,6 +32,13 @@ export default {
     'van-image': Image,
   },
   methods: {
+    onSkip(url) {
+      Bridge.sendMessage({
+        module: 'active',
+        action: 'getUrl',
+        params: `${url}`,
+      });
+    },
   },
   computed: {
     ...mapState('activity', [
@@ -50,19 +53,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .swipe{
-    width :100%;
-    height:88px;
-    display: flex;
-    justify-content: center;
-    .swiper_image{
-      width : 335px;
-      height: 88px;
-    }
-    .swiper_item_image{
-      width : 335px;
-      height: 88px;
-    }
+.swipe {
+  width: 100%;
+  height: 88px;
+  display: flex;
+  justify-content: center;
+  .swiper_image {
+    width: 335px;
+    height: 88px;
   }
-
+  .swiper_item_image {
+    width: 335px;
+    height: 88px;
+  }
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="member">
-    <nav-bar title="会员权益" />
+    <nav-bar title="会员权益" :onArrowClick="goBack" />
     <div class="member-con">
       <div class="level">
         <div class="info">
@@ -77,6 +77,12 @@ export default {
     ...mapActions(['getUserSummary']),
     onSkip() {
       this.$router.push('/more-welfare');
+    },
+    goBack() {
+      Bridge.sendMessage({
+        module: 'auth',
+        action: 'getFinish',
+      });
     },
     onGoFundPage() {
       Bridge.sendMessage({
