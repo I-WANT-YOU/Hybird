@@ -83,7 +83,6 @@ export default {
       color: #666666;
       line-height: 17px;
       margin-left: 10px;
-
     }
   }
   /*列表*/
@@ -98,7 +97,7 @@ export default {
       flex-wrap: wrap;
       justify-content: space-between;
       >li{
-        width: 160px;
+        width: 47.5%;
         margin-bottom: 15px;
         padding-bottom: 20px;
         display: flex;

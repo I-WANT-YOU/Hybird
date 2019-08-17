@@ -453,6 +453,7 @@ export default {
   }
   .goods-container{
     padding-top: 29px;
+    width: 100%;
   }
   .coupon-container{
   }
