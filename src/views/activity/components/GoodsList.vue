@@ -7,8 +7,7 @@
     <div class="goods-list">
       <ul>
         <li v-for="(item,index) in products.ENTITY" :key="index" @click="toGoodDetail(item.id)">
-          <van-image
-            height="100"
+          <van-image class="self-img"
             :src="item.thumbnail_url"
           />
           <span class="textStyle">{{item.integral_product_name}}</span>
@@ -50,12 +49,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .self-img{
+    width:130px ;
+    height: 100px;
+  }
   /*已售磬*/
   .goodsState{
     color:#FF5C5C!important;
   }
   .textStyle{
-    width:150px;
+    width:120px;
     text-align: center;
     overflow:hidden;
     white-space:nowrap;
@@ -96,17 +99,14 @@ export default {
       justify-content: space-between;
       >li{
         width: 160px;
-        height: 170px;
         margin-bottom: 15px;
+        padding-bottom: 20px;
         display: flex;
         flex-direction:column;
         align-items: center;
         background: #FFFFFF;
         border-radius: 4px;
         box-shadow: 0 5px 10px 0 rgba(0,0,0,0.1);
-        >img{
-          height: 100px;
-        }
         >span:nth-child(2){
           margin-top: 14px;
           font-size: 12px;

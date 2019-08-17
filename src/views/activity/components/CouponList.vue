@@ -8,9 +8,7 @@
       <ul>
         <li v-for="(item,index) in products.COUPON" :key="index" @click="toGoodDetail(item.id)">
           <div>
-            <van-image
-            width="102"
-            height="60"
+            <van-image class="self-image"
             :src="item.thumbnail_url"
             />
             <span class="textStyle">{{item.integral_product_name}}</span>
@@ -53,6 +51,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /*图片*/
+  .self-image{
+    width: 102px;
+    height: 60px;
+  }
   /*已售磬*/
   .goodsState{
     color:#FF5C5C!important;
