@@ -37,7 +37,7 @@
           </div>
         </div>
         <div>
-          <img src="../../assets/images/active/integral.svg" alt="." />
+          <img src="../../assets/images/active/integral.svg" alt="" />
         </div>
       </div>
       <!--签到-->
