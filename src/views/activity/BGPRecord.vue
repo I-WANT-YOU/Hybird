@@ -31,7 +31,7 @@
               <span>{{item.integral_product_name}}</span>
               <div>
                 <span>x1</span>
-                <span>{{item.fbpprice}}积分</span>
+                <span>{{item.fbpprice}}FBP</span>
               </div>
             </div>
             <div class="deliverInfo">

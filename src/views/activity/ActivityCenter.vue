@@ -30,7 +30,7 @@
       <div class="member-integral"  @click="toRecord">
         <div>
           <div>
-            <span>{{basicInfo.fbp_amt}}</span><span>积分</span>
+            <span>{{Math.floor(basicInfo.fbp_amt*100)/100}}</span>
           </div>
           <div>
             <span>BGP明细</span>
@@ -240,6 +240,9 @@ export default {
     ...mapState('user', [
       'basicInfo',
       'isSignInInfo',
+    ]),
+    ...mapState('activity', [
+      'bannerList',
     ]),
   },
   mounted() {

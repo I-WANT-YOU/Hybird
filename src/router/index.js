@@ -111,6 +111,17 @@ const router = new Router({
         },
       ],
     },
+    // 静态banner
+    {
+      path: '/abcFund',
+      name: 'AbcFund',
+      component: () => import('../views/staticViews/AbcFund.vue'),
+    },
+    {
+      path: '/fundRelease',
+      name: 'FundRelease',
+      component: () => import('../views/staticViews/FundRelease.vue'),
+    },
   ],
 });
 
