@@ -4,7 +4,11 @@
       :autoplay="3000"
       indicator-color="white"
     >
-      <SwipeItem v-for="(item,index) in {bannerList} || [0]" :key="index">
+      <SwipeItem
+        v-for="(item,index) in bannerList"
+        :key="index"
+        @click="()=>{console.log(item.url)}"
+      >
         <van-image class="swiper_item_image"
           :src="item.img_url"
         />
@@ -37,6 +41,10 @@ export default {
     ...mapState('activity', [
       'bannerList',
     ]),
+  },
+  mounted() {
+    console.log(1111);
+    console.log(this.bannerList);
   },
 };
 </script>
