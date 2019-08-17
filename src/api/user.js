@@ -41,6 +41,20 @@ class UserService {
       throw new Error(error);
     }
   }
+
+  // 邀友返利
+  static async getReferInfo() {
+    try {
+      const requestOptions = {
+        url: '/user/get-refer-info',
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
 
 export default UserService;

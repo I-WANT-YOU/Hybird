@@ -122,6 +122,11 @@ const router = new Router({
       name: 'FundRelease',
       component: () => import('../views/staticViews/FundRelease.vue'),
     },
+    {
+      path: '/refer',
+      name: 'refer',
+      component: () => import('../views/refer/Refer.vue'),
+    },
   ],
 });
 
