@@ -137,6 +137,24 @@ const router = new Router({
       name: 'referRules',
       component: () => import('../views/refer/ReferRules.vue'),
     },
+    // 基金风险说明
+    {
+      path: '/risk-statement',
+      name: 'RiskStatement',
+      component: () => import('../views/staticViews/RiskStatement.vue'),
+    },
+    // 定期常见问题
+    {
+      path: '/fixed-questions',
+      name: 'FixedQuestions',
+      component: () => import('../views/staticViews/FixedQuestions.vue'),
+    },
+    // 定期常见问题
+    {
+      path: '/fixed-safety-security',
+      name: 'SafetySecurity',
+      component: () => import('../views/staticViews/SafetySecurity.vue'),
+    },
   ],
 });
 

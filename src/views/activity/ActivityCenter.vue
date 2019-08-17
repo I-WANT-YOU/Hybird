@@ -9,12 +9,12 @@
           <span>{{basicInfo.membership_amount}}/{{basicInfo.next_min_membership_num}}</span>
         </div>
         <div class="member-level">
-          <img :src="levelImg"/>
+          <img :src="levelImg" />
         </div>
       </div>
     </div>
     <!--未登录-->
-    <div class="member-num-unLogin"  v-else>
+    <div class="member-num-unLogin" v-else>
       <div class="background">
         <span>领取会员权益，获得更多奖励</span>
         <div>
@@ -27,7 +27,7 @@
     <!--会员积分和签到-->
     <div class="member-account" v-if="isLogin">
       <!--积分-->
-      <div class="member-integral"  @click="toRecord">
+      <div class="member-integral" @click="toRecord">
         <div>
           <div>
             <span>{{Math.floor(basicInfo.fbp_amt*100)/100}}</span>
@@ -37,7 +37,7 @@
           </div>
         </div>
         <div>
-          <img src="../../assets/images/active/integral.svg" alt="."/>
+          <img src="../../assets/images/active/integral.svg" alt="." />
         </div>
       </div>
       <!--签到-->
@@ -47,23 +47,25 @@
           <span>每日签到</span>
         </div>
         <div>
-          <img :src="isSign?signIcon:unSignIcon" alt="." :class="{signInImage:isSign}"/>
+          <img :src="isSign?signIcon:unSignIcon" alt="." :class="{signInImage:isSign}" />
         </div>
       </div>
     </div>
     <!--轮播图-->
-    <div class="swipe-container"><ActivityCenterSwipe/></div>
+    <div class="swipe-container">
+      <ActivityCenterSwipe :isLogin="isLogin" />
+    </div>
     <!--实物列表-->
     <div class="goods-container">
-      <GoodList/>
+      <GoodList />
     </div>
-     <!--优惠券列表-->
+    <!--优惠券列表-->
     <div class="coupon-container">
-      <CouponList/>
+      <CouponList />
     </div>
-     <!--虚拟物品-->
+    <!--虚拟物品-->
     <div class="virtual-container">
-      <VirtualList/>
+      <VirtualList />
     </div>
     <!--签到弹窗-->
     <div class="hadSignPop" :class="{showPop:showSignIn}">
@@ -80,7 +82,7 @@
           <span>&nbsp;天</span>
         </div>
         <div @click="closeSignIn">
-          <img src="../../assets/images/active/close_x.png" alt="."/>
+          <img src="../../assets/images/active/close_x.png" alt="." />
         </div>
       </div>
     </div>
@@ -91,6 +93,7 @@
 import Vue from 'vue';
 import { Toast } from 'vant';
 import { mapState, mapActions } from 'vuex';
+import { getToken } from '@utils/auth';
 import Bridge from '@/config/bridge';
 import BgainNavBar from '@/components/BgainNavBar.vue';
 import ActivityCenterSwipe from './components/ActivityCenterSwipe.vue';
@@ -158,6 +161,7 @@ export default {
           return false;
         },
         (err) => {
+          this.$toast(err);
           if (err.status) { this.$toast(errorMessage[err.status]); } else {
             this.$toast('网络故障');
           }
@@ -166,23 +170,26 @@ export default {
       );
       return false;
     },
-    handleSetToken() {
-      this.getUserSummary().then(
-        () => {
-          Toast.clear();
+    async handleSetToken() {
+      try {
+        Toast.clear();
+        // 判断是否登录
+        if (getToken()) {
+          await this.getUserSummary();
           this.formatUserInfo(this.basicInfo);// 获取数据
           // 判断用户是否签到
           this.isLogin = true;
           this.isSign = this.basicInfo.had_membership_sign;
-        },
-        (err) => {
-          this.$toast.clear();
-          this.isLogin = false;
-          if (err.status) { this.$toast(errorMessage[err.status]); } else {
-            this.$toast('网络故障');
-          }
-        },
-      );
+        }
+      } catch (error) {
+        Toast.clear();
+        if (error.status) {
+          this.$toast(errorMessage[error.status]);
+        } else {
+          this.$toast('网络故障');
+        }
+        this.isLogin = false;
+      }
     },
     // 格式化用户会员数据
     formatUserInfo(userInfo) {
@@ -253,31 +260,21 @@ export default {
     Toast.loading({
       message: '加载中...',
     });
-    // 获取banner
-    this.getBanner().then(
-      () => {},
-      (err) => {
-        if (err.status) { this.$toast(errorMessage[err.status]); } else {
-          this.$toast('网络故障');
-        }
-      },
-    );
-    // 获取商品信息
-    this.getBgpProducts().then(
-      () => {},
-      (err) => {
-        if (err.status) { this.$toast(errorMessage[err.status]); } else {
-          this.$toast('网络故障');
-        }
-      },
-    );
-    Bridge.sendMessage(
-      {
-        module: 'active',
-        action: 'getToken',
-      },
-      this.handleSetToken,
-    );
+    try {
+      // 获取banner
+      this.getBanner();
+      // 获取商品信息
+      this.getBgpProducts();
+      Bridge.sendMessage(
+        {
+          module: 'active',
+          action: 'getToken',
+        },
+        this.handleSetToken,
+      );
+    } catch (error) {
+      this.$toast(error);
+    }
   },
   beforeDestroy() {
     Toast.clear();
@@ -286,119 +283,119 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .showPop{
-    display: block!important;
-  }
-  .signInImage{
-    width: 46px!important;
-    height: 46px!important;
-  }
-  /*.set*/
-  .setContainer{
-    width: 100vw!important;
-    height: 100vh!important;
-    overflow: hidden;
-  }
-.activity__container{
+.showPop {
+  display: block !important;
+}
+.signInImage {
+  width: 46px !important;
+  height: 46px !important;
+}
+/*.set*/
+.setContainer {
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden;
+}
+.activity__container {
   font-family: PingFangSC-Medium sans-serif;
   /*会员*/
-  .member-num{
-    margin-top:9px;
+  .member-num {
+    margin-top: 9px;
     display: flex;
     justify-content: center;
-    .background{
+    .background {
       width: 335px;
       height: 140px;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      box-shadow: 0 4px 14px 0 rgba(39,46,210,0.5);
+      box-shadow: 0 4px 14px 0 rgba(39, 46, 210, 0.5);
       border-radius: 6px;
-      background: url('../../assets/images/active/member-background.svg');
-      background-size:100% 100%;
-      .member-info{
+      background: url("../../assets/images/active/member-background.svg");
+      background-size: 100% 100%;
+      .member-info {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        color: #FFFFFF;
+        color: #ffffff;
         padding-left: 26px;
-        >span:nth-child(1){
+        > span:nth-child(1) {
           margin-top: 34px;
           font-size: 23px;
           line-height: 32px;
         }
-        >span:nth-child(2){
+        > span:nth-child(2) {
           line-height: 21px;
           margin-top: 2px;
           font-size: 15px;
           letter-spacing: 0.14px;
         }
       }
-      .member-level{
+      .member-level {
         padding-right: 15px;
       }
     }
   }
-  .member-num-unLogin{
-    margin-top:9px;
+  .member-num-unLogin {
+    margin-top: 9px;
     display: flex;
     justify-content: center;
-    .background{
+    .background {
       width: 335px;
       height: 140px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      box-shadow: 0 4px 14px 0 rgba(39,46,210,0.5);
+      box-shadow: 0 4px 14px 0 rgba(39, 46, 210, 0.5);
       border-radius: 6px;
-      background: url('../../assets/images/active/member-background.svg');
-      background-size:100% 100%;
-      >span{
+      background: url("../../assets/images/active/member-background.svg");
+      background-size: 100% 100%;
+      > span {
         margin-top: 44px;
         font-size: 15px;
         line-height: 21px;
-        color: #FFFFFF;
+        color: #ffffff;
         letter-spacing: 0.14px;
       }
-      >div{
+      > div {
         margin-top: 9px;
         display: flex;
         justify-content: center;
         font-size: 16px;
         line-height: 22px;
-        color: #FFFFFF;
+        color: #ffffff;
         letter-spacing: 0.15px;
       }
     }
   }
   /*积分和签到*/
-  .member-account{
+  .member-account {
     margin-top: 9px;
     display: flex;
     display: flex;
     justify-content: space-between;
-    .member-integral{
+    .member-integral {
       padding-left: 30px;
       display: flex;
       justify-content: space-between;
-      >div:nth-child(1){
+      > div:nth-child(1) {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        >div:nth-child(1){
+        > div:nth-child(1) {
           color: #333333;
-          >span:nth-child(1){
+          > span:nth-child(1) {
             font-size: 20px;
             line-height: 28px;
           }
-          >span:nth-child(2){
+          > span:nth-child(2) {
             font-size: 10px;
             line-height: 14px;
           }
         }
-        >div:nth-child(2){
-          >span{
+        > div:nth-child(2) {
+          > span {
             display: block;
             font-size: 12px;
             color: #999999;
@@ -406,45 +403,45 @@ export default {
           }
         }
       }
-      >div:nth-child(2){
+      > div:nth-child(2) {
         margin-left: 14px;
         display: flex;
         align-items: flex-end;
-        >img{
+        > img {
           width: 46px;
           height: 46px;
         }
       }
     }
-    .member-sign{
+    .member-sign {
       padding-right: 30px;
       display: flex;
       justify-content: flex-end;
       /*积分*/
-      >div:nth-child(1){
+      > div:nth-child(1) {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        >span:nth-child(1){
+        > span:nth-child(1) {
           font-size: 13px;
           color: #333333;
           line-height: 28px;
         }
-        >span:nth-child(2){
+        > span:nth-child(2) {
           font-size: 12px;
           color: #999999;
           line-height: 17px;
         }
       }
       /*签到*/
-      >div:nth-child(2){
+      > div:nth-child(2) {
         display: flex;
         align-items: flex-end;
         justify-content: center;
         width: 55px;
         height: 65px;
         margin-left: 5px;
-        >img{
+        > img {
           width: 55px;
           height: 65px;
         }
@@ -452,24 +449,24 @@ export default {
     }
   }
   /*轮播图*/
-  .swipe-container{
+  .swipe-container {
     padding-top: 29px;
     width: 100%;
     display: flex;
     justify-content: center;
   }
-  .goods-container{
+  .goods-container {
     padding-top: 29px;
     width: 100%;
   }
-  .coupon-container{
+  .coupon-container {
   }
   // 弹窗
-  .hadSignPop{
+  .hadSignPop {
     position: absolute;
     display: none;
     top: 0;
-    .background{
+    .background {
       width: 100vw;
       height: 100vh;
       display: flex;
@@ -477,7 +474,7 @@ export default {
       background: #000000;
       z-index: 99;
     }
-    .back-img{
+    .back-img {
       position: absolute;
       left: 22.5px;
       top: 150px;
@@ -487,45 +484,45 @@ export default {
       flex-direction: column;
       align-items: center;
       background: url("../../assets/images/active/signSuccess.png");
-      background-size:320px 291px ;
+      background-size: 320px 291px;
       z-index: 120;
-      >div{
-        >span:nth-child(2){
-          color: #FF333333;
+      > div {
+        > span:nth-child(2) {
+          color: #ff333333;
           font-weight: bold;
         }
       }
-      >div:nth-child(1){
+      > div:nth-child(1) {
         margin-top: 158px;
         font-size: 20px;
         color: #333333;
-        >span{
+        > span {
           line-height: 25px;
         }
-        >span:nth-child(2){
+        > span:nth-child(2) {
           line-height: 32px;
           font-size: 30px;
         }
       }
-      >div:nth-child(2){
+      > div:nth-child(2) {
         font-size: 14px;
         color: #333333;
-        .span{
+        .span {
           line-height: 25px;
         }
-        >span:nth-child(2){
+        > span:nth-child(2) {
           line-height: 30px;
           font-size: 18px;
         }
       }
-      >div:nth-child(3){
+      > div:nth-child(3) {
         margin-top: 115px;
-        >img{
+        > img {
           width: 25px;
           height: 25px;
         }
       }
-      }
     }
+  }
 }
 </style>
