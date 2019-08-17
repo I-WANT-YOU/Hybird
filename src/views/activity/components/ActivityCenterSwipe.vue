@@ -1,11 +1,7 @@
 <template>
   <div class="swipe">
     <Swipe class="swiper_image" :autoplay="3000" indicator-color="white">
-      <SwipeItem
-        v-for="(item,index) in bannerList"
-        :key="index"
-        @click="onSkip(item.url)"
-      >
+      <SwipeItem v-for="(item,index) in bannerList" :key="index" @click="onSkip(item.url)">
         <van-image class="swiper_item_image" :src="item.img_url" />
       </SwipeItem>
     </Swipe>
@@ -21,6 +17,13 @@ import Bridge from '@/config/bridge';
 
 export default {
   name: 'ActivityCenterSwipe',
+  props: {
+    isLogin: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+  },
   data() {
     return {
       img: 'http://img2.imgtn.bdimg.com/it/u=180868167,273146879&fm=26&gp=0.jpg',
@@ -33,21 +36,24 @@ export default {
   },
   methods: {
     onSkip(url) {
-      Bridge.sendMessage({
-        module: 'active',
-        action: 'getUrl',
-        params: `${url}`,
-      });
+      if (this.isLogin) {
+        Bridge.sendMessage({
+          module: 'active',
+          action: 'getUrl',
+          params: `${url}`,
+        });
+      } else {
+        Bridge.sendMessage({
+          module: 'auth',
+          action: 'goSignIn',
+        });
+      }
     },
   },
   computed: {
     ...mapState('activity', [
       'bannerList',
     ]),
-  },
-  mounted() {
-    console.log(1111);
-    console.log(this.bannerList);
   },
 };
 </script>
