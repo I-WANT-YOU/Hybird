@@ -5,7 +5,13 @@
         <div class="num">{{bonusSummary}}</div>
         <div class="text">
           <span>已得奖励(USDT)</span>
-          <svg-icon icon-class="doubt" class="icon" />
+          <span @click="onTip" class="icon-wrap">
+            <svg-icon icon-class="doubt" class="icon" />
+          </span>
+          <div :class="['tip',showTip ? '' : 'active']">
+            <div class="tit">根据奖励发放时的币种汇率计算而得，此数据仅供参考</div>
+            <div class="top"></div>
+          </div>
         </div>
         <div class="refer">
           <div>
@@ -53,10 +59,15 @@ export default {
       } else {
         this.list = this.rewardRecordList;
       }
-      console.log(this.list);
     },
     onClick() {
 
+    },
+    onTip() {
+      this.showTip = true;
+      this.timer = setTimeout(() => {
+        this.showTip = false;
+      }, 3000);
     },
   },
   data() {
@@ -64,6 +75,8 @@ export default {
       active: '1',
       list: [],
       info: {},
+      time: null,
+      showTip: false,
     };
   },
   computed: {
@@ -105,10 +118,46 @@ export default {
       align-items: center;
       justify-content: center;
       margin-bottom: 35px;
-      .icon {
-        width: 14px;
-        height: 14px;
+      position: relative;
+      .icon-wrap {
         margin-left: 5px;
+        display: flex;
+        align-items: center;
+        .icon {
+          width: 14px;
+          height: 14px;
+        }
+      }
+      .tip {
+        position: absolute;
+        left: 50px;
+        top: 28px;
+        width: 273px;
+        height: 90px;
+        font-size: 14px;
+        color: #ffffff;
+        letter-spacing: 0.35px;
+        line-height: 24px;
+        z-index: 100;
+        opacity: 0.6;
+        background: #000000;
+        .tit {
+          display: flex;
+          padding: 20px 12px 0 17px;
+          text-align: left;
+        }
+        .top {
+          position: absolute;
+          width: 0;
+          height: 0;
+          top: -19px;
+          left: 175px;
+          border: 10px solid;
+          border-color: transparent transparent #000000;
+        }
+        &.active {
+          display: none;
+        }
       }
     }
     .refer {
@@ -155,13 +204,13 @@ export default {
       }
     }
   }
-  .button{
+  .button {
     position: fixed;
     left: 22px;
     bottom: 18px;
     width: 331px;
     height: 46px;
-    background: url('../../assets/images/invitation.svg');
+    background: url("../../assets/images/invitation.svg");
     background-size: 100% 100%;
   }
 }
