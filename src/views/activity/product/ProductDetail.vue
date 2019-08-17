@@ -37,6 +37,7 @@ import BgainBaseDialog from '@/components/BgainBaseDialog.vue';
 import ProductDetailCard from './components/ProductDetailCard.vue';
 import ProductInfoCard from './components/ProductInfoCard.vue';
 import BgainNavBar from '@/components/BgainNavBar.vue';
+import Bridge from '@/config/bridge';
 
 const { mapActions, mapState } = createNamespacedHelpers('activity');
 
@@ -109,9 +110,13 @@ export default {
       }
     },
     onGoActivity() {
-      this.$router.push({
-        name: 'activity',
+      Bridge.sendMessage({
+        module: 'auth',
+        action: 'getFinish',
       });
+      // this.$router.push({
+      //   name: 'activity',
+      // });
     },
   },
 };

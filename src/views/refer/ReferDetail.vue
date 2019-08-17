@@ -1,6 +1,5 @@
 <template>
   <div class="asset">
-    <BgainNavBar title="已得奖励"/>
     <div class="total-asset">
       <span class="num">{{asset}}</span>
       <span>USDT</span>
@@ -18,13 +17,12 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import BgainNavBar from '@component/BgainNavBar.vue';
+import { Toast } from 'vant';
+import Bridge from '@/config/bridge';
+import errorMessage from '../../constants/responseStatus';
 
 const { mapActions, mapGetters } = createNamespacedHelpers('user');
 export default {
-  components: {
-    BgainNavBar,
-  },
   computed: {
     ...mapGetters(['everyTokens', 'bonusSummary']),
   },
@@ -38,9 +36,22 @@ export default {
     };
   },
   async mounted() {
-    await this.getReferInfo();
-    this.asset = this.bonusSummary;
-    this.list = this.everyTokens;
+    Bridge.sendMessage({
+      module: 'active',
+      action: 'setTitle',
+      params: '已得奖励',
+    });
+    try {
+      await this.getReferInfo();
+      this.asset = this.bonusSummary;
+      this.list = this.everyTokens;
+    } catch (error) {
+      if (error.status) {
+        Toast(errorMessage[error.status]);
+      } else {
+        Toast('网络故障');
+      }
+    }
   },
 };
 </script>
@@ -81,7 +92,7 @@ export default {
         }
       }
     }
-    .item:last-child{
+    .item:last-child {
       border-bottom: 0;
     }
   }

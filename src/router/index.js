@@ -132,6 +132,11 @@ const router = new Router({
       name: 'referDetail',
       component: () => import('../views/refer/ReferDetail.vue'),
     },
+    {
+      path: '/refer-rules',
+      name: 'referRules',
+      component: () => import('../views/refer/ReferRules.vue'),
+    },
   ],
 });
 
