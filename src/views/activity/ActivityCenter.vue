@@ -14,11 +14,7 @@
       </div>
     </div>
     <!--未登录-->
-<<<<<<< HEAD
     <div class="member-num-unLogin"  v-else  @click="onLogin">
-=======
-    <div class="member-num-unLogin" v-else>
->>>>>>> aeb33af517b984619141963179c6285c2cfb3c57
       <div class="background">
         <span>领取会员权益，获得更多奖励</span>
         <div>
@@ -86,7 +82,7 @@
           <span>&nbsp;天</span>
         </div>
         <div @click="closeSignIn">
-          <img src="../../assets/images/active/close_x.png" alt="." />
+          <img src="../../assets/images/active/close_x.png" alt="" />
         </div>
       </div>
     </div>

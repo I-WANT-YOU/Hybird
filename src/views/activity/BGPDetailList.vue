@@ -50,7 +50,6 @@ export default {
     this.getBGPDetailList().then(
       () => {
         Toast.clear();
-        console.log(this.detailList);
       },
       (err) => {
         this.$toast.clear();
