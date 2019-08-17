@@ -2,7 +2,7 @@
   <div class="refer-wrap">
     <div class="info">
       <div class="asset">
-        <div class="num">{{bonusSummary}}</div>
+        <div @click="onSkip" class="num">{{bonusSummary}}</div>
         <div class="text">
           <span>已得奖励(USDT)</span>
           <span @click="onTip" class="icon-wrap">
@@ -35,6 +35,11 @@
     </div>
     <div class="list">
       <ReferCard v-for="(item,key) in list" :key="key" :option="item" :tab="active" />
+      <div class="blank" v-if="!list.length">
+        <svg-icon icon-class="mine-fund-no-record" class="icon" />
+        <div>暂无相关数据</div>
+        <div>快去邀请好友赚奖励的~</div>
+      </div>
     </div>
     <div class="button" @click="onClick"></div>
   </div>
@@ -42,7 +47,11 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
+import { Toast } from 'vant';
+import { get } from 'lodash';
+import Bridge from '@/config/bridge';
 import ReferCard from './components/ReferCard.vue';
+import errorMessage from '../../constants/responseStatus';
 
 const { mapActions, mapGetters, mapState } = createNamespacedHelpers('user');
 export default {
@@ -51,7 +60,7 @@ export default {
     ReferCard,
   },
   methods: {
-    ...mapActions(['getReferInfo']),
+    ...mapActions(['getReferInfo', 'getUserSummary']),
     onTab(text) {
       this.active = text;
       if (text === '1') {
@@ -61,7 +70,21 @@ export default {
       }
     },
     onClick() {
-
+      const inviteCode = get(this.basicInfo, 'invitation_code', '');
+      if (inviteCode) {
+        Bridge.sendMessage({
+          module: 'active',
+          action: 'share',
+          params: {
+            type: 'web',
+            url: `${
+              window.location.origin
+            }/active/invitee?invite_code=${inviteCode}`,
+            title: '好友总动员，一起来赚钱，USDT免费送，独乐乐不如众乐乐~',
+            des: '邀请越多得越多，更有免费收益拿',
+          },
+        });
+      }
     },
     onTip() {
       this.showTip = true;
@@ -69,11 +92,17 @@ export default {
         this.showTip = false;
       }, 3000);
     },
+    onSkip() {
+      this.$router.push('/refer-detail');
+    },
+    skipRules() {
+      this.$router.push('/refer-rules');
+    },
   },
   data() {
     return {
       active: '1',
-      list: [],
+      list: ['1'],
       info: {},
       time: null,
       showTip: false,
@@ -81,12 +110,31 @@ export default {
   },
   computed: {
     ...mapGetters(['bonusSummary', 'inviteeDetailsList', 'rewardRecordList']),
-    ...mapState(['referInfo']),
+    ...mapState(['referInfo', 'basicInfo']),
   },
   async mounted() {
-    await this.getReferInfo();
-    this.list = this.inviteeDetailsList;
-    this.info = this.referInfo;
+    window.skipRules = this.skipRules;
+    Bridge.sendMessage({
+      module: 'active',
+      action: 'getRefer',
+    });
+    Bridge.sendMessage({
+      module: 'active',
+      action: 'setTitle',
+      params: '邀请记录',
+    });
+    try {
+      await this.getUserSummary();
+      await this.getReferInfo();
+      this.list = this.inviteeDetailsList;
+      this.info = this.referInfo;
+    } catch (error) {
+      if (error.status) {
+        Toast(errorMessage[error.status]);
+      } else {
+        Toast('网络故障');
+      }
+    }
   },
 };
 </script>
@@ -201,6 +249,22 @@ export default {
       &.active {
         color: #ffb629;
         border-color: #ffb629;
+      }
+    }
+  }
+  .list {
+    .blank {
+      font-size: 14px;
+      color: #999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 88px;
+      line-height: 22px;
+      .icon {
+        width: 102px;
+        height: 78px;
+        margin-bottom: 12px;
       }
     }
   }
