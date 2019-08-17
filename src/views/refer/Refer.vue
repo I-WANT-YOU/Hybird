@@ -2,7 +2,7 @@
   <div class="refer-wrap">
     <div class="info">
       <div class="asset">
-        <div class="num">{{bonusSummary}}</div>
+        <div @click="onSkip" class="num">{{bonusSummary}}</div>
         <div class="text">
           <span>已得奖励(USDT)</span>
           <span @click="onTip" class="icon-wrap">
@@ -42,6 +42,8 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
+import { Toast } from 'vant';
+import Bridge from '@/config/bridge';
 import ReferCard from './components/ReferCard.vue';
 
 const { mapActions, mapGetters, mapState } = createNamespacedHelpers('user');
@@ -61,13 +63,19 @@ export default {
       }
     },
     onClick() {
-
+      Bridge.sendMessage({
+        module: 'active',
+        action: 'inviteFriends',
+      });
     },
     onTip() {
       this.showTip = true;
       this.timer = setTimeout(() => {
         this.showTip = false;
       }, 3000);
+    },
+    onSkip() {
+      this.$router.push('/refer-detail');
     },
   },
   data() {
@@ -84,9 +92,17 @@ export default {
     ...mapState(['referInfo']),
   },
   async mounted() {
-    await this.getReferInfo();
-    this.list = this.inviteeDetailsList;
-    this.info = this.referInfo;
+    Bridge.sendMessage({
+      module: 'active',
+      action: 'getRefer',
+    });
+    try {
+      await this.getReferInfo();
+      this.list = this.inviteeDetailsList;
+      this.info = this.referInfo;
+    } catch (error) {
+      Toast(error);
+    }
   },
 };
 </script>
