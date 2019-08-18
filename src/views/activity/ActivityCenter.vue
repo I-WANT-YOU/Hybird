@@ -254,6 +254,7 @@ export default {
     ]),
     ...mapState('activity', [
       'bannerList',
+      'products',
     ]),
   },
   mounted() {

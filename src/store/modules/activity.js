@@ -6,7 +6,11 @@ import * as types from '../mutationTypes';
 
 const state = {
   sign: {},
-  products: {},
+  products: {
+    ENTITY: [],
+    COUPON: [],
+    VIRTUAL_WITH_BAR_CODES: [],
+  },
   bannerList: {},
   recordList: [],
   detailList: {},

@@ -1,5 +1,5 @@
 <template>
-  <div class="goods">
+  <div class="goods" v-show="JSON.stringify(products.ENTITY) !== '[]'" >
     <div class="goods-title">
       <span>精选生活</span>
       <span>甄选优质好生活</span>
@@ -12,7 +12,7 @@
           />
           <span class="textStyle">{{item.integral_product_name}}</span>
           <span :class="{goodsState:item.stock === 0}">
-            {{item.stock === 0?'已售磬':item.fbpprice+'BGP'}}
+            {{item.stock === 0?'已售磬':fromatPrice(item.fbpprice)+'BGP'}}
           </span>
         </li>
       </ul>
@@ -23,6 +23,7 @@
 <script>
 import { mapState } from 'vuex';
 import { Image } from 'vant';
+import { numberWithThousands } from '@utils/tools';
 import Bridge from '@/config/bridge';
 
 export default {
@@ -36,6 +37,10 @@ export default {
     ]),
   },
   methods: {
+    // 千分位
+    fromatPrice(price) {
+      return numberWithThousands(price);
+    },
     /* 跳转实物详情 */
     toGoodDetail(id) {
       Bridge.sendMessage({
