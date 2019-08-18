@@ -37,7 +37,7 @@
           </div>
         </div>
         <div>
-          <img src="../../assets/images/active/integral.svg" alt="." />
+          <img src="../../assets/images/active/integral.svg" alt="" />
         </div>
       </div>
       <!--签到-->
@@ -373,12 +373,11 @@ export default {
   .member-account {
     margin-top: 9px;
     display: flex;
-    display: flex;
     justify-content: space-between;
     .member-integral {
       padding-left: 30px;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       > div:nth-child(1) {
         display: flex;
         flex-direction: column;
@@ -386,7 +385,7 @@ export default {
         > div:nth-child(1) {
           color: #333333;
           > span:nth-child(1) {
-            font-size: 20px;
+            font-size: 18px;
             line-height: 28px;
           }
           > span:nth-child(2) {
@@ -439,11 +438,11 @@ export default {
         align-items: flex-end;
         justify-content: center;
         width: 55px;
-        height: 65px;
+        height: 65.1px;
         margin-left: 5px;
         > img {
           width: 55px;
-          height: 65px;
+          height: 65.1px;
         }
       }
     }

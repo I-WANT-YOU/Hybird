@@ -1,6 +1,6 @@
 <template>
   <div class="record">
-    <nav-bar title="BGP记录" />
+    <nav-bar title="BGP记录"  :on-arrow-click="onGoActivity"/>
     <div class="tips">
       <span>BGP是Bgain平台激励用户投资行为的奖励</span>
     </div>
@@ -40,6 +40,10 @@
             </div>
           </div>
         </div>
+        <div class="blank-trade" v-if="recordList.length === 0">
+          <svg-icon icon-class="mine-fund-no-record" class="icon-noRecord" />
+          <span>暂无记录</span>
+        </div>
       </div>
     </div>
   </div>
@@ -52,6 +56,7 @@ import Vue from 'vue';
 import PublicMethods from '@utils/publicMethods';
 import BgainNavBar from '@/components/BgainNavBar.vue';
 import errorMessage from '../../constants/responseStatus';
+import Bridge from '@/config/bridge';
 
 Vue.use(Toast);
 export default {
@@ -72,6 +77,16 @@ export default {
     ...mapActions('activity', [
       'getBGPRecord',
     ]),
+    // 返回主页
+    onGoActivity() {
+      Bridge.sendMessage({
+        module: 'auth',
+        action: 'getFinish',
+      });
+      // this.$router.push({
+      //   name: 'activity',
+      // });
+    },
     // 跳往详情页面
     toDetail(id) {
       this.$router.push({
@@ -262,6 +277,23 @@ export default {
             color: #999999;
             line-height: 18px;
           }
+        }
+      }
+      // 空白记录
+      .blank-trade{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        .icon-noRecord{
+          width: 102px;
+          height: 78px;
+          margin-top: 140px;
+        }
+        >span{
+          margin-top:12px;
+          line-height: 20px;
+          font-size: 14px;
+          color: #999999
         }
       }
     }
