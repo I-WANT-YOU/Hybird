@@ -1,6 +1,7 @@
 // const dev = 'http://192.168.50.114:8091';
 const prod = 'http://demo.xjetry.top:8091';
 const dev = 'http://dev.xjetry.top:8084';
+// const dev = 'http://demo.xjetry.top:8091';
 
 
 const env = process.env.NODE_ENV || 'development';
