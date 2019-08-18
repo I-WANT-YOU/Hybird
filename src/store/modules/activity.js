@@ -8,7 +8,7 @@ const state = {
   sign: {},
   products: {},
   bannerList: {},
-  recordList: {},
+  recordList: [],
   detailList: {},
   product: {},
   address: {},
