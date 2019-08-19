@@ -1,5 +1,6 @@
 <template>
-  <div class="goods" v-show="JSON.stringify(products.ENTITY) !== '[]'" >
+  <div class="goods" v-show="products.ENTITY!==undefined
+  &&JSON.stringify(products.ENTITY) !== '[]'" >
     <div class="goods-title">
       <span>精选生活</span>
       <span>甄选优质好生活</span>

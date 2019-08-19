@@ -219,7 +219,7 @@ export default {
             break;
         }
       } catch (e) {
-        console.log(e);
+        throw e;
       }
     },
     // 关闭
@@ -265,7 +265,11 @@ export default {
       // 获取banner
       this.getBanner();
       // 获取商品信息
-      this.getBgpProducts();
+      this.getBgpProducts().then(
+        () => {
+        },
+        () => {},
+      );
       Bridge.sendMessage(
         {
           module: 'active',
