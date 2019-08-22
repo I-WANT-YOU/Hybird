@@ -137,13 +137,11 @@ const router = new Router({
       name: 'referRules',
       component: () => import('../views/refer/ReferRules.vue'),
     },
-
     {
       path: '/commonProblem', // lihui- 常见问题
       name: 'CommonProblem',
       component: () => import('../views/staticViews/CommonProblem.vue'),
     },
-
     // 基金风险说明
     {
       path: '/risk-statement',
