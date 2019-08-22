@@ -1,5 +1,6 @@
 <template>
-  <div class="coupon"  v-show="JSON.stringify(products.COUPON)!=='[]'" >
+  <div class="coupon"  v-show="products.COUPON!==undefined
+  &&JSON.stringify(products.COUPON)!=='[]'" >
     <div class="coupon-title">
       <span>Bgain红包</span>
       <span>加息券、满减券</span>

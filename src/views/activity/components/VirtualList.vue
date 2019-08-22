@@ -1,5 +1,8 @@
 <template>
-  <div class="virtural" v-show="JSON.stringify( products.VIRTUAL_WITH_BAR_CODES)!=='[]'">
+  <div class="virtural"
+       v-show="products.VIRTUAL_WITH_BAR_CODES !==undefined
+       && JSON.stringify( products.VIRTUAL_WITH_BAR_CODES)!=='[]'"
+  >
     <div class="virtural-title">
       <span>Bgain虚拟物品</span>
       <span>甄选优质好生活</span>
