@@ -170,6 +170,18 @@ const router = new Router({
       name: 'tradingCompetition',
       component: () => import('../views/trading-competition/TradingCompetition.vue'),
     },
+    // 第一赛季排行
+    {
+      path: '/rank-history',
+      name: 'RankHistory',
+      component: () => import('../views/trading-competition/RankHistory.vue'),
+    },
+    // 第一赛季排行
+    {
+      path: '/history-detail/:id',
+      name: 'HistoryDetail',
+      component: () => import('../views/trading-competition/HistoryDetail.vue'),
+    },
   ],
 });
 

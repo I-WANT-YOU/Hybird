@@ -9,6 +9,7 @@ const state = {
   top1: [],
   homeComments: {}, // 评论
   homeReports: {}, // 媒体报道
+  rankList: {},
 };
 // sorted_list
 const getters = {
@@ -16,6 +17,7 @@ const getters = {
   tabList: state => get(state.homeInfo, 'sorted_list', []),
   commentList: state => get(state.homeComments, 'sorted_list', []),
   updateTime: state => get(state.homeInfo, 'update_time', 1566389006000),
+  historyList: state => get(state.rankList, 'sorted_list', []),
 };
 const mutations = {
   [types.GET_TEAM_DETAIL](state, payload) {
@@ -32,6 +34,9 @@ const mutations = {
   },
   [types.GET_HOME_TOP1](state, payload) {
     state.top1 = { ...payload };
+  },
+  [types.GET_RANK_LIST](state, payload) {
+    state.rankList = { ...payload };
   },
 };
 
@@ -82,6 +87,17 @@ const actions = {
       const response = await raceService.getHomeReports(teamId);
       const data = await handlerSuccessResponse(response);
       commit(types.GET_HOME_REPORTS, data);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // 获取排行榜
+  async getRank({ commit }, fundType) {
+    try {
+      const response = await raceService.getRank(fundType);
+      const data = await handlerSuccessResponse(response);
+      commit(types.GET_RANK_LIST, data);
     } catch (error) {
       throw error;
     }
