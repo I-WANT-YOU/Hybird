@@ -30,11 +30,13 @@
           <!--日增长率-->
           <div class="netValue">
               <div>
-                <span>最新净值（{{formatMonthDate(teamDetailInfo.date)}}）</span>
-                <van-image :src="up" class="arrow-icon" v-show="teamDetailInfo.nav>0"/>
-                <van-image :src="down" class="arrow-icon" v-show="teamDetailInfo.nav<0"/>
+                <span>日增长率</span>
+                <van-image :src="up" class="arrow-icon"
+                           v-show="teamDetailInfo.ror.substring(0,1)!=='-'"/>
+                <van-image :src="down" class="arrow-icon"
+                           v-show="teamDetailInfo.ror.substring(0,1)==='-'"/>
               </div>
-              <span>{{teamDetailInfo.nav}}</span>
+              <span>{{teamDetailInfo.ror}}</span>
             </div>
         </div>
         <!--最近的数据-->
@@ -44,7 +46,7 @@
             <span>{{teamDetailInfo.change_weekly_percent||'--'}}</span>
             <div>
               <span>近一周</span>
-              <el-tooltip class="item" effect="dark" content="近一周净值涨跌幅" placement="top-start">
+              <el-tooltip effect="dark" content="近一周净值涨跌幅" placement="top">
                 <van-image :src="tips" class="icon-tips"></van-image>
               </el-tooltip>
             </div>
@@ -59,7 +61,7 @@
             <span>{{teamDetailInfo.change_monthly_percent||'--'}}</span>
             <div>
               <span>近一月</span>
-              <el-tooltip class="item" effect="dark" content="近一周净值涨跌幅" placement="top-start">
+              <el-tooltip  effect="light" content="近一月净值涨跌幅" placement="top">
                 <van-image :src="tips" class="icon-tips"></van-image>
               </el-tooltip>
             </div>
@@ -75,8 +77,8 @@
           <div class="recentData-item">
             <span>{{teamDetailInfo.change_since_begin_percent||'--'}}</span>
             <div>
-              <span>近一月</span>
-              <el-tooltip class="item" effect="dark" content="近一周净值涨跌幅" placement="top-start">
+              <span>成立以来</span>
+              <el-tooltip effect="light" content="成立以来净值涨跌幅" placement="bottom-end">
                 <van-image :src="tips" class="icon-tips"></van-image>
               </el-tooltip>
             </div>
@@ -777,7 +779,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+  .el-tooltip__popper{
+    font-size: 10px;
+    color: #FFFFFF;
+    height: 200px;
+  }
   /*tab切换样式*/
   .SelectedStyle{
     background: url("../../assets/images/detail/Tab-button.png");
@@ -804,6 +811,7 @@ export default {
         font-size: 20px;
         text-align: center;
         line-height: 44px;
+        color: #000;
       }
       .capital-title-middle{
         width: 240px;
@@ -814,6 +822,7 @@ export default {
         font-size: 20px;
         text-align: center;
         line-height: 44px;
+        color: #000;
       }
       .capital-title-long{
         width: 320px;
@@ -823,7 +832,8 @@ export default {
         background-size: 320px 44px;
         font-size: 20px;
         text-align: center;
-        line-height: 44px
+        line-height: 44px;
+        color: #000;
       }
       /*最近的数据*/
       .latestInfo{
@@ -846,9 +856,10 @@ export default {
              >span{
                font-size:12px;
                font-weight:600;
-               line-height:25px;
+               line-height:24px;
              }
              .arrow-icon{
+               margin-left: 5px;
                width: 11px;
                height: 12px;
              }
