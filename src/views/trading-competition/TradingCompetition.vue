@@ -123,6 +123,7 @@
         </div>
       </div>
     </div>
+    <div class="block"></div>
     <div class="team">
       <div class="team-title">团队追踪</div>
       <div class="team-info">停赛期间将持续跟进团队表现</div>
@@ -155,7 +156,12 @@
         <HomeTable :tableData="tableData" />
         <div v-show="showMores" v-if="(type === null || type === 'all')" class="more">
           <span @click="more">{{moreText}}</span>
-          <img src="../../assets/images/trading-competition/home/more.png" class="icon-more" alt />
+          <img
+            src="../../assets/images/trading-competition/home/more.png"
+            @click="more"
+            class="icon-more"
+            alt
+          />
         </div>
       </div>
     </div>
@@ -290,9 +296,9 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-  height: 100%;
-  background: url("../../assets/images/trading-competition/home/bg.png");
-  background-size: 100% 2540px;
+  background: url("../../assets/images/trading-competition/home/bg.png")
+    no-repeat;
+  background-size: 375px 1263px;
   padding-top: 51px;
   .league-match-wrap {
     display: flex;
@@ -555,12 +561,15 @@ export default {
       }
     }
   }
+  .block {
+    width: 100%;
+    height: 15px;
+  }
   .team {
     background: rgba(25, 24, 24, 1);
     border-radius: 3px;
     display: flex;
     flex-direction: column;
-    margin-top: 15px;
     .team-title {
       width: 122px;
       height: 26px;
