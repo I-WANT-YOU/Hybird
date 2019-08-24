@@ -72,5 +72,88 @@ const publicMethods = {
     const afterDate = `${year}-${month}-${day} ${hours}:${minute}`;
     return afterDate;
   },
+
+  // 创建月日时间
+  formateMonthDate(paramsDate) {
+    const time = new Date(paramsDate); // 毫秒转换为正常时间
+    let year = time.getFullYear();
+    let month = time.getMonth() + 1;
+    let day = time.getDate();
+    let hours = time.getHours();
+    let minute = time.getMinutes();
+    if (year < 10) {
+      year = `0${year}`;
+    }
+    if (month < 10) {
+      month = `0${month}`;
+    }
+    if (day < 10) {
+      day = `0${day}`;
+    }
+    if (hours < 10) {
+      hours = `0${hours}`;
+    }
+    if (minute < 10) {
+      minute = `0${minute}`;
+    }
+    const afterDate = `${month}-${day}`;
+    return afterDate;
+  },
+
+  formatChartYearData(paramsDate) {
+    const time = new Date(paramsDate); // 毫秒转换为正常时间
+    let year = time.getFullYear();
+    let month = time.getMonth() + 1;
+    let day = time.getDate();
+    let hours = time.getHours();
+    let minute = time.getMinutes();
+    let second = time.getSeconds();
+    if (year < 10) {
+      year = `0${year}`;
+    }
+    if (month < 10) {
+      month = `0${month}`;
+    }
+    if (day < 10) {
+      day = `0${day}`;
+    }
+    if (hours < 10) {
+      hours = `0${hours}`;
+    }
+    if (minute < 10) {
+      minute = `0${minute}`;
+    }
+    if (second < 10) {
+      second = `0${second}`;
+    }
+    const afterDate = `${year}-${month}-${day}`;
+    return afterDate;
+  },
+  // 图表数据
+  formatChartMonthData(date) {
+    const time = new Date(date); // 毫秒转换为正常时间
+    let year = time.getFullYear();
+    let month = time.getMonth() + 1;
+    let day = time.getDate();
+    let hours = time.getHours();
+    let minute = time.getMinutes();
+    if (year < 10) {
+      year = `0${year}`;
+    }
+    if (month < 10) {
+      month = `0${month}`;
+    }
+    if (day < 10) {
+      day = `0${day}`;
+    }
+    if (hours < 10) {
+      hours = `0${hours}`;
+    }
+    if (minute < 10) {
+      minute = `0${minute}`;
+    }
+    const afterDate = `${month}月${day}日`;
+    return afterDate;
+  },
 };
 export default publicMethods;
