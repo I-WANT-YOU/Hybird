@@ -164,6 +164,12 @@ const router = new Router({
       name: 'SafetySecurity',
       component: () => import('../views/staticViews/SafetySecurity.vue'),
     },
+    // 比赛详情页面
+    {
+      path: '/raceDetail/:id',
+      name: 'RaceDetail',
+      component: () => import('../views/trading-competition/RaceDetail.vue'),
+    },
     // 交易大赛
     {
       path: '/trading_competition',

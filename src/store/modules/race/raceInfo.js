@@ -4,7 +4,12 @@ import raceService from '@/api/raceInfo';
 import { handlerSuccessResponse } from '@/utils/auth';
 
 const state = {
-  teamDetailInfo: {},
+  teamDetailInfo: {
+    allYearData: [],
+    halfYearData: [],
+    monthData: [],
+    weekData: [],
+  },
   homeInfo: {}, // 首页主要信息
   top1: [],
   homeComments: {}, // 评论
@@ -18,6 +23,10 @@ const getters = {
   commentList: state => get(state.homeComments, 'sorted_list', []),
   updateTime: state => get(state.homeInfo, 'update_time', 1566389006000),
   historyList: state => get(state.rankList, 'sorted_list', []),
+  allYearData: state => state.teamDetailInfo.return_rate_data,
+  halfYearData: state => state.teamDetailInfo.half_year_rate_data,
+  monthData: state => state.teamDetailInfo.month_rate_data,
+  weekData: state => state.teamDetailInfo.week_rate_data,
 };
 const mutations = {
   [types.GET_TEAM_DETAIL](state, payload) {
