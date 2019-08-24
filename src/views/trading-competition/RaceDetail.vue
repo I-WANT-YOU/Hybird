@@ -209,15 +209,10 @@ import pulicMethods from '@utils/publicMethods';
 import EChart from 'echarts';
 import BgainNavBar from '../../components/BgainNavBar.vue';
 import errorMessage from '../../constants/responseStatus';
-// import analysis from '../assets/detail/analusis.png';
-// import team from '../assets/detail/team.png';
-// import title from '../assets/detail/title.png';
-// import first from '../assets/detail/first.png';
 import up from '../../assets/images/detail/up.png';
 import down from '../../assets/images/detail/down.png';
 import tips from '../../assets/images/detail/mark.png';
 import copy from '../../assets/images/detail/copy.png';
-// import trend from '../assets/detail/trend.png';
 
 export default {
   name: 'RaceDetail',
