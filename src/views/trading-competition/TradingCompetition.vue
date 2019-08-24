@@ -20,7 +20,7 @@
       <div class="first-season-time">2019.05.31 ~ 2019.08.23</div>
       <div class="datas">
         <div class="datas-card-wrap">
-          <div v-for="(item,key) in topList" :key="key" class="datas-card">
+          <div v-for="(item,key) in topList" @click="onSkip(item)" :key="key" class="datas-card">
             <img
               src="../../assets/images/trading-competition/home/an-crown.png"
               class="an-crown"
@@ -54,7 +54,7 @@
       <span @click="showAll">查看全部榜单</span>
     </div>
     <div class="two-season">
-      <div class="two-season-title">第二季即将开始</div>
+      <div class="two-season-title">第二赛季即将开始</div>
       <div class="time">
         <div class="num">{{dateTime.dd}}</div>
         <div class="text">天</div>
@@ -246,6 +246,9 @@ export default {
     showAll() {
       this.$router.push('/rank-history');
     },
+    onSkip(item) {
+      this.$router.push(`/raceDetail/${item.product_id}`);
+    },
   },
   data() {
     return {
@@ -289,7 +292,7 @@ export default {
 .home {
   height: 100%;
   background: url("../../assets/images/trading-competition/home/bg.png");
-  background-size: 100% 100%;
+  background-size: 100% 2540px;
   padding-top: 51px;
   .league-match-wrap {
     display: flex;
@@ -427,11 +430,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    span{
+    span {
       padding: 8px 15px 15px 15px;
-      background: url('../../assets/images/trading-competition/home/show-all.png');
+      background: url("../../assets/images/trading-competition/home/show-all.png");
       background-size: 100% 100%;
-      display:flex;
+      display: flex;
       align-items: center;
       justify-content: center;
       color: rgba(196, 171, 98, 1);
@@ -445,7 +448,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 10px;
+    margin: 0 auto;
     .two-season-title {
       width: 150px;
       height: 25px;
@@ -557,6 +560,7 @@ export default {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
+    margin-top: 15px;
     .team-title {
       width: 122px;
       height: 26px;
