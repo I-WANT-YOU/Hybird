@@ -50,6 +50,9 @@
         </div>
       </div>
     </div>
+    <div class="showAll">
+      <span @click="showAll">查看全部榜单</span>
+    </div>
     <div class="two-season">
       <div class="two-season-title">第二季即将开始</div>
       <div class="time">
@@ -240,6 +243,9 @@ export default {
         pull: this.type ? item.rank_group_arrow : item.rank_all_arrow,
       }));
     },
+    showAll() {
+      this.$router.push('/rank-history');
+    },
   },
   data() {
     return {
@@ -413,6 +419,22 @@ export default {
           }
         }
       }
+    }
+  }
+  .showAll {
+    margin: 20px auto;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span{
+      padding: 8px 15px 15px 15px;
+      background: url('../../assets/images/trading-competition/home/show-all.png');
+      background-size: 100% 100%;
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(196, 171, 98, 1);
     }
   }
   .two-season {
