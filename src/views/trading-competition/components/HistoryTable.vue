@@ -5,14 +5,12 @@
     header-cell-class-name="cell"
     :header-cell-style="headerCell"
     :cell-style="headerCell"
-    style="width: 100%;"
     class="table"
-    @row-click="onClick"
   >
-    <TableColumn width="40" prop="date">
+    <TableColumn width="50" prop="rank">
       <template slot-scope="scope">
         <div class="data-wrap">
-          <span class="text">{{scope.row.date}}</span>
+          <span class="text">{{scope.row.rank}}</span>
           <img
             v-show="scope.row.pull == 1"
             src="../../../assets/images/trading-competition/home/nameup.png"
@@ -28,7 +26,7 @@
         </div>
       </template>
       <template v-slot:header>
-        <div class="data-name">排名</div>
+        <div>最终排名</div>
       </template>
     </TableColumn>
     <TableColumn label="参赛组名称">
@@ -36,10 +34,10 @@
         <span class="name-wrap">{{scope.row.name}}</span>
       </template>
     </TableColumn>
-    <TableColumn prop="nav">
+    <TableColumn prop="score">
       <template slot-scope="scope">
         <div class="year-wrap">
-          <span class="year-text">{{scope.row.nav}}</span>
+          <span class="year-text">{{scope.row.score}}</span>
           <span
             :class="['year-arrow',scope.row.navPull == -1
           ? 'year-up' :scope.row.navPull == 1
@@ -49,23 +47,20 @@
       </template>
       <template v-slot:header>
         <div class="mask-wrap">
-          <span>当前净值</span>
-          <span :class="['pull', nav === '1' ? 'up' : '']" @click="sortNav"></span>
+          <span>综合得分</span>
         </div>
       </template>
     </TableColumn>
-    <TableColumn prop="day">
+    <TableColumn prop="roi">
       <template v-slot:header>
         <div class="mask-wrap">
-          <span>日增长率</span>
-          <span :class="['pull', day === '1' ? 'up' : '']" @click="sortDay"></span>
+          <span>赛季ROI</span>
         </div>
       </template>
     </TableColumn>
     <TableColumn width="40" label="操作">
-      <!-- <template slot-scope="scope"> -->
-      <template slot-scope>
-        <span class="detail-info">详情</span>
+      <template slot-scope="scope">
+        <span class="detail-info" @click="onSkip(scope)">详情</span>
       </template>
     </TableColumn>
   </Table>
@@ -95,50 +90,11 @@ export default {
         'font-weight': 400,
         'border-color': 'rgba(206,175,95,1)',
       },
-      option: [],
-      day: '0',
-      nav: '0',
     };
   },
-  mounted() {
-    this.option = this.tableData;
-  },
   methods: {
-    onClick(row) {
-      this.$router.push(`/detail/${row.id}`);
-    },
-    sortDay() {
-      this.change('day', this.day);
-      this.sort('day', this.day);
-    },
-    sortNav() {
-      this.change('nav', this.nav);
-      this.sort('nav', this.nav);
-    },
-    sort(text, statu) {
-      if (text === 'day') {
-        if (statu === '0') {
-          this.option = this.tableData.sort((a, b) => b[text].slice(0, b[text].length - 1)
-            - a[text].slice(0, a[text].length - 1));
-        } else {
-          this.option = this.tableData.sort((a, b) => a[text].slice(0, a[text].length - 1)
-            - b[text].slice(0, b[text].length - 1));
-        }
-      } else if (statu === '0') {
-        this.option = this.tableData.sort((a, b) => b[text] - a[text]);
-      } else {
-        this.option = this.tableData.sort((a, b) => a[text] - b[text]);
-      }
-    },
-    change(text, statu) {
-      this.day = '0';
-      this.nav = '0';
-      if (statu === '0') {
-        this[text] = '1';
-      }
-    },
-    xiazai() {
-      window.location.href = 'https://fir.im/ngaw';
+    onSkip(item) {
+      this.$router.push(`/history-detail/${item.row.id}`);
     },
   },
 };
@@ -239,19 +195,7 @@ tbody {
     }
   }
 }
-.data-name {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  width: 100%;
-}
 .hidden-columns {
   display: none;
-}
-.name-wrap {
-  white-space: pre-wrap;
-}
-.detail-info {
-  opacity: 0.5;
 }
 </style>

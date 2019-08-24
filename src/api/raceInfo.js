@@ -75,6 +75,25 @@ class AssetsService {
       throw new Error(error);
     }
   }
+
+  // 获取榜单信息
+  static async getRank(fundType) {
+    try {
+      const requestOptions = {
+        url: '/fcat/get-fcat-rank-by-date',
+        method: 'post',
+        data: {
+          fund_product_type: fundType,
+          symbol: 'all',
+          date: '2019-08-23',
+        },
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
 
 export default AssetsService;

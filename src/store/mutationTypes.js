@@ -26,3 +26,4 @@ export const GET_HOME_DATA = 'GET_HOME_DATA';
 export const GET_HOME_COMMENTS = 'GET_HOME_COMMENTS';
 export const GET_HOME_REPORTS = 'GET_HOME_REPORTS';
 export const GET_HOME_TOP1 = 'GET_HOME_TOP1';
+export const GET_RANK_LIST = 'GET_RANK_LIST';
