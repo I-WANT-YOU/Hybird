@@ -15,13 +15,13 @@
           <span class="text">{{scope.row.date}}</span>
           <img
             v-show="scope.row.pull == 1"
-            src="../../../assets/images/trading-competition/home/nameup.png"
+            src="../../../assets/images/trading-competition/home/namedown.png"
             class="pull"
             alt
           />
           <img
             v-show="scope.row.pull == -1"
-            src="../../../assets/images/trading-competition/home/namedown.png"
+            src="../../../assets/images/trading-competition/home/nameup.png"
             class="pull"
             alt
           />
@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     onClick(row) {
-      this.$router.push(`/detail/${row.id}`);
+      this.$router.push(`/raceDetail/${row.id}`);
     },
     sortDay() {
       this.change('day', this.day);
@@ -250,8 +250,5 @@ tbody {
 }
 .name-wrap {
   white-space: pre-wrap;
-}
-.detail-info {
-  opacity: 0.5;
 }
 </style>

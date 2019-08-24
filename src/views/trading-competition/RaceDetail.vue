@@ -241,6 +241,11 @@ export default {
       popsShow: false,
     };
   },
+  beforeRouteEnter(to, from, next) {
+    next(() => {
+      window.scrollTo(0, 0);
+    });
+  },
   components: {
     BgainNavBar,
     'van-image': Image,
