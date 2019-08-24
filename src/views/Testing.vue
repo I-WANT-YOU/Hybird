@@ -51,6 +51,11 @@ export default {
           text: '邀友返利',
           to: '/refer',
         },
+        {
+          icon: 'diamond-o',
+          text: '交易大赛',
+          to: '/trading_competition',
+        },
       ],
     };
   },

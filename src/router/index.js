@@ -6,10 +6,14 @@ Vue.use(Router);
 const router = new Router({
   base: process.env.BASE_URL,
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'test',
+    //   component: () => import('../views/Testing.vue'),
+    // },
     {
       path: '/',
-      name: 'test',
-      component: () => import('../views/Testing.vue'),
+      redirect: '/trading_competition',
     },
     {
       path: '/login',
@@ -159,6 +163,12 @@ const router = new Router({
       path: '/fixed-safety-security',
       name: 'SafetySecurity',
       component: () => import('../views/staticViews/SafetySecurity.vue'),
+    },
+    // 交易大赛
+    {
+      path: '/trading_competition',
+      name: 'tradingCompetition',
+      component: () => import('../views/trading-competition/TradingCompetition.vue'),
     },
   ],
 });
