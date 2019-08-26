@@ -4,7 +4,7 @@
     <div class="con">
       <div class="name">
         <div class="name-wrap">
-          <i class="icon">{{teamDetailInfo.rank_all}}</i>
+          <i class="icon none">{{teamDetailInfo.rank_all}}</i>
           <span>{{teamDetailInfo.team_name}}</span>
           <i class="icon none"></i>
         </div>
@@ -92,9 +92,10 @@ export default {
   flex-direction: column;
   .con {
     flex: 1;
-    background: url("../../assets/images/trading-competition/home/detail-bg.png");
+    background: url("../../assets/images/trading-competition/home/bg.png");
     background-size: 100% 100%;
     .name {
+      justify-content: center;
       font-size: 18px;
       display: flex;
       margin-top: 20px;
@@ -139,15 +140,16 @@ export default {
       }
     }
     .results {
-      margin-top: 20px;
+      margin-top: 15px;
       color: rgba(248, 227, 158, 1);
       box-sizing: border-box;
-      padding: 0 35px;
+      padding: 0 30px;
       .title {
         opacity: 0.5;
+        font-size: 20px;
       }
       .result-card-wrap {
-        margin-top: 10px;
+        margin-top: 5px;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;

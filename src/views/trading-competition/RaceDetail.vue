@@ -32,9 +32,9 @@
               <div>
                 <span>日增长率</span>
                 <van-image :src="up" class="arrow-icon"
-                           v-show="teamDetailInfo.ror.substring(0,1)!=='-'"/>
+                           v-show="teamDetailInfo.ror && teamDetailInfo.ror.substring(0,1)!=='-'"/>
                 <van-image :src="down" class="arrow-icon"
-                           v-show="teamDetailInfo.ror.substring(0,1)==='-'"/>
+                           v-show="teamDetailInfo.ror && teamDetailInfo.ror.substring(0,1)==='-'"/>
               </div>
               <span>{{teamDetailInfo.ror}}</span>
             </div>
@@ -46,9 +46,14 @@
             <span>{{teamDetailInfo.change_weekly_percent||'--'}}</span>
             <div>
               <span>近一周</span>
-              <el-tooltip effect="dark" content="近一周净值涨跌幅" placement="top">
-                <van-image :src="tips" class="icon-tips"></van-image>
-              </el-tooltip>
+              <el-popover
+                placement="top"
+                title=''
+                width="200"
+                trigger="click">
+                <span class="tipOne">近1周净值涨跌幅及相应排名</span>
+                <van-image slot="reference" :src="tips" class="icon-tips"></van-image>
+              </el-popover>
             </div>
             <span>
               （{{teamDetailInfo.change_weekly_rank_all||'--'}}
@@ -61,9 +66,14 @@
             <span>{{teamDetailInfo.change_monthly_percent||'--'}}</span>
             <div>
               <span>近一月</span>
-              <el-tooltip  effect="light" content="近一月净值涨跌幅" placement="top">
-                <van-image :src="tips" class="icon-tips"></van-image>
-              </el-tooltip>
+              <el-popover
+                placement="top"
+                title=''
+                width="200"
+                trigger="click">
+                <span class="tipTwo">近1月净值涨跌幅及相应排名</span>
+                <van-image slot="reference" :src="tips" class="icon-tips"></van-image>
+              </el-popover>
             </div>
             <span>
               （
@@ -78,9 +88,19 @@
             <span>{{teamDetailInfo.change_since_begin_percent||'--'}}</span>
             <div>
               <span>成立以来</span>
-              <el-tooltip effect="light" content="成立以来净值涨跌幅" placement="bottom-end">
-                <van-image :src="tips" class="icon-tips"></van-image>
-              </el-tooltip>
+              <!--<el-tooltip effect="light" content="成立以来净值涨跌幅及相应排名" placement="bottom-end">-->
+                <!--<van-image :src="tips" class="icon-tips"></van-image>-->
+              <!--</el-tooltip>-->
+              <el-popover
+                placement="top"
+                title=''
+                width="200"
+                trigger="click">
+                <div style="position: relative">
+                  <span class="tipThree">成立以来净值涨跌幅及相应排名</span>
+                </div>
+                <van-image slot="reference" :src="tips" class="icon-tips"></van-image>
+              </el-popover>
             </div>
             <span>
               （
@@ -133,7 +153,7 @@
               <span>{{netWorthDate}}</span>
             </div>
             <div>
-              <span>净值</span>
+              <span>净值：</span>
               <span>{{netWorthValue}}</span>
             </div>
           </div>
@@ -144,12 +164,12 @@
             </div>
             <div>
               <div>
-                <span>该基金收益率(USD)：</span>
-                <span>{{profitUSD}}</span>
-              </div>
-              <div>
                 <span>持有BTC收益率：</span>
                 <span>{{profitBTC}}</span>
+              </div>
+              <div>
+                <span>该基金收益率(USD)：</span>
+                <span>{{profitUSD}}</span>
               </div>
             </div>
           </div>
@@ -183,7 +203,7 @@
           </p>
           <div class="weixin">
             <span>官方微信号：</span>
-            <span>Bgainkefu</span>
+            <span>finbeekefu</span>
             <van-image :src="copy" class="copy-icon" @click="copyText('weixin')"/>
           </div>
           <div class="email weixin">
@@ -204,7 +224,7 @@
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import {
-  Tooltip,
+  Popover,
 } from 'element-ui';
 import { Image, Toast, Popup } from 'vant';
 import pulicMethods from '@utils/publicMethods';
@@ -239,6 +259,7 @@ export default {
       netWorthDate: '--',
       netWorthValue: '--',
       popsShow: false,
+      tipOneVisible: false,
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -249,8 +270,8 @@ export default {
   components: {
     BgainNavBar,
     'van-image': Image,
-    'el-tooltip': Tooltip,
     'van-popup': Popup,
+    'el-popover': Popover,
   },
   computed: {
     ...mapState('race/raceInfo', [
@@ -266,8 +287,16 @@ export default {
     teamData() {
       const teamData = [
         {
+          name: '成立日期',
+          value: this.formatChartYearData(this.teamDetailInfo.create_date),
+        },
+        {
           name: '综合得分',
           value: this.teamDetailInfo.score,
+        },
+        {
+          name: '当前规模',
+          value: this.teamDetailInfo.size,
         },
         {
           name: '最大回撤比',
@@ -278,16 +307,20 @@ export default {
           value: this.teamDetailInfo.sharpe_ratio,
         },
         {
-          name: '当前规模',
-          value: this.teamDetailInfo.size,
-        },
-        {
           name: '年化收益率',
           value: this.teamDetailInfo.return_rate_annual_percent,
         },
         {
           name: '卡玛比',
           value: this.teamDetailInfo.risk_benefit_ratio,
+        },
+        {
+          name: '4周ROI',
+          value: this.teamDetailInfo.roi4week_percent,
+        },
+        {
+          name: '赛季ROI',
+          value: this.teamDetailInfo.roi_season_percent,
         },
       ];
       return teamData;
@@ -311,46 +344,6 @@ export default {
       }
       return len;
     },
-    copyText(name) {
-      const input = document.createElement('input');
-      input.setAttribute('id', 'copyInput');
-      if (name === 'weixin') {
-        input.setAttribute('value', 'Bgainkefu');
-        document.getElementsByTagName('body')[0].appendChild(input);
-        document.getElementById('copyInput').select();
-        document.execCommand('copy');
-        this.$toast('复制成功');
-      } else if (name === 'email') {
-        input.setAttribute('value', 'CS@fin-bee.com');
-        document.getElementsByTagName('body')[0].appendChild(input);
-        document.getElementById('copyInput').select();
-        document.execCommand('copy');
-        this.$toast('复制成功');
-      }
-      document.getElementById('copyInput').remove();
-    },
-    /* 展示弹出窗 */
-    showInfoPop() {
-      this.popsShow = true;
-    },
-    hidePop() {
-      this.popsShow = false;
-    },
-    /* 改变折线图 */
-    changeTab(type) {
-      if (type === 'trend') { // 净值走势
-        this.tabChangeViews = true;
-        this.changeChart = 0;
-        this.tabsTimeState = 3;
-        this.initTrendChart(this.formatChartData(this.teamDetailInfo.nav_data, 365));
-      } else if (type === 'profit') { // 收益率
-        this.tabChangeViews = false;
-        this.changeChart = 1;
-        this.tabsTimeState = 3;
-        this.initProfitChart(this.formatChartDataTwo(this.allYearData));
-      }
-    },
-    /* 改变时间Tab */
     changeTimeTab(date) {
       if (this.changeChart === 0) { // 净值走势
         switch (date) {
@@ -486,10 +479,184 @@ export default {
       const y2min = Math.min.apply(null, currentData.yTwo);
       currentData.maxNum = y1max > y2max ? y1max : y2max;
       currentData.minNum = y1min > y2min ? y2min : y1min;
-
       return currentData;
     },
-    /* 初始化收率折线图 */
+    /* 复制 */
+    copyText(name) {
+      const input = document.createElement('input');
+      input.setAttribute('id', 'copyInput');
+      if (name === 'weixin') {
+        input.setAttribute('value', 'Bgainkefu');
+        document.getElementsByTagName('body')[0].appendChild(input);
+        document.getElementById('copyInput').select();
+        document.execCommand('copy');
+        this.$toast('复制成功');
+      } else if (name === 'email') {
+        input.setAttribute('value', 'CS@fin-bee.com');
+        document.getElementsByTagName('body')[0].appendChild(input);
+        document.getElementById('copyInput').select();
+        document.execCommand('copy');
+        this.$toast('复制成功');
+      }
+      document.getElementById('copyInput').remove();
+    },
+    /* 展示弹出窗 */
+    showInfoPop() {
+      this.popsShow = true;
+    },
+    /* 隐藏弹窗 */
+    hidePop() {
+      this.popsShow = false;
+    },
+    /* 初始化净值走势和收益率展示数据 */
+    initChartShowData(type, data) {
+      if (type === 'netWorth') { // 净值走势
+        const formatNetWorthData = this.formatChartData(data, 365);
+        const lastIndex = formatNetWorthData.xData.length - 1;
+        this.netWorthDate = formatNetWorthData.xData[lastIndex];
+        this.netWorthValue = formatNetWorthData.yData[lastIndex];
+        if (formatNetWorthData.xData[lastIndex].toString().length === 1) {
+          this.netWorthValue = 'formatNetWorthData.xData[lastIndex].toString()}.000';
+        } else if (formatNetWorthData.xData[lastIndex].toString().length === 3) {
+          this.netWorthValue = 'formatNetWorthData.xData[lastIndex].toString()}00';
+        } else if (formatNetWorthData.xData[lastIndex].toString().length === 4) {
+          this.netWorthValue = 'formatNetWorthData.xData[lastIndex].toString()}0';
+        }
+      } else if (type === 'profit') { // 收益率
+        const formatProfitData = this.formatChartDataTwo(data);
+        const lastIndex = formatProfitData.xData.length - 1;
+        console.log(formatProfitData);
+        this.profitDate = formatProfitData.xData[lastIndex];
+        this.profitBTC = `${Math.floor(formatProfitData.yOne[lastIndex] * 10000) / 100}%`;
+        this.profitUSD = `${Math.floor(formatProfitData.yTwo[lastIndex] * 10000) / 100}%`;
+      }
+    },
+    /* 改变折线图（净值走势 收益率） */
+    changeTab(type) {
+      if (type === 'trend') { // 净值走势
+        this.tabChangeViews = true;
+        this.changeChart = 0;
+        this.tabsTimeState = 3;
+        this.initTrendChart(this.formatChartData(this.teamDetailInfo.nav_data, 365));
+        this.initChartShowData('netWorth', this.teamDetailInfo.nav_data);
+      } else if (type === 'profit') { // 收益率
+        this.tabChangeViews = false;
+        this.changeChart = 1;
+        this.tabsTimeState = 3;
+        this.initProfitChart(this.formatChartDataTwo(this.allYearData));
+        this.initChartShowData('profit', this.allYearData);
+      }
+    },
+    /* 改变时间Tab（一周 一月 半年 一年） */
+    /* 初始化净值走势折线图 */
+    initTrendChart(chartData) {
+      this.myChart = EChart.init(document.getElementById('myChart'));
+      this.myChart.clear();
+      const optionLineOne = {
+        grid: {
+          top: '12px',
+          left: '48px',
+          right: '10px',
+          bottom: '45px',
+        },
+        color: ['#EA772A'],
+        legend: {
+          data: ['净值'],
+          itemHeight: 4,
+          orient: 'vertical',
+          icon: 'roundRect',
+          bottom: 'bottom',
+          textStyle: {
+            color: '#F8E39E',
+            padding: [4, 0, 3, 0],
+            fontSize: 10,
+          },
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: (params) => {
+            this.netWorthValue = params[0].value;
+            console.log(params[0].value);
+            if (params[0].value.toString().length === 1) {
+              console.log(params[0].value);
+              this.netWorthValue = `${params[0].value.toString()}.000`;
+            } else if (params[0].value.toString().length === 3) {
+              this.netWorthValue = `${params[0].value.toString()}00`;
+            } else if (params[0].value.toString().length === 4) {
+              this.netWorthValue = `${params[0].value.toString()}0`;
+            }
+            this.netWorthDate = params[0].axisValue;
+            return '';
+          },
+          // formatter: params => `<div>${params[0].seriesName}:${Math.floor(params[0].value * 10000) / 100}%</div><div>${params[1].seriesName}:${Math.floor(params[1].value * 10000) / 100}%</div>`,
+        },
+        xAxis: {
+          type: 'category',
+          // nameGap: '170px',
+          axisLine: {
+            show: false,
+          },
+          axisLabel: {
+            color: '#F8E39E',
+            margin: 10,
+            fontSize: 10,
+            formatter: (value) => {
+              const newValue = value.substring(5);
+              return newValue;
+            },
+          },
+          axisTick: {
+            show: false,
+          },
+          data: chartData.xData,
+        },
+        yAxis: {
+          type: 'value',
+          min: chartData.maxNum === chartData.minNum ? chartData.minNum / 1.1 : (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2),
+          max: chartData.maxNum === chartData.minNum ? chartData.maxNum * 1.1 : (chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1),
+          interval: chartData.maxNum === chartData.minNum ? (chartData.maxNum * 1.1 - chartData.minNum / 1.1) / 6 : ((chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1) - (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2)) / 6,
+          nameGap: '70px',
+          axisLine: {
+            show: false,
+          },
+          axisLabel: {
+            formatter: (value) => {
+              let newValue = (Math.floor(value * 1000) / 1000).toString();
+              if (newValue.length === 3) {
+                newValue += '00';
+              } else if (newValue.length === 4) {
+                newValue += '0';
+              } else if (newValue.length === 1) {
+                newValue += '.000';
+              }
+              return newValue;
+            },
+            color: '#F8E39E',
+            margin: 15,
+            fontSize: 10,
+          },
+          splitLine: {
+            lineStyle: {
+              color: '#2C2C2C',
+            },
+          },
+        },
+        series: [{
+          name: '净值',
+          data: chartData.yData,
+          type: 'line',
+          animationEasing: 'liner',
+          smooth: true,
+          symbol: 'none',
+          lineStyle: {
+            color: '#EA772A',
+            width: 0.8,
+          },
+        }],
+      };
+      this.myChart.setOption(optionLineOne);
+    },
+    /* 初始化收益率折线图 */
     initProfitChart(chartData) {
       this.myChart = EChart.init(document.getElementById('myChart'));
       this.myChart.clear();
@@ -525,8 +692,8 @@ export default {
           trigger: 'axis',
           formatter: (params) => {
             this.profitDate = params[0].axisValue;
-            this.profitUSD = `${Math.floor(params[0].value * 10000) / 100}%`;
-            this.profitBTC = `${Math.floor(params[1].value * 10000) / 100}%`;
+            this.profitBTC = `${Math.floor(params[0].value * 10000) / 100}%`;
+            this.profitUSD = `${Math.floor(params[1].value * 10000) / 100}%`;
             return '';
           },
           // formatter: params => `<div>${params[0].seriesName}:${Math.floor(params[0].value * 10000) / 100}%</div><div>${params[1].seriesName}:${Math.floor(params[1].value * 10000) / 100}%</div>`,
@@ -650,105 +817,6 @@ export default {
       };
       this.myChart.setOption(optionLineTwo);
     },
-    /* 初始化净值走势折线图 */
-    initTrendChart(chartData) {
-      this.myChart = EChart.init(document.getElementById('myChart'));
-      this.myChart.clear();
-      const optionLineOne = {
-        grid: {
-          top: '12px',
-          left: '48px',
-          right: '10px',
-          bottom: '45px',
-        },
-        color: ['#EA772A'],
-        legend: {
-          data: ['净值'],
-          itemHeight: 4,
-          orient: 'vertical',
-          icon: 'roundRect',
-          bottom: 'bottom',
-          textStyle: {
-            color: '#F8E39E',
-            padding: [4, 0, 3, 0],
-            fontSize: 10,
-          },
-        },
-        tooltip: {
-          trigger: 'axis',
-          formatter: (params) => {
-            this.netWorthDate = params[0].axisValue;
-            this.netWorthValue = params[0].value;
-            return '';
-          },
-          // formatter: params => `<div>${params[0].seriesName}:${Math.floor(params[0].value * 10000) / 100}%</div><div>${params[1].seriesName}:${Math.floor(params[1].value * 10000) / 100}%</div>`,
-        },
-        xAxis: {
-          type: 'category',
-          // nameGap: '170px',
-          axisLine: {
-            show: false,
-          },
-          axisLabel: {
-            color: '#F8E39E',
-            margin: 10,
-            fontSize: 10,
-            formatter: (value) => {
-              const newValue = value.substring(5);
-              return newValue;
-            },
-          },
-          axisTick: {
-            show: false,
-          },
-          data: chartData.xData,
-        },
-        yAxis: {
-          type: 'value',
-          min: chartData.maxNum === chartData.minNum ? chartData.minNum / 1.1 : (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2),
-          max: chartData.maxNum === chartData.minNum ? chartData.maxNum * 1.1 : (chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1),
-          interval: chartData.maxNum === chartData.minNum ? (chartData.maxNum * 1.1 - chartData.minNum / 1.1) / 6 : ((chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1) - (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2)) / 6,
-          nameGap: '70px',
-          axisLine: {
-            show: false,
-          },
-          axisLabel: {
-            formatter: (value) => {
-              let newValue = (Math.floor(value * 1000) / 1000).toString();
-              if (newValue.length === 3) {
-                newValue += '00';
-              } else if (newValue.length === 4) {
-                newValue += '0';
-              } else if (newValue.length === 1) {
-                newValue += '.000';
-              }
-              return newValue;
-            },
-            color: '#F8E39E',
-            margin: 15,
-            fontSize: 10,
-          },
-          splitLine: {
-            lineStyle: {
-              color: '#2C2C2C',
-            },
-          },
-        },
-        series: [{
-          name: '净值',
-          data: chartData.yData,
-          type: 'line',
-          animationEasing: 'liner',
-          smooth: true,
-          symbol: 'none',
-          lineStyle: {
-            color: '#EA772A',
-            width: 0.8,
-          },
-        }],
-      };
-      this.myChart.setOption(optionLineOne);
-    },
   },
   mounted() {
     Toast.loading({
@@ -756,22 +824,33 @@ export default {
       duration: 0,
       message: '加载中...',
     });
-    const { id } = this.$route.params;
-    // 根据id获取team数据
-    this.getTeamDetailInfo(id).then(
-      () => {
-        Toast.clear();
-        this.initTrendChart(this.formatChartData(this.teamDetailInfo.nav_data, 365));
-      },
-      (error) => {
-        Toast.clear();
-        if (error.status) {
-          Toast(errorMessage[error.status]);
-        } else {
-          Toast('网络错误');
-        }
-      },
-    );
+    if (this.$route.params.id) {
+      const { id } = this.$route.params;
+      // 根据id获取team数据
+      this.getTeamDetailInfo(id).then(
+        () => {
+          Toast.clear();
+          try {
+            /* 初始化净值走势图表 */
+            this.initTrendChart(this.formatChartData(this.teamDetailInfo.nav_data, 365));
+            /* 初始化净值走势展示数据 */
+            this.initChartShowData('netWorth', this.teamDetailInfo.nav_data);
+          } catch (e) {
+            throw new Error(e);
+          }
+        },
+        (error) => {
+          Toast.clear();
+          if (error.status) {
+            Toast(errorMessage[error.status]);
+          } else {
+            Toast('网络错误');
+          }
+        },
+      );
+    } else {
+      Toast.clear();
+    }
   },
   beforeDestroy() {
     Toast.clear();
@@ -780,10 +859,32 @@ export default {
 </script>
 
 <style lang="scss" >
-  .el-tooltip__popper{
-    font-size: 10px;
+  /*tips样式处理*/
+  .tipOne{
+    display: inline-block;
+    width: 160px;
     color: #FFFFFF;
-    height: 200px;
+    background: rgba(0,0,0,0.8);
+    font-size: 12px;
+    margin-left: 70px;
+  }
+  .tipTwo{
+    display: inline-block;
+    width: 160px;
+    color: #FFFFFF;
+    background: rgba(0,0,0,0.8);
+    font-size: 12px;
+  }
+  .tipThree{
+    position: absolute;
+    left: -150px;
+    top: -20px;
+    display: block;
+    width: 180px;
+    color: #FFFFFF;
+    background: rgba(0,0,0,0.8);
+    font-size: 12px;
+    text-align: right;
   }
   /*tab切换样式*/
   .SelectedStyle{
@@ -840,7 +941,6 @@ export default {
         color:rgba(196,171,98,1);
         /*最新数据*/
         .latestData{
-          padding:0 10px;
           display: flex;
           >div{
             width: 50%;
@@ -848,8 +948,9 @@ export default {
          .netValue{
            display: flex;
            flex-direction: column;
-           align-items: center;
+           align-items: flex-start;
            justify-content: center;
+           padding-left: 55px;
            >div{
              display: flex;
              align-items: center;
@@ -983,11 +1084,11 @@ export default {
         }
         /*echart图*/
         .chartInfo{
-          padding: 10px 16px;
+          padding: 2px 16px 10px 16px;
           .showInfo-one{
             padding: 0 8px 5px 8px;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             >div{
               >span{
                 font-size:12px;
