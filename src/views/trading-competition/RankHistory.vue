@@ -31,14 +31,14 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import BgainNavBar from '@component/BgainNavBar.vue';
+// import BgainNavBar from '@component/BgainNavBar.vue';
 import HistoryTable from './components/HistoryTable.vue';
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
 export default {
   name: 'RankHistory',
   components: {
-    BgainNavBar,
+    // BgainNavBar,
     HistoryTable,
   },
   data() {
@@ -75,15 +75,15 @@ export default {
 
 <style lang="scss" scoped>
 .wrap {
-  width: 100%;
-  height: 100%;
-  background: url("../../assets/images/trading-competition/home/detail-bg.png");
-  background-size: 100% 100%;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-y: scroll;
+  background: url("../../assets/images/trading-competition/home/bg.png") no-repeat;
+  background-size: 100vw 100%;
   .con {
     background: #191818;
     width: 354px;
-    margin: 0 auto;
-    margin-top: 30px;
+    margin: 30px auto;
     border-radius: 5px;
     .title-wrap {
       display: flex;
@@ -94,7 +94,7 @@ export default {
         display: inline-block;
         padding: 5px 20px;
         margin: 0 auto;
-        font-size: 15px;
+        font-size: 13px;
         text-align: center;
         background: url("../../assets/images/trading-competition/home/two.png")
           no-repeat;
@@ -117,7 +117,7 @@ export default {
         line-height: 29px;
         text-align: center;
         margin: 0 9px;
-        font-size: 17px;
+        font-size: 15px;
         font-family: PingFang SC;
         font-weight: 400;
         color: rgba(248, 226, 158, 1);

@@ -1,74 +1,74 @@
 <template>
-  <Table
-    :data="tableData"
-    cell-class-name="cell"
-    header-cell-class-name="cell"
-    :header-cell-style="headerCell"
-    :cell-style="headerCell"
-    style="width: 100%;"
-    class="table"
-    @row-click="onClick"
-  >
-    <TableColumn width="40" prop="date">
-      <template slot-scope="scope">
-        <div class="data-wrap">
-          <span class="text">{{scope.row.date}}</span>
-          <img
-            v-show="scope.row.pull == 1"
-            src="../../../assets/images/trading-competition/home/namedown.png"
-            class="pull"
-            alt
-          />
-          <img
-            v-show="scope.row.pull == -1"
-            src="../../../assets/images/trading-competition/home/nameup.png"
-            class="pull"
-            alt
-          />
-        </div>
-      </template>
-      <template v-slot:header>
-        <div class="data-name">排名</div>
-      </template>
-    </TableColumn>
-    <TableColumn label="参赛组名称">
-      <template slot-scope="scope">
-        <span class="name-wrap">{{scope.row.name}}</span>
-      </template>
-    </TableColumn>
-    <TableColumn prop="nav">
-      <template slot-scope="scope">
-        <div class="year-wrap">
-          <span class="year-text">{{scope.row.nav}}</span>
-          <span
-            :class="['year-arrow',scope.row.navPull == -1
+    <Table
+      :data="tableData"
+      cell-class-name="cell"
+      header-cell-class-name="cell"
+      :header-cell-style="headerCell"
+      :cell-style="headerCell"
+      style="width: 100%;"
+      class="table"
+      @row-click="onClick"
+    >
+      <TableColumn width="40" prop="date">
+        <template slot-scope="scope">
+          <div class="data-wrap">
+            <span class="text">{{scope.row.date}}</span>
+            <img
+              v-show="scope.row.pull == 1"
+              src="../../../assets/images/trading-competition/home/namedown.png"
+              class="pull"
+              alt
+            />
+            <img
+              v-show="scope.row.pull == -1"
+              src="../../../assets/images/trading-competition/home/nameup.png"
+              class="pull"
+              alt
+            />
+          </div>
+        </template>
+        <template v-slot:header>
+          <div class="data-name">排名</div>
+        </template>
+      </TableColumn>
+      <TableColumn label="参赛组名称">
+        <template slot-scope="scope">
+          <span class="name-wrap">{{scope.row.name}}</span>
+        </template>
+      </TableColumn>
+      <TableColumn prop="nav">
+        <template slot-scope="scope">
+          <div class="year-wrap">
+            <span class="year-text">{{scope.row.nav}}</span>
+            <span
+              :class="['year-arrow',scope.row.navPull == -1
           ? 'year-up' :scope.row.navPull == 1
           ? 'year-down' : '']"
-          ></span>
-        </div>
-      </template>
-      <template v-slot:header>
-        <div class="mask-wrap">
-          <span>当前净值</span>
-          <span :class="['pull', nav === '1' ? 'up' : '']" @click="sortNav"></span>
-        </div>
-      </template>
-    </TableColumn>
-    <TableColumn prop="day">
-      <template v-slot:header>
-        <div class="mask-wrap">
-          <span>日增长率</span>
-          <span :class="['pull', day === '1' ? 'up' : '']" @click="sortDay"></span>
-        </div>
-      </template>
-    </TableColumn>
-    <TableColumn width="40" label="操作">
-      <!-- <template slot-scope="scope"> -->
-      <template slot-scope>
-        <span class="detail-info">详情</span>
-      </template>
-    </TableColumn>
-  </Table>
+            ></span>
+          </div>
+        </template>
+        <template v-slot:header>
+          <div class="mask-wrap">
+            <span>当前净值</span>
+            <span :class="['pull', nav === '1' ? 'up' : '']" @click="sortNav"></span>
+          </div>
+        </template>
+      </TableColumn>
+      <TableColumn prop="day">
+        <template v-slot:header>
+          <div class="mask-wrap">
+            <span>日增长率</span>
+            <span :class="['pull', day === '1' ? 'up' : '']" @click="sortDay"></span>
+          </div>
+        </template>
+      </TableColumn>
+      <TableColumn width="40" label="操作">
+        <!-- <template slot-scope="scope"> -->
+        <template slot-scope>
+          <span class="detail-info">详情</span>
+        </template>
+      </TableColumn>
+    </Table>
 </template>
 
 <script>
@@ -243,7 +243,6 @@ tbody {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  width: 100%;
 }
 .hidden-columns {
   display: none;

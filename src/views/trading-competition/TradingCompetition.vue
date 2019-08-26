@@ -296,9 +296,11 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-  background: url("../../assets/images/trading-competition/home/bg.png")
-    no-repeat;
-  background-size: 375px 1263px;
+
+  width: 100%;
+  overflow-y: scroll;
+  background: url("../../assets/images/trading-competition/home/bg_home.jpg");
+  background-size: 100% 100%;
   padding-top: 51px;
   .league-match-wrap {
     display: flex;
@@ -362,7 +364,7 @@ export default {
         justify-content: space-around;
         box-sizing: border-box;
         padding: 0 10px;
-        margin-bottom: 32px;
+        margin-bottom: 15px;
         .datas-card {
           width: 99.5px;
           height: 95.5px;
@@ -386,7 +388,7 @@ export default {
             font-size: 6.5px;
             color: rgba(251, 230, 162, 1);
             .text {
-              background: url("../../assets/images/trading-competition//home/name-bg.png")
+              background: url("../../assets/images/trading-competition/home/name-bg.png")
                 no-repeat;
               background-size: 100% 100%;
               width: 25px;
@@ -431,7 +433,7 @@ export default {
     }
   }
   .showAll {
-    margin: 20px auto;
+    margin: 5px auto 25px;
     font-size: 14px;
     display: flex;
     align-items: center;
@@ -462,7 +464,7 @@ export default {
       background: url("../../assets/images/trading-competition/home/two.png");
       background-size: 100% 100%;
       margin-top: -2px;
-      font-size: 12px;
+      font-size: 13px;
       font-family: Lantinghei SC;
       color: rgba(28, 28, 28, 1);
       text-align: center;
@@ -570,20 +572,19 @@ export default {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
+    margin-top: 15px;
     .team-title {
       width: 122px;
       height: 26px;
       line-height: 26px;
-      margin: 0 auto;
+      margin: -2px auto 7px;
       background: url("../../assets/images/trading-competition/home/two.png");
       background-size: 100% 100%;
-      margin-top: -2px;
-      font-size: 12px;
+      font-size: 13px;
       font-family: Lantinghei SC;
       font-weight: 600;
       color: rgba(28, 28, 28, 1);
       text-align: center;
-      margin-bottom: 7px;
     }
     .team-info {
       margin: 0 auto;
@@ -616,7 +617,7 @@ export default {
         line-height: 29px;
         text-align: center;
         margin: 0 9px;
-        font-size: 17px;
+        font-size: 15px;
         font-family: PingFang SC;
         font-weight: 400;
         color: rgba(248, 226, 158, 1);
@@ -634,10 +635,11 @@ export default {
       }
     }
     .table-wrap {
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 44px;
+      margin-bottom: 40px;
       .more {
         margin-top: 20px;
         font-size: 11px;

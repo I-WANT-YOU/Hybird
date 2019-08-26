@@ -1,13 +1,14 @@
 <template>
   <Table
     :data="tableData"
+    @row-click="onSkip"
     cell-class-name="cell"
     header-cell-class-name="cell"
     :header-cell-style="headerCell"
     :cell-style="headerCell"
     class="table"
   >
-    <TableColumn width="50" prop="rank">
+    <TableColumn width="60" prop="rank">
       <template slot-scope="scope">
         <div class="data-wrap">
           <span class="text">{{scope.row.rank}}</span>
@@ -26,7 +27,7 @@
         </div>
       </template>
       <template v-slot:header>
-        <div>最终排名</div>
+        <div class="header-rank">最终排名</div>
       </template>
     </TableColumn>
     <TableColumn label="参赛组名称">
@@ -59,8 +60,8 @@
       </template>
     </TableColumn>
     <TableColumn width="40" label="操作">
-      <template slot-scope="scope">
-        <span class="detail-info" @click="onSkip(scope)">详情</span>
+      <template>
+        <span class="detail-info">详情</span>
       </template>
     </TableColumn>
   </Table>
@@ -94,7 +95,7 @@ export default {
   },
   methods: {
     onSkip(item) {
-      this.$router.push(`/history-detail/${item.row.id}`);
+      this.$router.push(`/history-detail/${item.id}`);
     },
   },
 };
@@ -103,11 +104,14 @@ export default {
 <style lang="scss">
 .table {
   background: rgba(25, 24, 24, 1);
-  width: 330px !important;
+  width: 100%!important;
   font-size: 12px;
   opacity: 0.8;
   text-align: center;
-  margin-top: 10px;
+  margin: 0 0 0 0!important;
+  .el-table__body-wrapper{
+    margin-top: 10px!important;
+  }
   .mask-wrap {
     display: flex;
     align-items: center;
