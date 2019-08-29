@@ -188,6 +188,18 @@ const router = new Router({
       name: 'HistoryDetail',
       component: () => import('../views/trading-competition/HistoryDetail.vue'),
     },
+    // CTA母基金
+    {
+      path: '/CTAMotherFund',
+      name: 'CTAMotherFund',
+      component: () => import('../views/staticViews/CTAMotherFund.vue'),
+    },
+    // 套利母基金
+    {
+      path: '/InterestArbitrageFund',
+      name: 'InterestArbitrageFund',
+      component: () => import('../views/staticViews/InterestArbitrageFund.vue'),
+    },
   ],
 });
 
