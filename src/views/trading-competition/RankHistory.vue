@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <BgainNavBar title="历史榜单" />
+    <!--<BgainNavBar title="历史榜单" />-->
     <div class="con">
       <div class="title-wrap">
         <div class="title">第一赛季冠军排行榜</div>
@@ -31,14 +31,14 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import BgainNavBar from '@component/BgainNavBar.vue';
+// import BgainNavBar from '@component/BgainNavBar.vue';
 import HistoryTable from './components/HistoryTable.vue';
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
 export default {
   name: 'RankHistory',
   components: {
-    BgainNavBar,
+    // BgainNavBar,
     HistoryTable,
   },
   data() {

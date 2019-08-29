@@ -1,6 +1,6 @@
 <template>
   <div class="raceDetail">
-    <BgainNavBar title="团队详情"/>
+    <!--<BgainNavBar title="团队详情"/>-->
     <div class="contentContainer">
       <!--头部-->
       <div class="capital-title-short" v-show="computedStrLen(teamDetailInfo.team_name)<8">
@@ -229,7 +229,7 @@ import {
 import { Image, Toast, Popup } from 'vant';
 import pulicMethods from '@utils/publicMethods';
 import EChart from 'echarts';
-import BgainNavBar from '../../components/BgainNavBar.vue';
+// import BgainNavBar from '../../components/BgainNavBar.vue';
 import errorMessage from '../../constants/responseStatus';
 import up from '../../assets/images/detail/up.png';
 import down from '../../assets/images/detail/down.png';
@@ -268,7 +268,7 @@ export default {
     });
   },
   components: {
-    BgainNavBar,
+    // BgainNavBar,
     'van-image': Image,
     'van-popup': Popup,
     'el-popover': Popover,
@@ -525,7 +525,6 @@ export default {
       } else if (type === 'profit') { // 收益率
         const formatProfitData = this.formatChartDataTwo(data);
         const lastIndex = formatProfitData.xData.length - 1;
-        console.log(formatProfitData);
         this.profitDate = formatProfitData.xData[lastIndex];
         this.profitBTC = `${Math.floor(formatProfitData.yOne[lastIndex] * 10000) / 100}%`;
         this.profitUSD = `${Math.floor(formatProfitData.yTwo[lastIndex] * 10000) / 100}%`;
@@ -576,9 +575,7 @@ export default {
           trigger: 'axis',
           formatter: (params) => {
             this.netWorthValue = params[0].value;
-            console.log(params[0].value);
             if (params[0].value.toString().length === 1) {
-              console.log(params[0].value);
               this.netWorthValue = `${params[0].value.toString()}.000`;
             } else if (params[0].value.toString().length === 3) {
               this.netWorthValue = `${params[0].value.toString()}00`;
