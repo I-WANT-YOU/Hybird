@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <BgainNavBar title="历史榜单" />
+    <!--<BgainNavBar title="历史榜单" />-->
     <div class="con">
       <div class="title-wrap">
         <div class="title">第一赛季冠军排行榜</div>
@@ -80,6 +80,7 @@ export default {
   overflow-y: scroll;
   background: url("../../assets/images/trading-competition/home/bg.png") no-repeat;
   background-size: 100vw 100%;
+  font-family: PingFang SC sans-serif;
   .con {
     background: #191818;
     width: 354px;
@@ -118,7 +119,6 @@ export default {
         text-align: center;
         margin: 0 9px;
         font-size: 15px;
-        font-family: PingFang SC;
         font-weight: 400;
         color: rgba(248, 226, 158, 1);
         &.active {
