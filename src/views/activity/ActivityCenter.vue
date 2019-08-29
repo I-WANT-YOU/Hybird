@@ -2,7 +2,7 @@
   <div class="activity__container" :class="{setContainer:showSignIn}">
     <nav-bar title="活动中心" :show-arrow="false" />
     <!--会员值 已登陆-->
-    <div class="member-num" v-if="isLogin === true" @click="onGoMemberPage">
+    <div class="member-num" v-if="login === true" @click="onGoMemberPage">
       <div class="background">
         <div class="member-info">
           <span>{{userLevel}}</span>
@@ -25,7 +25,7 @@
       </div>
     </div>
     <!--会员积分和签到-->
-    <div class="member-account" v-if="isLogin">
+    <div class="member-account" v-if="login">
       <!--积分-->
       <div class="member-integral" @click="toRecord">
         <div>
@@ -53,7 +53,7 @@
     </div>
     <!--轮播图-->
     <div class="swipe-container">
-      <ActivityCenterSwipe :isLogin="isLogin" />
+      <ActivityCenterSwipe :isLogin="login" />
     </div>
     <!--实物列表-->
     <div class="goods-container">
@@ -93,7 +93,6 @@
 import Vue from 'vue';
 import { Toast } from 'vant';
 import { mapState, mapActions } from 'vuex';
-import { getToken } from '@utils/auth';
 import Bridge from '@/config/bridge';
 import BgainNavBar from '@/components/BgainNavBar.vue';
 import ActivityCenterSwipe from './components/ActivityCenterSwipe.vue';
@@ -115,7 +114,7 @@ export default {
   data() {
     return {
       levelImg: '',
-      isLogin: false, // 是否登陆
+      login: false, // 是否登陆
       isLoginText: '已签到',
       isSign: false, // 是否签到
       signIcon,
@@ -139,6 +138,10 @@ export default {
     ...mapActions('activity', [
       'getBgpProducts',
       'getBanner',
+    ]),
+
+    ...mapActions('auth', [
+      'isLogin',
     ]),
 
     // 跳往记录页面
@@ -170,26 +173,28 @@ export default {
       );
       return false;
     },
-    async handleSetToken() {
-      try {
-        Toast.clear();
-        // 判断是否登录
-        if (getToken()) {
-          await this.getUserSummary();
-          this.formatUserInfo(this.basicInfo);// 获取数据
-          // 判断用户是否签到
-          this.isLogin = true;
-          this.isSign = this.basicInfo.had_membership_sign;
-        }
-      } catch (error) {
-        Toast.clear();
-        if (error.status) {
-          this.$toast(errorMessage[error.status]);
-        } else {
-          this.$toast('网络故障');
-        }
-        this.isLogin = false;
-      }
+
+    handleSetToken() {
+      // 判断是否登录
+      this.isLogin().then(() => {
+        this.login = true;
+        this.getUserSummary().then(
+          () => {
+            Toast.clear();
+            this.formatUserInfo(this.basicInfo);// 获取数据
+            // 判断用户是否签到
+            this.isSign = this.basicInfo.had_membership_sign;
+          },
+          (err) => {
+            this.$toast.clear();
+            if (err.status) { this.$toast(errorMessage[err.status]); } else {
+              this.$toast('未登录');
+            }
+          },
+        );
+      }, () => {
+        this.login = false;
+      });
     },
     // 格式化用户会员数据
     formatUserInfo(userInfo) {

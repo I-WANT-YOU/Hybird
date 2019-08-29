@@ -1,6 +1,9 @@
 <template>
-  <div class="coupon"  v-show="products.COUPON!==undefined
-  &&JSON.stringify(products.COUPON)!=='[]'" >
+  <div
+    class="coupon"
+    v-show="products.COUPON!==undefined
+  &&JSON.stringify(products.COUPON)!=='[]'"
+  >
     <div class="coupon-title">
       <span>Bgain红包</span>
       <span>加息券、满减券</span>
@@ -9,13 +12,11 @@
       <ul>
         <li v-for="(item,index) in products.COUPON" :key="index" @click="toGoodDetail(item.id)">
           <div>
-            <van-image class="self-image"
-            :src="item.thumbnail_url"
-            />
+            <van-image class="self-image" :src="item.thumbnail_url" />
             <span class="textStyle">{{item.integral_product_name}}</span>
-            <span :class="{goodsState:item.stock === 0}" >
-            {{item.stock === 0?'已售磬':fromatPrice(item.fbpprice)+'BGP'}}
-          </span>
+            <span
+              :class="{goodsState:item.stock === 0}"
+            >{{item.stock === 0?'已售磬':fromatPrice(item.fbpprice)+'BGP'}}</span>
           </div>
         </li>
       </ul>
@@ -51,92 +52,85 @@ export default {
         action: 'getUrl',
         params: `/activity/product/${id}`,
       });
-      // this.$router.push(
-      //   {
-      //     name: 'product-detail',
-      //     params: { id },
-      //   },
-      // );
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  /*图片*/
-  .self-image{
-    width: 102px;
-    height: 60px;
-    border: none;
-  }
-  /*已售磬*/
-  .goodsState{
-    color:#FF5C5C!important;
-  }
-  .textStyle{
-    width:102px;
-    text-align: center;
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-  }
-  .coupon{
-    font-family: PingFangSC-Medium sans-serif;
-    letter-spacing: 0;
-    /*title*/
-    .coupon-title{
-      padding-left: 20px;
-      >span{
-        display: inline;
-      }
-      >span:nth-child(1){
-        font-size: 18px;
-        color: #222222;
-        line-height: 25px;
-      }
-      >span:nth-child(2){
-        font-size: 12px;
-        color: #666666;
-        line-height: 17px;
-        margin-left: 10px;
-
-      }
+/*图片*/
+.self-image {
+  width: 102px;
+  height: 60px;
+  border: none;
+}
+/*已售磬*/
+.goodsState {
+  color: #ff5c5c !important;
+}
+.textStyle {
+  width: 102px;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.coupon {
+  font-family: PingFangSC-Medium sans-serif;
+  letter-spacing: 0;
+  /*title*/
+  .coupon-title {
+    padding-left: 20px;
+    > span {
+      display: inline;
     }
-    /*列表*/
-    .coupon-list{
-      padding-top:20px;
-      padding-bottom: 13px;
-      ul{
-        padding:0 11.7px;
-        list-style: none;
+    > span:nth-child(1) {
+      font-size: 18px;
+      color: #222222;
+      line-height: 25px;
+    }
+    > span:nth-child(2) {
+      font-size: 12px;
+      color: #666666;
+      line-height: 17px;
+      margin-left: 10px;
+    }
+  }
+  /*列表*/
+  .coupon-list {
+    padding-top: 20px;
+    padding-bottom: 13px;
+    ul {
+      padding: 0 11.7px;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      > li {
+        width: 33%;
+        margin-bottom: 15px;
         display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        >li{
-          width: 33%;
-          margin-bottom: 15px;
+        justify-content: center;
+        border-radius: 4px;
+        > div {
           display: flex;
-          justify-content: center;
-          border-radius: 4px;
-          >div{
-            display: flex;
-            flex-direction:column;
-            align-items: center;
-            >span:nth-child(2){
-              margin-top: 10px;
-              font-size: 12px;
-              line-height: 17px;
-              color: #333333;
-            }
-            >span:nth-child(3){
-              margin-top: 1px;
-              font-size: 13px;
-              color: #3C64EE;
-              line-height: 18px;
-            }
+          flex-direction: column;
+          align-items: center;
+          > span:nth-child(2) {
+            margin-top: 10px;
+            font-size: 12px;
+            line-height: 17px;
+            color: #333333;
+          }
+          > span:nth-child(3) {
+            margin-top: 1px;
+            font-size: 13px;
+            color: #3c64ee;
+            line-height: 18px;
           }
         }
       }
     }
   }
+}
 </style>
