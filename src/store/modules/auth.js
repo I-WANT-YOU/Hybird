@@ -34,6 +34,14 @@ const actions = {
       throw error;
     }
   },
+  async isLogin() {
+    try {
+      const response = await AuthService.isLogin();
+      return Auth.handlerSuccessResponseV2(response);
+    } catch (error) {
+      throw error;
+    }
+  },
   async logout({ commit }) {
     try {
       await AuthService.logout();
