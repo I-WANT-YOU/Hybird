@@ -8,7 +8,7 @@
     <!-- eslint-enable -->
     <div class="account">
       <span>微信账号</span>
-      <span class="copy" @click="copyText">
+      <span class="copy" @click="copyText(value)">
         Bgainkefu
         <i class="icon"></i>
       </span>
@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import { Toast } from 'vant';
+import { copyText } from '@utils/tools';
 
 export default {
   name: 'AddCommunity',
@@ -26,15 +26,8 @@ export default {
     };
   },
   methods: {
-    copyText() {
-      const input = document.createElement('input');
-      input.setAttribute('id', 'copyInput');
-      input.setAttribute('value', this.value);
-      document.getElementsByTagName('body')[0].appendChild(input);
-      document.getElementById('copyInput').select();
-      document.execCommand('copy');
-      Toast('复制成功');
-      document.getElementById('copyInput').remove();
+    copyText(text) {
+      return copyText(text);
     },
   },
 };
