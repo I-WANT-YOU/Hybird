@@ -203,12 +203,12 @@
           </p>
           <div class="weixin">
             <span>官方微信号：</span>
-            <span>finbeekefu</span>
+            <span>Bgainkefu</span>
             <van-image :src="copy" class="copy-icon" @click="copyText('weixin')"/>
           </div>
           <div class="email weixin">
             <span>联系邮箱：</span>
-            <span>CS@fin-bee.com</span>
+            <span>CS@bgain.com</span>
             <van-image :src="copy" class="copy-icon" @click="copyText('email')"/>
           </div>
           <div class="buttonContainer">
