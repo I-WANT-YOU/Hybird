@@ -2,7 +2,7 @@
   <div class="container">
     <!--<BgainNavBar title = "第一月度CTA组冠军团队"/>-->
       <van-image class="image-banner" :src="CTAMotherFund"/>
-      <div class="buttonContainer"><van-image class="image-button" :src="CTAButton"/></div>
+      <div class="buttonContainer" @click="onSkip"><van-image class="image-button" :src="CTAButton"/></div>
   </div>
 </template>
 
@@ -11,6 +11,7 @@ import { Image } from 'vant';
 // import BgainNavBar from '@component/BgainNavBar.vue';
 import CTAMotherFund from '../../assets/images/staticViews/CTAMotherFund.png';
 import CTAButton from '../../assets/images/staticViews/CTAButton.png';
+import Bridge from '@/config/bridge';
 
 export default {
   name: 'CTAMotherFund',
@@ -23,6 +24,14 @@ export default {
   components: {
     'van-image': Image,
     // BgainNavBar,
+  },
+  methods: {
+    onSkip() {
+      Bridge.sendMessage({
+        module: 'fund',
+        action: 'getInitial',
+      });
+    },
   },
 };
 </script>

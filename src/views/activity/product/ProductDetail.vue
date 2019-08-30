@@ -14,8 +14,8 @@
         </div>
       </swipe>
 
-      <product-info-card :data-source="product" />
-      <product-detail-card :data-source="product" :on-show-dialog="onShow"/>
+      <product-info-card :data-source="prod" />
+      <product-detail-card :data-source="prod" :on-show-dialog="onShow"/>
     </div>
     <bgain-base-dialog
       v-model="visible"
@@ -61,6 +61,7 @@ export default {
     return {
       current: 0,
       visible: false,
+      prod: {},
     };
   },
   computed: {
@@ -74,14 +75,16 @@ export default {
     },
   },
   async mounted() {
-    const { id } = this.$route.params;
     try {
       Toast.loading({
         duration: 0,
       });
+      const { id } = this.$route.params;
       await this.getBgpProductDetail(id);
+      this.prod = this.product;
       Toast.clear();
     } catch (error) {
+      Toast.clear();
       Toast(error);
     }
   },

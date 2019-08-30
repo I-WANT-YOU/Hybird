@@ -2,7 +2,7 @@
   <div class="container">
     <!--<BgainNavBar title = ""/>-->
     <van-image class="image-banner" :src="InterestArbitrageFund"/>
-    <div class="buttonContainer"><van-image class="image-button" :src="CTAButton"/></div>
+    <div class="buttonContainer" @click="onSkip"><van-image class="image-button" :src="CTAButton"/></div>
   </div>
 </template>
 
@@ -11,6 +11,7 @@ import { Image } from 'vant';
 // import BgainNavBar from '@component/BgainNavBar.vue';
 import InterestArbitrageFund from '../../assets/images/staticViews/InterestArbitrageFund.png';
 import CTAButton from '../../assets/images/staticViews/CTAButton.png';
+import Bridge from '@/config/bridge';
 
 export default {
   name: 'InterestArbitrageFund',
@@ -23,6 +24,14 @@ export default {
   components: {
     'van-image': Image,
     // BgainNavBar,
+  },
+  methods: {
+    onSkip() {
+      Bridge.sendMessage({
+        module: 'fund',
+        action: 'getInitial',
+      });
+    },
   },
 };
 </script>
