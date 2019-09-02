@@ -118,10 +118,6 @@ export default {
     window.skipRules = this.skipRules;
     Bridge.sendMessage({
       module: 'active',
-      action: 'getRefer',
-    });
-    Bridge.sendMessage({
-      module: 'active',
       action: 'setTitle',
       params: '邀请记录',
     });
@@ -143,7 +139,9 @@ export default {
 
 <style lang="scss" scoped>
 .refer-wrap {
-  padding-bottom: 64px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   .info {
     height: 180px;
     display: flex;
@@ -255,6 +253,7 @@ export default {
     }
   }
   .list {
+    flex: 1;
     .blank {
       font-size: 14px;
       color: #999999;
@@ -271,10 +270,8 @@ export default {
     }
   }
   .button {
-    position: fixed;
     text-align: center;
-    left: 22px;
-    bottom: 18px;
+    margin: 10px auto 15px;
     width: 331px;
     height: 46px;
     line-height: 46px;

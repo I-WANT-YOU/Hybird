@@ -5,7 +5,7 @@
       <div class="detail-item" v-for="(item,index) in detailList.operation_logs" :key="index">
         <div>
           <span>{{changeTr(item.transaction_type)}}</span>
-          <span>{{item.fbpType === 'INCREASE'?'+':'-'}}{{item.amount}}</span>
+          <span>{{item.fbp_type === 'INCREASE'?'+':'-'}}{{item.amount}}</span>
         </div>
         <div>
           {{createOrderDate(item.createAt)}}
@@ -159,6 +159,7 @@ export default {
     this.getBGPDetailList().then(
       () => {
         Toast.clear();
+        console.log(this.detailList);
       },
       (err) => {
         this.$toast.clear();

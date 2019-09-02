@@ -270,11 +270,7 @@ export default {
       // 获取banner
       this.getBanner();
       // 获取商品信息
-      this.getBgpProducts().then(
-        () => {
-        },
-        () => {},
-      );
+      this.getBgpProducts();
       Bridge.sendMessage(
         {
           module: 'active',
