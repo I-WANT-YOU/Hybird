@@ -41,7 +41,7 @@
         <div>快去邀请好友赚奖励的~</div>
       </div>
     </div>
-    <div class="button" @click="onClick"></div>
+    <div class="button" @click="onClick">我的邀请码 {{invitationCode}}</div>
   </div>
 </template>
 
@@ -49,6 +49,7 @@
 import { createNamespacedHelpers } from 'vuex';
 import { Toast } from 'vant';
 import { get } from 'lodash';
+import { copyText } from '@utils/tools';
 import Bridge from '@/config/bridge';
 import ReferCard from './components/ReferCard.vue';
 import errorMessage from '../../constants/responseStatus';
@@ -72,18 +73,19 @@ export default {
     onClick() {
       const inviteCode = get(this.basicInfo, 'invitation_code', '');
       if (inviteCode) {
-        Bridge.sendMessage({
-          module: 'active',
-          action: 'share',
-          params: {
-            type: 'web',
-            url: `${
-              window.location.origin
-            }/active/invitee?invite_code=${inviteCode}`,
-            title: '好友总动员，一起来赚钱，USDT免费送，独乐乐不如众乐乐~',
-            des: '邀请越多得越多，更有免费收益拿',
-          },
-        });
+        // Bridge.sendMessage({
+        //   module: 'active',
+        //   action: 'share',
+        //   params: {
+        //     type: 'web',
+        //     url: `${
+        //       window.location.origin
+        //     }/active/invitee?invite_code=${inviteCode}`,
+        //     title: '好友总动员，一起来赚钱，USDT免费送，独乐乐不如众乐乐~',
+        //     des: '邀请越多得越多，更有免费收益拿',
+        //   },
+        // });
+        copyText(inviteCode);
       }
     },
     onTip() {
@@ -109,15 +111,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['bonusSummary', 'inviteeDetailsList', 'rewardRecordList']),
+    ...mapGetters(['bonusSummary', 'inviteeDetailsList', 'rewardRecordList', 'invitationCode']),
     ...mapState(['referInfo', 'basicInfo']),
   },
   async mounted() {
     window.skipRules = this.skipRules;
-    Bridge.sendMessage({
-      module: 'active',
-      action: 'getRefer',
-    });
     Bridge.sendMessage({
       module: 'active',
       action: 'setTitle',
@@ -132,7 +130,7 @@ export default {
       if (error.status) {
         Toast(errorMessage[error.status]);
       } else {
-        Toast('网络故障');
+        Toast('未登录');
       }
     }
   },
@@ -141,7 +139,9 @@ export default {
 
 <style lang="scss" scoped>
 .refer-wrap {
-  padding-bottom: 64px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   .info {
     height: 180px;
     display: flex;
@@ -253,6 +253,7 @@ export default {
     }
   }
   .list {
+    flex: 1;
     .blank {
       font-size: 14px;
       color: #999999;
@@ -269,12 +270,14 @@ export default {
     }
   }
   .button {
-    position: fixed;
-    left: 22px;
-    bottom: 18px;
+    text-align: center;
+    margin: 10px auto 15px;
     width: 331px;
     height: 46px;
-    background: url("../../assets/images/invitation.svg");
+    line-height: 46px;
+    font-size: 16px;
+    color: #ffffff;
+    background: url("../../assets/images/invitation.png");
     background-size: 100% 100%;
   }
 }
