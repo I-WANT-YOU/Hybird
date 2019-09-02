@@ -39,13 +39,15 @@ export default {
 <style lang="scss" scoped>
 .image-banner{
   position: relative;
-  width: 100%;
+  width: 375px;
+  height: 1730px;
 }
 .buttonContainer{
   position: absolute;
-  left: 97px;
-  right: 97px;
-  top: 400px;
+  left: 50%;
+  top: 0;
+  margin-top: 400px;
+  transform: translateX(-50%);
   .image-button{
     width:181px;
     height: 52px;

@@ -43,9 +43,10 @@ export default {
   }
   .buttonContainer{
     position: absolute;
-    left: 97px;
-    right: 97px;
-    top: 380px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 380px;
     .image-button{
       width:181px;
       height: 52px;
