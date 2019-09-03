@@ -455,8 +455,7 @@ export default {
   }
   /*轮播图*/
   .swipe-container {
-    padding-top: 29px;
-    width: 100%;
+    padding: 29px 0 0 0;
     display: flex;
     justify-content: center;
   }

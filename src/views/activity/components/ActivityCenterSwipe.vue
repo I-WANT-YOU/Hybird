@@ -3,13 +3,9 @@
     <Swipe
       :autoplay="3000"
       indicator-color="white"
-      :width = 335
-      :height= 88
     >
       <SwipeItem v-for="(item,index) in bannerList" :key="index">
         <van-image
-          width="335"
-          height="88"
           :src="item.img_url"
           @click="onSkip"
         />
