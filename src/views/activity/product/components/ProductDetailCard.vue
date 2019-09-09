@@ -15,7 +15,7 @@ import { createNamespacedHelpers } from 'vuex';
 import Bridge from '@/config/bridge';
 import BgainButton from '@/components/BgainButton.vue';
 
-const { mapGetters } = createNamespacedHelpers('activity');
+const { mapGetters, mapActions } = createNamespacedHelpers('activity');
 const { mapActions: mapAuthActions } = createNamespacedHelpers('auth');
 
 export default {
@@ -41,7 +41,9 @@ export default {
   computed: {
     ...mapGetters(['isEnoughBgp', 'isEnoughLevel', 'isEnoughStock']),
     buttonText() {
-      if (this.login && !this.isEnoughBgp) {
+      if (!this.login) {
+        return '立即兑换';
+      } if (this.login && !this.isEnoughBgp) {
         return '您的当前积分不足';
       } if (this.login && !this.isEnoughLevel) {
         return '您未达到兑换等级';
@@ -55,13 +57,19 @@ export default {
     },
   },
   mounted() {
+    if (this.dataSource.id) {
+      this.getBgpProductDetail(this.dataSource.id);
+    }
     this.isLogin().then(() => {
       this.login = true;
+      console.log(this.login);
     }, () => {
       this.login = false;
+      console.log(this.login);
     });
   },
   methods: {
+    ...mapActions(['getBgpProductDetail']),
     ...mapAuthActions(['isLogin']),
     onClick() {
       if (this.login) {
