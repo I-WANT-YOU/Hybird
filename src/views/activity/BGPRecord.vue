@@ -12,12 +12,12 @@
           <svg-icon icon-class="next" class="icon-style"/>
         </div>
       </div>
-      <div><span>{{basicInfo.fbp_amt}}</span></div>
+      <div><span>{{numberWithThousands(basicInfo.fbp_amt * 1)}}</span></div>
     </div>
     <!--交易记录-->
     <div class="trade-history">
       <div class="trade-tile">
-        交易记录
+        兑换记录
       </div>
       <div class="trade-content">
         <div class ="trade-item" v-for="(item,index) in recordList" :key="index"
@@ -54,6 +54,7 @@ import { Image, Toast } from 'vant';
 import { mapState, mapActions } from 'vuex';
 import Vue from 'vue';
 import PublicMethods from '@utils/publicMethods';
+import { numberWithThousands } from '@utils/tools';
 import BgainNavBar from '@/components/BgainNavBar.vue';
 import errorMessage from '../../constants/responseStatus';
 import Bridge from '@/config/bridge';
@@ -95,6 +96,10 @@ export default {
           orderId: id,
         },
       });
+    },
+
+    numberWithThousands(num) {
+      return numberWithThousands(num);
     },
 
     // 时间格式化
