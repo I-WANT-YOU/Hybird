@@ -2,7 +2,7 @@
   <div class="activity__container" :class="{setContainer:showSignIn}">
     <nav-bar title="活动中心" :show-arrow="false" />
     <!--会员值 已登陆-->
-    <div class="member-num" v-if="login === true" @click="onGoMemberPage">
+    <div class="member-num" v-show="login" @click="onGoMemberPage">
       <div class="background">
         <div class="member-info">
           <span>{{userLevel}}</span>
@@ -14,7 +14,7 @@
       </div>
     </div>
     <!--未登录-->
-    <div class="member-num-unLogin"  v-else  @click="onLogin">
+    <div class="member-num-unLogin" v-show="!login" @click="onLogin">
       <div class="background">
         <span>领取会员权益，获得更多奖励</span>
         <div>
@@ -25,7 +25,7 @@
       </div>
     </div>
     <!--会员积分和签到-->
-    <div class="member-account" v-if="login">
+    <div class="member-account" v-show="login">
       <!--积分-->
       <div class="member-integral" @click="toRecord">
         <div>
@@ -37,7 +37,7 @@
           </div>
         </div>
         <div>
-          <img src="../../assets/images/active/integral.svg" alt="" />
+          <img src="../../assets/images/active/integral.svg" alt />
         </div>
       </div>
       <!--签到-->
@@ -82,7 +82,7 @@
           <span>&nbsp;天</span>
         </div>
         <div @click="closeSignIn">
-          <img src="../../assets/images/active/close_x.png" alt="" />
+          <img src="../../assets/images/active/close_x.png" alt />
         </div>
       </div>
     </div>
@@ -175,6 +175,7 @@ export default {
     },
 
     handleSetToken() {
+      Toast.clear();
       // 判断是否登录
       this.isLogin().then(() => {
         this.login = true;
@@ -264,6 +265,8 @@ export default {
   },
   mounted() {
     Toast.loading({
+      duration: 0,
+      forbidClick: true,
       message: '加载中...',
     });
     try {
@@ -279,7 +282,8 @@ export default {
         this.handleSetToken,
       );
     } catch (error) {
-      this.$toast(error);
+      Toast.clear();
+      Toast('网络错误');
     }
   },
   beforeDestroy() {

@@ -272,13 +272,26 @@ export default {
     ...mapGetters(['top', 'tabList', 'updateTime']),
     // 倒计时
     dateTime() {
-      const endTime = Dayjs('2019-09-09 18:00') * 1;
-      const dd = parseInt((endTime - this.time) / (60 * 60 * 24 * 1000), 0);
-      const hh = parseInt(((endTime - this.time) / (60 * 60 * 1000)) % 24, 0);
-      const mm = parseInt(((endTime - this.time) / (60 * 1000)) % 60, 0);
-      const ss = parseInt(((endTime - this.time) / 1000) % 60, 0);
+      const endTime = Dayjs('2019-09-23 18:00') * 1;
+      const time = endTime - this.time;
+      let dd;
+      let hh;
+      let mm;
+      let ss;
+      if (time > 0) {
+        dd = parseInt((time) / (60 * 60 * 24 * 1000), 0);
+        hh = parseInt(((time) / (60 * 60 * 1000)) % 24, 0);
+        mm = parseInt(((time) / (60 * 1000)) % 60, 0);
+        ss = parseInt(((time) / 1000) % 60, 0);
+      } else {
+        dd = 0;
+        hh = 0;
+        mm = 0;
+        ss = 0;
+      }
+
       return {
-        dd,
+        dd: this.timeAddZero(dd),
         hh: this.timeAddZero(hh),
         mm: this.timeAddZero(mm),
         ss: this.timeAddZero(ss),
