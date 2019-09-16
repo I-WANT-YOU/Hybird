@@ -200,6 +200,13 @@ const router = new Router({
       name: 'InterestArbitrageFund',
       component: () => import('../views/staticViews/InterestArbitrageFund.vue'),
     },
+    /* 交易比赛二期 */
+    // 比赛详情页面
+    {
+      path: '/raceDetailTwo',
+      name: 'RaceDetailTwo',
+      component: () => import('../views/trading-competition-two/RaceDetail.vue'),
+    },
   ],
 });
 
