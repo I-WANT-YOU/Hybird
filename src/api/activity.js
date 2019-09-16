@@ -1,4 +1,4 @@
-import request from '@utils/request';
+import request from '@utils/requestV1';
 import { handlerResponse } from '@/utils/auth';
 
 class ActivityService {
