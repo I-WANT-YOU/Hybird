@@ -200,6 +200,11 @@ const router = new Router({
       name: 'InterestArbitrageFund',
       component: () => import('../views/staticViews/InterestArbitrageFund.vue'),
     },
+    {
+      path: '/Statement-of-Legitimate-Source-of-Fund',
+      name: 'SourceFund',
+      component: () => import('../views/staticViews/SourceFunds.vue'),
+    },
     /* 交易比赛二期 */
     // 比赛详情页面
     {

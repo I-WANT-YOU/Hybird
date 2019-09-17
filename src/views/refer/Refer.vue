@@ -72,6 +72,20 @@ export default {
         this.list = this.rewardRecordList;
       }
     },
+    async handleSetToken() {
+      try {
+        await this.getUserSummary();
+        await this.getReferInfo();
+        this.list = this.inviteeDetailsList;
+        this.info = this.referInfo;
+      } catch (error) {
+        if (error.status) {
+          Toast(errorMessage[error.status]);
+        } else {
+          Toast('未登录');
+        }
+      }
+    },
     onClick() {
       const inviteCode = get(this.basicInfo, 'invitation_code', '');
       if (inviteCode) {
@@ -116,25 +130,20 @@ export default {
     ...mapGetters(['bonusSummary', 'inviteeDetailsList', 'rewardRecordList', 'invitationCode']),
     ...mapState(['referInfo', 'basicInfo']),
   },
-  async mounted() {
+  mounted() {
     window.skipRules = this.skipRules;
     Bridge.sendMessage({
       module: 'active',
       action: 'setTitle',
       params: '邀请记录',
     });
-    try {
-      await this.getUserSummary();
-      await this.getReferInfo();
-      this.list = this.inviteeDetailsList;
-      this.info = this.referInfo;
-    } catch (error) {
-      if (error.status) {
-        Toast(errorMessage[error.status]);
-      } else {
-        Toast('未登录');
-      }
-    }
+    Bridge.sendMessage(
+      {
+        module: 'active',
+        action: 'getToken',
+      },
+      this.handleSetToken,
+    );
   },
 };
 </script>
