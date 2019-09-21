@@ -27,3 +27,7 @@ export const GET_HOME_COMMENTS = 'GET_HOME_COMMENTS';
 export const GET_HOME_REPORTS = 'GET_HOME_REPORTS';
 export const GET_HOME_TOP1 = 'GET_HOME_TOP1';
 export const GET_RANK_LIST = 'GET_RANK_LIST';
+
+// 二期
+export const GET_RACE_HOME = 'GET_RACE_HOME';
+export const GET_RACE_DETAIL = 'GET_RACE_DETAIL';

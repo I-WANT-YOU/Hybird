@@ -94,6 +94,35 @@ class AssetsService {
       throw new Error(error);
     }
   }
+
+  // 二期首页
+  static async getRaceHome() {
+    try {
+      const requestOptions = {
+        url: '/1',
+        // url: '/cat/index',
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  // 二期详情
+  static async getRaceDetail(detailId) {
+    try {
+      const requestOptions = {
+        url: `/cat/index/${detailId}`,
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
 
 export default AssetsService;

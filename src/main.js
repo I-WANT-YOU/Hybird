@@ -1,8 +1,9 @@
 import Vue from 'vue';
-import eruda from 'eruda';
+// import eruda from 'eruda';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import mixin from './mixin';
 import 'amfe-flexible';
 import 'normalize.css';
 import './assets/css/common.css';
@@ -19,6 +20,7 @@ Vue.config.productionTip = false;
 // }
 
 Vue.use(vVisible);
+Vue.mixin(mixin);
 
 new Vue({
   router,

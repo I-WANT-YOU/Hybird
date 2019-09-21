@@ -13,7 +13,8 @@ const router = new Router({
     // },
     {
       path: '/',
-      redirect: '/trading_competition',
+      // redirect: '/trading_competition',
+      redirect: '/trading-competition-two',
     },
     {
       path: '/login',
@@ -206,6 +207,26 @@ const router = new Router({
       component: () => import('../views/staticViews/SourceFunds.vue'),
     },
     /* 交易比赛二期 */
+    {
+      path: '/trading-competition-two',
+      name: 'tradingCompetitionTwo',
+      component: () => import('../views/trading-competition-two/TradingCompetitionTwo.vue'),
+    },
+    {
+      path: '/trading-competition-two-app',
+      name: 'tradingCompetitionTwoApp',
+      component: () => import('../views/trading-competition-two/TradingCompetitionTwoApp.vue'),
+    },
+    {
+      path: '/trading-competition-history',
+      name: 'tradingCompetitionHistory',
+      component: () => import('../views/trading-competition-two/TradingCompetitionHistory.vue'),
+    },
+    {
+      path: '/trading-competition-history-detail/:id',
+      name: 'tradingCompetitionHistoryDetail',
+      component: () => import('../views/trading-competition-two/HistoryDetail.vue'),
+    },
     // 比赛详情页面
     {
       path: '/raceDetailTwo',
