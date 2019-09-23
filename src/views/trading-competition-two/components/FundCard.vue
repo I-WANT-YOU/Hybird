@@ -46,9 +46,6 @@ export default {
       type: Object,
     },
   },
-  mounted() {
-    console.log('1');
-  },
   methods: {
     onBuy() {
       if (getClientType) {

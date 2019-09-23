@@ -213,11 +213,6 @@ const router = new Router({
       component: () => import('../views/trading-competition-two/TradingCompetitionTwo.vue'),
     },
     {
-      path: '/trading-competition-two-app',
-      name: 'tradingCompetitionTwoApp',
-      component: () => import('../views/trading-competition-two/TradingCompetitionTwoApp.vue'),
-    },
-    {
       path: '/trading-competition-history',
       name: 'tradingCompetitionHistory',
       component: () => import('../views/trading-competition-two/TradingCompetitionHistory.vue'),
