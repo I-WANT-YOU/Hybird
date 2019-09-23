@@ -8,7 +8,7 @@
             <span :class="['i', rank === '1' ? 'active' : '']" @click="sort('rank')"></span>
             <span class="b" @click="onToast('排名根据赛季ROI')"></span>
           </th>
-          <th>基金名称</th>
+          <th class="name-wrap">基金名称</th>
           <th>
             <span>净值</span>
             <span :class="['i', nav === '1' ? 'active' : '']" @click="sort('nav')"></span>
@@ -66,14 +66,14 @@
           <td>--</td>
           <td>--</td>
         </tr>
-        <tr class="benchmark">
+        <tr v-for="tr in benchmark" :key="tr.product_name" class="benchmark">
           <td colspan="2">
             <span>基准参考值</span>
-            <span class="b" @click="onToast('基准参考值为Bgain联合市场中多个优秀量化投资管理人共同打造的数字资产量化投资系列指数。')"></span>
+            <span class="b b1" @click="onToast('基准参考值为Bgain联合市场中多个优秀量化投资管理人共同打造的数字资产量化投资系列指数。')"></span>
           </td>
-          <td>{{benchmark.nav}}</td>
-          <td>{{benchmark.ror}}{{benchmark.ror ? '%' : ''}}</td>
-          <td>{{benchmark.roi_season}}{{benchmark.roi_season ? '%' : ''}}</td>
+          <td>{{tr.nav}}</td>
+          <td></td>
+          <td>{{tr.roi_season}}{{tr.roi_season ? '%' : ''}}</td>
         </tr>
       </tbody>
     </table>
@@ -89,7 +89,7 @@ export default {
     return {
       tableArr: [],
       failedArr: [],
-      benchmark: [],
+      benchmark: {},
       rank: '1',
       nav: '0',
       ror: '0',
@@ -103,15 +103,28 @@ export default {
   watch: {
     tableData(newData) {
       this.getData(newData);
-      this.sort('rank');
+    },
+  },
+  computed: {
+    active() {
+      if (this.rank === '1') {
+        return 'rank';
+      }
+      if (this.ror === '1') {
+        return 'ror';
+      }
+      if (this.roi_season === '1') {
+        return 'roi_season';
+      }
+      return 'rank';
     },
   },
   methods: {
     getData(data) {
       this.benchmark = data.filter(item => item.compare_to_benchmark * 1 === 0);
-      this.benchmark = this.benchmark.length && this.benchmark[0];
       this.tableArr = data.filter(item => item.compare_to_benchmark * 1 !== 0)
-        .filter(item => item.success);
+        .filter(item => item.success)
+        .sort((a, b) => a[this.active] * 1 - b[this.active] * 1);
       this.failedArr = data.filter(item => !item.success);
     },
     onToast(text) {
@@ -148,7 +161,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tables {
   .my-table {
     width: 100%;
@@ -189,6 +202,7 @@ export default {
       }
 
       .benchmark {
+        color: #1c7bff;
         border-bottom: 0;
       }
     }
@@ -219,6 +233,14 @@ export default {
     border-radius: 50%;
     background: url("../../../assets/images/trading-competition-two/home/an.png")
       no-repeat;
+    background-size: 7px 7px;
+  }
+
+  .b1 {
+    background: url("../../../assets/images/trading-competition-two/home/an2.png")
+      no-repeat;
+    width: 7px;
+    height: 9px;
     background-size: 7px 7px;
   }
 }

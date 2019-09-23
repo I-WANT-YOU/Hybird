@@ -58,6 +58,7 @@ module.exports = {
   },
   devServer: {
     host: '0.0.0.0',
+    disableHostCheck: true,
     port: 8080,
     // proxy: {
     //   // 设置代理

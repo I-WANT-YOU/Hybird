@@ -9,11 +9,17 @@
         src="../../../assets/images/trading-competition-two/home/initial.png"
         class="initial-icon"
       />
-      <div class="time linear">{{formatType(fundDetail.strategy)}} | {{fundDetail.period}}天锁定期</div>
+      <div class="time">
+        <span class="linear">{{formatType(fundDetail.strategy)}}</span>
+        <span class="linear">|</span>
+        <span class="linear">{{fundDetail.period}}天锁定期</span>
+      </div>
     </div>
-    <div v-if="fundDetail.status !== 'INITIAL'" class="no-initial">
+    <div v-else class="no-initial">
       <div class="no-initial-num">
-        <div class="linear">{{fundDetail.roi}}</div>
+        <div
+          class="linear"
+        >{{fundDetail.roi*1 > 0 ? '+' : ''}}{{(fundDetail.roi * 100).toFixed(2)}}%</div>
         <div class="linear">{{fundDetail.nav}}</div>
       </div>
       <div class="no-initial-text">
@@ -30,6 +36,9 @@
 </template>
 
 <script>
+import { getClientType } from '@utils/auth';
+import Bridge from '@/config/bridge';
+
 export default {
   name: 'FundCard',
   props: {
@@ -39,7 +48,15 @@ export default {
   },
   methods: {
     onBuy() {
-      window.location.href = `http://m.bgain.com/#/product/fund/noinitial/${this.fundDetail.id}`;
+      if (getClientType) {
+        Bridge.sendMessage({
+          module: 'active',
+          action: 'goFundDetail',
+          params: `${this.fundDetail.id}`,
+        });
+      } else {
+        window.location.href = `http://m.bgain.com/#/product/fund/noinitial/${this.fundDetail.id}`;
+      }
     },
     formatType(type) {
       switch (type) {
@@ -105,7 +122,7 @@ export default {
   }
 
   .initial {
-    margin-bottom: 10px;
+    margin-bottom: 7px;
 
     .initial-icon {
       width: 26px;
@@ -119,6 +136,13 @@ export default {
       font-size: 12px;
       line-height: 24px;
       margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      > span:nth-child(2) {
+        margin: -2px 3px 0;
+      }
     }
   }
 
