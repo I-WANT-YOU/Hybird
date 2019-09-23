@@ -72,7 +72,7 @@
             <span class="b" @click="onToast('基准参考值为Bgain联合市场中多个优秀量化投资管理人共同打造的数字资产量化投资系列指数。')"></span>
           </td>
           <td>{{benchmark.nav}}</td>
-          <td>{{benchmark.ror}}{{benchmark.ror ? '%' : ''}}</td>
+          <td></td>
           <td>{{benchmark.roi_season}}{{benchmark.roi_season ? '%' : ''}}</td>
         </tr>
       </tbody>
@@ -103,7 +103,20 @@ export default {
   watch: {
     tableData(newData) {
       this.getData(newData);
-      this.sort('rank');
+    },
+  },
+  computed: {
+    active() {
+      if (this.rank === '1') {
+        return 'rank';
+      }
+      if (this.ror === '1') {
+        return 'ror';
+      }
+      if (this.roi_season === '1') {
+        return 'roi_season';
+      }
+      return 'rank';
     },
   },
   methods: {
@@ -111,7 +124,8 @@ export default {
       this.benchmark = data.filter(item => item.compare_to_benchmark * 1 === 0);
       this.benchmark = this.benchmark.length && this.benchmark[0];
       this.tableArr = data.filter(item => item.compare_to_benchmark * 1 !== 0)
-        .filter(item => item.success);
+        .filter(item => item.success)
+        .sort((a, b) => a[this.active] * 1 - b[this.active] * 1);
       this.failedArr = data.filter(item => !item.success);
     },
     onToast(text) {
