@@ -39,19 +39,31 @@
             class="wallet-img"
           />
         </div>
-        <div class="league-icons-text">丰厚现金奖励</div>
+        <img
+          src="../../assets/images/trading-competition-two/home/wallet-text.png"
+          alt
+          class="league-icons-text wallet-text"
+        />
       </div>
       <div class="league-icons-wrap">
         <div class="league-icons-item">
           <img src="../../assets/images/trading-competition-two/home/hand.png" alt class="hand-img" />
         </div>
-        <div class="league-icons-text">高端商务合作</div>
+        <img
+          src="../../assets/images/trading-competition-two/home/hand-text.png"
+          alt
+          class="league-icons-text"
+        />
       </div>
       <div class="league-icons-wrap">
         <div class="league-icons-item">
           <img src="../../assets/images/trading-competition-two/home/lamp.png" alt class="lamp-img" />
         </div>
-        <div class="league-icons-text">业内品牌曝光</div>
+        <img
+          src="../../assets/images/trading-competition-two/home/lamp-text.png"
+          alt
+          class="league-icons-text"
+        />
       </div>
     </div>
 
@@ -170,7 +182,7 @@
           />
         </div>
         <div>
-          <div :class="[tabActive === 'no' ? 'active' : '']" @click="changTab('no')">不限策略(BTC)</div>
+          <div :class="[tabActive === 'no' ? 'active' : '']" @click="changTab('no')">不限策略(USD)</div>
           <img
             v-show="tabActive === 'no'"
             src="../../assets/images/trading-competition-two/home/table-tab-active.png"
@@ -245,6 +257,8 @@
 import { createNamespacedHelpers } from 'vuex';
 import { Toast } from 'vant';
 import { formatDate } from '@utils/tools';
+import { getClientType, removeClientType } from '@utils/auth';
+import Bridge from '@/config/bridge';
 import TradingFooter from './components/TradingFooter.vue';
 import FundCard from './components/FundCard.vue';
 import HomeTable from './components/TradingCompetitionTwoHomeTable.vue';
@@ -319,7 +333,14 @@ export default {
       this.isShowMore = !this.isShowMore;
     },
     goFund() {
-      window.location.href = 'http://m.bgain.com/#/product/fund';
+      try {
+        Bridge.sendMessage({
+          module: 'active',
+          action: 'goFundPage',
+        });
+      } catch (error) {
+        window.location.href = 'http://m.bgain.com/#/product/fund';
+      }
     },
     goHistory() {
       this.$router.push('/trading-competition-history');
@@ -332,9 +353,14 @@ export default {
       'rankingMarketNeutral', 'rankingUnlimited',
     ]),
     stepWidth() {
-      if (this.isStepWidth) {
+      if (this.isStepWidth && this.stepActive === 1) {
+        return this.$refs['step-line'][this.stepActive - 1].offsetWidth * ((this.surplusDate - 23) / 7);
+      }
+
+      if (this.isStepWidth && this.stepActive !== 1) {
         return this.$refs['step-line'][this.stepActive - 1].offsetWidth * (this.surplusDate / this.stagesTotalDay);
       }
+
       return '';
     },
     showData() {
@@ -466,11 +492,11 @@ export default {
   .league-icons {
     display: flex;
     justify-content: center;
-    height: 32px;
 
     .league-icons-wrap {
-      height: 32px;
       margin: 0 8px;
+      display: flex;
+      flex-direction: column;
 
       .league-icons-item {
         height: 22px;
@@ -495,17 +521,12 @@ export default {
       }
 
       .league-icons-text {
-        font-size: 8px;
-        font-family: Source Han Sans CN;
-        font-weight: 200;
-        color: rgba(255, 255, 255, 1);
-        background: linear-gradient(
-          0deg,
-          rgba(45, 164, 240, 1) 0%,
-          rgba(255, 255, 255, 1) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        width: 48px;
+        height: 8px;
+      }
+
+      .wallet-text {
+        width: 63px;
       }
     }
   }
@@ -793,7 +814,7 @@ export default {
 
     .table-tab-buttons {
       color: #ffffff;
-      font-size: 9px;
+      font-size: 12px;
       font-family: PingFang SC;
       display: flex;
       padding-top: 33px;

@@ -171,7 +171,7 @@
           />
         </div>
         <div>
-          <div :class="[tabActive === 'no' ? 'active' : '']" @click="changTab('no')">不限策略(BTC)</div>
+          <div :class="[tabActive === 'no' ? 'active' : '']" @click="changTab('no')">不限策略(USD)</div>
           <img
             v-show="tabActive === 'no'"
             src="../../assets/images/trading-competition-two/home/table-tab-active.png"

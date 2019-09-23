@@ -13,7 +13,9 @@
     </div>
     <div v-if="fundDetail.status !== 'INITIAL'" class="no-initial">
       <div class="no-initial-num">
-        <div class="linear">{{fundDetail.roi}}</div>
+        <div
+          class="linear"
+        >{{fundDetail.roi * 1 > 0 ? '+' : ''}}{{(fundDetail.roi * 100).toFixed(2)}}%</div>
         <div class="linear">{{fundDetail.nav}}</div>
       </div>
       <div class="no-initial-text">
