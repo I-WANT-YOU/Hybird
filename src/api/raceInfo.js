@@ -99,8 +99,7 @@ class AssetsService {
   static async getRaceHome() {
     try {
       const requestOptions = {
-        url: '/1',
-        // url: '/cat/index',
+        url: '/cat/index',
         method: 'get',
       };
       const response = await request(requestOptions);
@@ -114,7 +113,7 @@ class AssetsService {
   static async getRaceDetail(detailId) {
     try {
       const requestOptions = {
-        url: `/cat/index/${detailId}`,
+        url: `/cat/detail/${detailId}`,
         method: 'get',
       };
       const response = await request(requestOptions);
