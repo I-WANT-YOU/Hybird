@@ -48,13 +48,13 @@ export default {
   },
   methods: {
     onBuy() {
-      if (getClientType) {
+      try {
         Bridge.sendMessage({
           module: 'active',
           action: 'goFundDetail',
           params: `${this.fundDetail.id}`,
         });
-      } else {
+      } catch (e) {
         window.location.href = `http://m.bgain.com/#/product/fund/noinitial/${this.fundDetail.id}`;
       }
     },

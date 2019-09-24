@@ -44,7 +44,7 @@
           <td>{{tr.ror}}%</td>
           <td>{{tr.roi_season ? tr.roi_season + '%' : '--'}}</td>
         </tr>
-        <tr v-for="(tr,key) in failedArr" :key="key" class="failed-team">
+        <tr v-for="(tr,key) in failedData" :key="key" class="failed-team">
           <td class="table-rank">
             <span>--</span>
             <img
@@ -88,7 +88,6 @@ export default {
   data() {
     return {
       tableArr: [],
-      failedArr: [],
       benchmark: {},
       rank: '1',
       nav: '0',
@@ -97,6 +96,9 @@ export default {
   },
   props: {
     tableData: {
+      type: Array,
+    },
+    failedData: {
       type: Array,
     },
   },
@@ -125,7 +127,6 @@ export default {
       this.tableArr = data.filter(item => item.compare_to_benchmark * 1 !== 0)
         .filter(item => item.success)
         .sort((a, b) => a[this.active] * 1 - b[this.active] * 1);
-      this.failedArr = data.filter(item => !item.success);
     },
     onToast(text) {
       Toast(text);

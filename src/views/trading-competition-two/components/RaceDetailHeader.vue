@@ -1,0 +1,257 @@
+<template>
+  <div class="raceDetailHeader">
+    <div class="title">
+      <div class="title-text">
+        <span>辉与资本</span>
+      </div>
+      <div class="title-info">
+        <div>
+          <span>违规品种交易</span>
+          <span>高杠杆</span>
+          <span>高回撤</span>
+        </div>
+        <div>
+          <span>跟投最多</span>
+          <span>停业</span>
+          <span>高回撤</span>
+        </div>
+      </div>
+    </div>
+    <div class="latest-info">
+      <div class="netWorth">
+        <div>
+          <span>1.0923</span>
+          <img :src="up" alt="" class="arrow-icon"/>
+        </div>
+        <span>最新净值</span>
+      </div>
+      <div class="netWorth referenceValue">
+        <span>1.0923</span>
+        <span>基准值</span>
+      </div>
+    </div>
+    <div class="recent-info">
+      <div class="recent-info-item" v-for="(item,index) in recentInfo" :key="index">
+        <div class="recent-info-item-name">
+          <span>{{item.name}}</span>
+          <span>{{item.time}}</span>
+          <img class="hasTip" alt="" :src="tip"/>
+        </div>
+        <div class="recent-info-item-value">
+          <span>{{item.value}}</span>
+          <span>{{item.symbol}}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+import up from '../../../assets/images/trading-competition-two/detail/header/up.png';
+import down from '../../../assets/images/trading-competition-two/detail/header/down.png';
+import tip from '../../../assets/images/trading-competition-two/detail/header/tip.png';
+
+export default {
+  name: 'raceDetailHeader',
+  data() {
+    return {
+      up,
+      down,
+      tip,
+      recentInfo: [
+        {
+          name: '近一周',
+          value: '10.32',
+          symbol: '%',
+          time: '01./12',
+          tips: 'ddddddd',
+        },
+        {
+          name: '近一月',
+          value: '10.32',
+          symbol: '%',
+          time: '01/12',
+          tips: 'ddddddd',
+        },
+        {
+          name: '成立以来',
+          value: '14.99',
+          symbol: '%',
+          time: '02/12',
+          tips: 'ddddddd',
+        },
+      ],
+    };
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+  .raceDetailHeader{
+    width: 375px;
+    height: 192px;
+    background: url("../../../assets/images/trading-competition-two/detail/header/bg.png");
+    background-size: 375px 192px;
+    font-family:PingFang SC sans-serif;
+    /*标题*/
+    .title{
+      padding-top: 20px;
+      display: flex;
+      .title-text{
+        height: 18px;
+        padding: 0 10px 0 26px ;
+        display: flex;
+        align-items: center;
+        >span{
+          font-size:14px;
+          font-weight:400;
+          color:rgba(42,85,231,1);
+          background:linear-gradient(0deg,rgba(45,164,240,1) 0%, rgba(255,255,255,1) 100%);
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+        }
+      }
+      .title-info{
+        >div{
+          height: 18px;
+          display: flex;
+          align-items: center;
+          >span{
+            height: 11.5px;
+            margin-right: 16px;
+            padding-left: 4px;
+            padding-right: 4px;
+            line-height: 11.5px;
+            font-size:8px;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            background: #1C7AFF;
+            &:after{
+              content: '';
+              position: absolute;
+              margin-left: 3.8px;
+              width: 7.5px;
+              height: 11.5px;
+              background: url("../../../assets/images/trading-competition-two/detail/header/right-arrow.png") no-repeat;
+              background-size: 7.5px 11.5px;
+            }
+          }
+          /*实现三角*/
+          .triangle{
+            height: 0;
+            width: 0;
+            border-top: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 10px solid red;
+          }
+        }
+      }
+    }
+    /*最新数据*/
+    .latest-info{
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      >div{
+        width:103px;
+        height:63px;
+        margin: 0 9px;
+        background: url("../../../assets/images/trading-competition-two/detail/header/big-text-bg.png");
+        background-size:103px 63px ;
+      }
+      /*最新净值*/
+      .netWorth{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        >div{
+          padding-top: 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          >span{
+            font-size:23px;
+            font-family:Myriad Pro sans-serif;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            line-height:30px;
+          }
+          .arrow-icon{
+            margin-left: 3px;
+            width: 8px;
+            height: 11px;
+          }
+        }
+        >span{
+          margin-top: 7px;
+          font-size:10px;
+          font-family:SourceHanSansCN sans-serif;
+          font-weight:200;
+          color:rgba(255,255,255,1);
+        }
+      }
+      /*基准值*/
+      .referenceValue{
+        >span:nth-child(1){
+          margin: 0;
+          padding-top: 5px;
+          font-size:23px;
+          font-family:Myriad Pro sans-serif;
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height:30px;
+        }
+      }
+
+    }
+    /*近期数据*/
+    .recent-info{
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      .recent-info-item{
+        width:84px;
+        height:41px;
+        margin: 0 5px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background: url("../../../assets/images/trading-competition-two/detail/header/small-text-bg.png");
+        background-size: 84px 41px;
+        border-radius:8px;
+        font-size: 10px;
+        .recent-info-item-name{
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          font-family:SourceHanSansCN sans-serif;
+          color:rgba(255,255,255,1);
+          .hasTip{
+            position: absolute;
+            top: -4.5px;
+            right: -8px;
+            display: block;
+            width: 7px;
+            height: 7px;
+          }
+          >span{
+            padding: 2px 0;
+            font-weight:200;
+          }
+          >span:nth-child(1){
+            font-size:9px;
+          }
+          >span:nth-child(2){
+            font-size:7px;
+          }
+        }
+        .recent-info-item-value{
+          color:rgba(29,121,252,1);
+        }
+      }
+    }
+  }
+</style>

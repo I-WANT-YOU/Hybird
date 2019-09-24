@@ -1,6 +1,6 @@
 <template>
   <div class="trading__footer__wrap">
-    <div class="trading__footer__text">copyright &copy; 2019 Bgain</div>
+    <div class="trading__footer__text">Copyright &copy; 2019 Bgain</div>
   </div>
 </template>
 
