@@ -192,7 +192,7 @@
       </div>
 
       <div class="table-tab-table">
-        <HomeTable :tableData="showData" />
+        <HomeTable :tableData="showData" :failedData="failedData"/>
       </div>
 
       <div v-show="tableData.length > 10" class="table-more">
@@ -363,9 +363,15 @@ export default {
 
       return '';
     },
+    failedData() {
+      if (!this.isShowMore) {
+        return [];
+      }
+      return this.tableData.filter(item => !item.success);
+    },
     showData() {
-      const date = this.tableData.slice(0, 11);
-
+      const tableArr = this.tableData.filter(item => item.success);
+      const date = tableArr.sort((a, b) => a.rank - b.rank).slice(0, 11);
       if (this.isShowMore) {
         return this.tableData;
       }

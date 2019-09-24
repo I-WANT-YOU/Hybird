@@ -23,13 +23,25 @@
           <span>{{item}}</span>
         </div>
       </div>
+      <!--展示图表数据-->
+      <div class="showSingleData">
+        <span>{{singleData.date.name+'：'+singleData.date.value}}</span>
+        <div>
+          <span>{{singleData.value1.name+'：'+singleData.value1.value}}</span>
+          <span>{{singleData.value2.name+'：'+singleData.value2.value}}</span>
+        </div>
+      </div>
       <div class="chart" ref="myChart"></div>
     </div>
   </div>
 </template>
 
 <script>
+/* eslint-disable max-len */
+
 import EChart from 'echarts';
+import { mapActions, mapState } from 'vuex';
+import pulicMethods from '@utils/publicMethods';
 import bg from '../../../assets/images/trading-competition-two/detail/content/bg-three.png';
 
 export default {
@@ -49,9 +61,27 @@ export default {
       ],
       typeTabSelected: 0,
       timeTabSelected: 3,
+      singleData: {
+        date: {
+          name: '日期',
+          value: '--',
+        },
+        value1: {
+          name: '当日净值',
+          value: '--',
+        },
+        value2: {
+          name: '基准净值',
+          value: '--',
+        },
+      },
     };
   },
+  computed: {
+    ...mapState('race/raceInfo', ['raceDetail']),
+  },
   methods: {
+    ...mapActions('race/raceInfo', ['getRaceDetail']),
     /* 改变类型 */
     changeType(index) {
       this.typeTabSelected = index;
@@ -59,9 +89,76 @@ export default {
     /* 改变时间轴 */
     changeTime(index) {
       this.timeTabSelected = index;
+      if (this.typeTabSelected === 0) {
+        switch (index) {
+          case 0:
+            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 8));
+            break;
+          case 1:
+            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 31));
+            break;
+          case 2:
+            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 187));
+            break;
+          case 3:
+            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 365));
+            break;
+          default:
+            break;
+        }
+      } else {
+        switch (index) {
+          case 0:
+            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 7));
+            break;
+          case 1:
+            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 7));
+            break;
+          case 2:
+            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 7));
+            break;
+          case 3:
+            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 7));
+            break;
+          default:
+            break;
+        }
+      }
     },
-    /* 初始化净值走势折线图 */
+    /* 格式化时间（年 chart数据） */
+    formatChartYearData(date) {
+      return pulicMethods.formatChartYearData(date);
+    },
+    /* 格式化净值图表数据（第一个） */
+    formatNetWorthChartData(data, times) {
+      const currentData = {
+        xData: [],
+        yOne: [],
+        yTwo: [],
+        maxNum: '',
+        minNum: '',
+      };
+      let filterData = [];
+      if (!!times && times < data.length) { // 不同的日期显示不同数据
+        /* 第一遍筛选 */
+        filterData = data.filter((item, index) => index >= (data.length - times));
+      } else {
+        filterData = data;
+      }
+      currentData.xData = filterData.map(item => this.formatChartYearData(item.x)); // 格式化时间
+      currentData.yOne = filterData.map(item => item.y1);
+      currentData.yTwo = filterData.map(item => item.y2);
+      const y1max = Math.max.apply(null, currentData.yOne);
+      const y1min = Math.min.apply(null, currentData.yOne);
+      const y2max = Math.max.apply(null, currentData.yTwo);
+      const y2min = Math.min.apply(null, currentData.yTwo);
+      currentData.maxNum = y1max > y2max ? y1max : y2max;
+      currentData.minNum = y1min > y2min ? y2min : y1min;
+      return currentData;
+    },
+    /* 净值走势折线图 */
     initTrendChart(chartData) {
+      // 最大值和最小值为0时候的判断
       this.myChart = EChart.init(this.$refs.myChart);
       this.myChart.clear();
       const optionLineOne = {
@@ -73,7 +170,7 @@ export default {
         },
         color: ['#EA772A'],
         legend: {
-          data: ['净值'],
+          data: ['Bgain指数', 'nav'],
           itemHeight: 4,
           orient: 'vertical',
           icon: 'roundRect',
@@ -81,7 +178,7 @@ export default {
           textStyle: {
             color: '#F8E39E',
             padding: [4, 0, 3, 0],
-            fontSize: 10,
+            fontSize: 8,
           },
         },
         tooltip: {
@@ -104,7 +201,7 @@ export default {
           type: 'category',
           // nameGap: '170px',
           axisLine: {
-            show: false,
+            show: true,
           },
           axisLabel: {
             color: '#F8E39E',
@@ -122,12 +219,12 @@ export default {
         },
         yAxis: {
           type: 'value',
-          min: chartData.maxNum === chartData.minNum ? chartData.minNum / 1.1 : (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2),
-          max: chartData.maxNum === chartData.minNum ? chartData.maxNum * 1.1 : (chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1),
-          interval: chartData.maxNum === chartData.minNum ? (chartData.maxNum * 1.1 - chartData.minNum / 1.1) / 6 : ((chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1) - (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2)) / 6,
+          min: chartData.minNum,
+          max: chartData.maxNum,
+          interval: (chartData.maxNum - chartData.minNum) / 5,
           nameGap: '70px',
           axisLine: {
-            show: false,
+            show: true,
           },
           axisLabel: {
             formatter: (value) => {
@@ -152,8 +249,20 @@ export default {
           },
         },
         series: [{
-          name: '净值',
-          data: chartData.yData,
+          name: 'Bgain指数',
+          data: chartData.yOne,
+          type: 'line',
+          animationEasing: 'liner',
+          smooth: true,
+          symbol: 'none',
+          lineStyle: {
+            color: '#EA772A',
+            width: 0.8,
+          },
+        },
+        {
+          name: 'nav',
+          data: chartData.yTwo,
           type: 'line',
           animationEasing: 'liner',
           smooth: true,
@@ -168,7 +277,23 @@ export default {
     },
   },
   mounted() {
-    this.initTrendChart();
+    this.getRaceDetail(1).then(
+      () => {
+        try {
+          /* 初始化净值走势图表 */
+          this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 365));
+          /* 初始化净值走势展示数据 */
+          // this.initChartShowData('netWorth', this.teamDetailInfo.nav_data);
+        } catch (e) {
+          throw new Error(e);
+        }
+      },
+      (error) => {
+        if (error.status) {
+        } else {
+        }
+      },
+    );
   },
 };
 </script>
@@ -243,6 +368,7 @@ export default {
       }
     }
     .chart{
+      margin: auto;
       width: 315px;
       height: 150px;
     }
