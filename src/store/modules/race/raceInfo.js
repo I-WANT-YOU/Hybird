@@ -41,7 +41,7 @@ const getters = {
   rankingMarketNeutral: state => get(state.raceHome, 'ranking_market_neutral', []),
   rankingUnlimited: state => get(state.raceHome, 'ranking_unlimited', []),
   // 二期详情
-  productName: state => get(state.raceDetail, 'productName', '产品名称'), // 产品名称
+  productName: state => get(state.raceDetail, 'product_name', '产品名称'), // 产品名称
   createDate: state => formatDate(get(state.raceDetail, 'establishDate', '2019-09-20 06:00'), 'YYYY.MM.DD'), // 成立日期
   size: state => get(state.raceDetail, 'size', '0'), // 当前规模
   sharpeRatio: state => get(state.raceDetail, 'sharpeRatio', '0'), // 夏普率
@@ -63,10 +63,11 @@ const getters = {
   profile: state => get(state.raceDetail, 'profile', {}), // 团队介绍
   navDate: state => get(state.raceDetail, 'navData', []), // 净值
   compareData: state => get(state.raceDetail, 'compareData', []), // Bgain指数
-  weekDataTwo: state => get(state.raceDetail, 'week_rate_data', []), // 周
-  monthDataTwo: state => get(state.raceDetail, 'month_rate_data', []), // 月
-  halfYearDataTwo: state => get(state.raceDetail, 'half_year_rate_data', []), // 半年
+  weekDataTwo: state => get(state.raceDetail, 'week_data', []), // 周
+  monthDataTwo: state => get(state.raceDetail, 'month_data', []), // 月
+  halfYearDataTwo: state => get(state.raceDetail, 'halt_year_data', []), // 半年
   allYearDataTwo: state => get(state.raceDetail, 'return_rate_data', []), // 全部
+  teamIntroduction: state => get(state.raceDetail, 'profile', []),
 };
 const mutations = {
   [types.GET_TEAM_DETAIL](state, payload) {
