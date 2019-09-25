@@ -2,11 +2,11 @@
     <div class="raceDetailTeamInfo">
       <p class="title">团队详情</p>
       <div class="teamInfo">
-        <img alt=""/>
+        <van-image class="logo-icon" :src="teamIntroduction.team_logo" alt=""/>
         <div class="info-detail">
-          <p class="teamName">罩杯资本</p>
-          <p>管理人：会与资本</p>
-          <p>量化投资策略 本基金主要采用三大类量化模型分别用以评估资产定价、控制风险和优化交易。基于模型结果,基金管理人结合市场环境和股票特性......</p>
+          <p class="teamName">{{teamIntroduction.team_name}}</p>
+          <p>管理人：{{teamIntroduction.manager_name}}</p>
+          <p>{{teamIntroduction.team_introduction}}</p>
         </div>
       </div>
       <div class="buttons">
@@ -17,8 +17,17 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { Image } from 'vant';
+
 export default {
   name: 'RaceDetailTeamInfo',
+  components: {
+    'van-image': Image,
+  },
+  computed: {
+    ...mapGetters('race/raceInfo', ['teamIntroduction']),
+  },
 };
 </script>
 
@@ -44,7 +53,7 @@ export default {
     .teamInfo{
       display: flex;
       margin-top: 18px;
-      >img{
+      .logo-icon{
         margin-left: 38px;
         width: 63px;
         height: 64px;

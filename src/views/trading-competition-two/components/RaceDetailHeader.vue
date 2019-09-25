@@ -2,7 +2,7 @@
   <div class="raceDetailHeader">
     <div class="title">
       <div class="title-text">
-        <span>辉与资本</span>
+        <span>{{productName}}</span>
       </div>
       <div class="title-info">
         <div>
@@ -48,9 +48,12 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex';
 import up from '../../../assets/images/trading-competition-two/detail/header/up.png';
 import down from '../../../assets/images/trading-competition-two/detail/header/down.png';
 import tip from '../../../assets/images/trading-competition-two/detail/header/tip.png';
+
+const { mapGetters } = createNamespacedHelpers('race/raceInfo');
 
 export default {
   name: 'raceDetailHeader',
@@ -83,6 +86,30 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    ...mapGetters(['createDate',
+      'size',
+      'productName',
+      'sharpeRatio',
+      'calmarRatio',
+      'benchmarkNav',
+      'nav',
+      'change',
+      'pnl',
+      'roiSeason',
+      'roiAnnual',
+      'ror7Days',
+      'rank7Days',
+      'count7Days',
+      'ror28Days',
+      'rank28Days',
+      'count28Days',
+      'ror',
+      'rank',
+      'countWholePeriod',
+      'margin',
+      'maxDrawDownRate']),
   },
 };
 </script>
