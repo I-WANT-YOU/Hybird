@@ -1,5 +1,6 @@
 <template>
   <div class="trading-competition-two">
+    <!-- <BgainNavBar title="交易比赛"/> -->
     <div class="trading-competition-two-bg">
       <div class="trading-competition-two-bg-one"></div>
       <div class="trading-competition-two-bg-two"></div>
@@ -64,20 +65,6 @@
           alt
           class="league-icons-text"
         />
-      </div>
-    </div>
-
-    <div class="trading-competition-two-fund-wraps">
-      <div class="trading-competition-two-fund-title">
-        <img src="../../assets/images/trading-competition-two/home/fund.png" alt />
-        <div>已在平台正式发售,可购买</div>
-        <div @click="goFund">
-          <span>更多</span>
-          <img src="../../assets/images/trading-competition-two/home/more-title.png" alt />
-        </div>
-      </div>
-      <div class="trading-competition-two-funds">
-        <FundCard v-for="fund in featuredProducts" :fundDetail="fund" :key="fund.id" />
       </div>
     </div>
 
@@ -166,7 +153,7 @@
 
       <div class="table-tab-buttons">
         <div>
-          <div :class="[tabActive === 'cta' ? 'active' : '']" @click="changTab('cta')">CTA(BTC)</div>
+          <div :class="[tabActive === 'cta' ? 'active' : '']" @click="changTab('cta')">CTA(BTC计价)</div>
           <img
             v-show="tabActive === 'cta'"
             src="../../assets/images/trading-competition-two/home/table-tab-active.png"
@@ -174,7 +161,7 @@
           />
         </div>
         <div>
-          <div :class="[tabActive === 'mid' ? 'active' : '']" @click="changTab('mid')">市场中性(BTC)</div>
+          <div :class="[tabActive === 'mid' ? 'active' : '']" @click="changTab('mid')">市场中性(BTC计价)</div>
           <img
             v-show="tabActive === 'mid'"
             src="../../assets/images/trading-competition-two/home/table-tab-active.png"
@@ -182,7 +169,7 @@
           />
         </div>
         <div>
-          <div :class="[tabActive === 'no' ? 'active' : '']" @click="changTab('no')">不限策略(USD)</div>
+          <div :class="[tabActive === 'no' ? 'active' : '']" @click="changTab('no')">不限策略(USD计价)</div>
           <img
             v-show="tabActive === 'no'"
             src="../../assets/images/trading-competition-two/home/table-tab-active.png"
@@ -192,10 +179,10 @@
       </div>
 
       <div class="table-tab-table">
-        <HomeTable :tableData="showData" :failedData="failedData"/>
+        <HomeTable :tableData="showData" :failedData="failedData" :activeStatu="tabActive" />
       </div>
 
-      <div v-show="tableData.length > 10" class="table-more">
+      <div v-show="showMoreText" class="table-more">
         <div @click="showMore">
           <span class="more">{{isShowMore ? '收起更多' : '查看更多'}}</span>
           <span :class="['more-icon', isShowMore ? 'active' : '']"></span>
@@ -204,7 +191,7 @@
     </div>
 
     <div class="trading-competition-two-spot-wrap">
-      <div class="spot-title linear">本期看点</div>
+      <div class="spot-title linear">赛事看点</div>
       <div class="spot-con">
         <div class="spot-con-item">
           <img
@@ -212,8 +199,8 @@
             class="spot-con-item-icon"
           />
           <div class="spot-con-item-text">
-            <div>业内最优量化交易团队</div>
-            <div>多种投资策略</div>
+            <div>顶尖交易团队</div>
+            <div>多样化投资策略</div>
           </div>
         </div>
         <div class="spot-con-item">
@@ -223,7 +210,7 @@
           />
           <div class="spot-con-item-text">
             <div>永续赛季</div>
-            <div>4x12周长期进行</div>
+            <div>持续追踪表现</div>
           </div>
         </div>
         <div class="spot-con-item">
@@ -233,7 +220,7 @@
           />
           <div class="spot-con-item-text">
             <div>专业投资人评委</div>
-            <div>长期追踪、分析比赛</div>
+            <div>长期追踪、定期点评</div>
           </div>
         </div>
         <div class="spot-con-item">
@@ -242,8 +229,8 @@
             class="spot-con-item-icon"
           />
           <div class="spot-con-item-text">
-            <div>多种评分标准</div>
-            <div>客观公正</div>
+            <div>严格比赛规则</div>
+            <div>交易风险可控</div>
           </div>
         </div>
       </div>
@@ -257,10 +244,9 @@
 import { createNamespacedHelpers } from 'vuex';
 import { Toast } from 'vant';
 import { formatDate } from '@utils/tools';
-import { getClientType, removeClientType } from '@utils/auth';
+// import BgainNavBar from '@component/BgainNavBar.vue';
 import Bridge from '@/config/bridge';
 import TradingFooter from './components/TradingFooter.vue';
-import FundCard from './components/FundCard.vue';
 import HomeTable from './components/TradingCompetitionTwoHomeTable.vue';
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
@@ -268,7 +254,7 @@ const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
 export default {
   name: 'TradingCompetitionTwo',
   components: {
-    FundCard,
+    // BgainNavBar,
     HomeTable,
     TradingFooter,
   },
@@ -368,6 +354,12 @@ export default {
         return [];
       }
       return this.tableData.filter(item => !item.success);
+    },
+    showMoreText() {
+      if (this.tableData.length > 11) {
+        return true;
+      }
+      return false;
     },
     showData() {
       const tableArr = this.tableData.filter(item => item.success);
@@ -500,7 +492,7 @@ export default {
     justify-content: center;
 
     .league-icons-wrap {
-      margin: 0 8px;
+      margin: 0 18px;
       display: flex;
       flex-direction: column;
 
@@ -527,61 +519,14 @@ export default {
       }
 
       .league-icons-text {
-        width: 48px;
-        height: 8px;
+        width: 32px;
+        height: 9px;
       }
 
       .wallet-text {
-        width: 63px;
+        width: 32px;
+        height: 9px;
       }
-    }
-  }
-
-  .trading-competition-two-fund-wraps {
-    margin-top: 30px;
-
-    .trading-competition-two-fund-title {
-      display: flex;
-      padding: 0 16px 4px 26px;
-
-      > img {
-        width: 55px;
-        height: 13px;
-      }
-
-      > div:nth-child(2) {
-        flex: 1;
-        font-size: 8px;
-        font-family: PingFang SC;
-        font-weight: 200;
-        color: rgba(153, 153, 153, 1);
-        padding-top: 4px;
-        margin-left: 11px;
-      }
-
-      > div:nth-child(3) {
-        font-size: 9px;
-        font-family: PingFang SC;
-        font-weight: 200;
-        padding-top: 3px;
-        color: rgba(255, 255, 255, 1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        img {
-          width: 8px;
-          height: 8px;
-          margin-left: 2px;
-        }
-      }
-    }
-
-    .trading-competition-two-funds {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
     }
   }
 
@@ -743,7 +688,7 @@ export default {
   }
 
   .trading-competition-two-table-title {
-    margin: 80px 0 10px;
+    margin: 90px 0 10px;
     padding: 0 16px 0 23px;
     display: flex;
     font-size: 9px;
@@ -757,7 +702,6 @@ export default {
       flex: 1;
       font-size: 8px;
       font-family: PingFang SC;
-      font-weight: 200;
       color: rgba(153, 153, 153, 1);
       padding: 4px 0 0 12px;
     }
@@ -836,7 +780,7 @@ export default {
         }
 
         > div {
-          margin: 0 10px;
+          margin: 0 7px;
           &.active {
             color: #1c7aff;
           }

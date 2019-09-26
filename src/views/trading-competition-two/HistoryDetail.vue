@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <!--<BgainNavBar title="团队详情" />-->
+    <!-- <BgainNavBar title="历史榜单" /> -->
     <div class="con">
       <div class="name">
         <div class="name-wrap">
@@ -61,15 +61,15 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
+import BgainNavBar from '@component/BgainNavBar.vue';
 import Footer from './components/TradingFooter.vue';
-// import BgainNavBar from '@component/BgainNavBar.vue';
 
 const { mapActions, mapState } = createNamespacedHelpers('race/raceInfo');
 export default {
   name: 'HistoryDetail',
   components: {
     Footer,
-    // BgainNavBar,
+    BgainNavBar,
   },
   methods: {
     ...mapActions(['getTeamDetailInfo']),

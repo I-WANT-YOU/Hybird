@@ -15,14 +15,14 @@
         </tr>
       </thead>
       <tbody class="table-tbody">
-        <tr v-for="(tr,key) in tableData" :key="key" class="tr-line">
+        <tr v-for="(tr,key) in tableData" :key="key" class="tr-line" @click="onSkip(tr.id)">
           <td class="table-rank">
             <span>{{tr.rank}}</span>
           </td>
           <td>{{tr.name}}</td>
           <td>{{tr.score}}</td>
           <td>{{tr.roi}}</td>
-          <td  @click="onSkip(tr.id)">详情</td>
+          <td>详情</td>
         </tr>
       </tbody>
     </table>
