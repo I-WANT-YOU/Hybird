@@ -25,10 +25,10 @@
       </div>
       <!--展示图表数据-->
       <div class="showSingleData">
-        <span>{{singleData.date.name+'：'+singleData.date.value}}</span>
+        <span>{{dataKeys.date+'：'+dataValues.date}}</span>
         <div>
-          <span>{{singleData.value1.name+'：'+singleData.value1.value}}</span>
-          <span>{{singleData.value2.name+'：'+singleData.value2.value}}</span>
+          <span>{{dataKeys.value1+'：'+dataValues.value1}}</span>
+          <span>{{dataKeys.value2+'：'+dataValues.value2}}</span>
         </div>
       </div>
       <div class="chart" ref="myChart"></div>
@@ -40,7 +40,7 @@
 /* eslint-disable max-len */
 
 import EChart from 'echarts';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import pulicMethods from '@utils/publicMethods';
 import bg from '../../../assets/images/trading-competition-two/detail/content/bg-three.png';
 
@@ -61,30 +61,32 @@ export default {
       ],
       typeTabSelected: 0,
       timeTabSelected: 3,
-      singleData: {
-        date: {
-          name: '日期',
-          value: '--',
-        },
-        value1: {
-          name: '当日净值',
-          value: '--',
-        },
-        value2: {
-          name: '基准净值',
-          value: '--',
-        },
+      dataKeys: {
+        date: '日期',
+        value1: '当日净值',
+        value2: '基准净值',
+      },
+      dataValues: {
+        date: '--',
+        value1: '--',
+        value2: '--',
       },
     };
   },
   computed: {
     ...mapState('race/raceInfo', ['raceDetail']),
+    ...mapGetters('race/raceInfo', ['navDate', 'compareData', 'weekDataTwo', 'monthDataTwo', 'halfYearDataTwo', 'allYearDataTwo']),
   },
   methods: {
     ...mapActions('race/raceInfo', ['getRaceDetail']),
     /* 改变类型 */
     changeType(index) {
       this.typeTabSelected = index;
+      if (index === 0) {
+        this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 365));
+      } else {
+        this.initProfitChart(this.formatNetWorthChartData(this.allYearDataTwo));
+      }
     },
     /* 改变时间轴 */
     changeTime(index) {
@@ -109,16 +111,16 @@ export default {
       } else {
         switch (index) {
           case 0:
-            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 7));
+            this.initProfitChart(this.formatNetWorthChartData(this.weekDataTwo));
             break;
           case 1:
-            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 7));
+            this.initProfitChart(this.formatNetWorthChartData(this.monthDataTwo));
             break;
           case 2:
-            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 7));
+            this.initProfitChart(this.formatNetWorthChartData(this.halfYearDataTwo));
             break;
           case 3:
-            this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 7));
+            this.initProfitChart(this.formatNetWorthChartData(this.allYearDataTwo));
             break;
           default:
             break;
@@ -129,8 +131,9 @@ export default {
     formatChartYearData(date) {
       return pulicMethods.formatChartYearData(date);
     },
-    /* 格式化净值图表数据（第一个） */
+    /* 格式表格数据 */
     formatNetWorthChartData(data, times) {
+      console.log(data);
       const currentData = {
         xData: [],
         yOne: [],
@@ -164,7 +167,7 @@ export default {
       const optionLineOne = {
         grid: {
           top: '12px',
-          left: '48px',
+          left: '30px',
           right: '10px',
           bottom: '45px',
         },
@@ -204,9 +207,9 @@ export default {
             show: true,
           },
           axisLabel: {
-            color: '#F8E39E',
-            margin: 10,
-            fontSize: 10,
+            color: '#ffffff',
+            margin: 8,
+            fontSize: 8,
             formatter: (value) => {
               const newValue = value.substring(5);
               return newValue;
@@ -224,7 +227,7 @@ export default {
           interval: (chartData.maxNum - chartData.minNum) / 5,
           nameGap: '70px',
           axisLine: {
-            show: true,
+            show: false,
           },
           axisLabel: {
             formatter: (value) => {
@@ -238,9 +241,9 @@ export default {
               }
               return newValue;
             },
-            color: '#F8E39E',
-            margin: 15,
-            fontSize: 10,
+            color: '#FFFFFF',
+            margin: 10,
+            fontSize: 7,
           },
           splitLine: {
             lineStyle: {
@@ -275,15 +278,175 @@ export default {
       };
       this.myChart.setOption(optionLineOne);
     },
+    /* 收益率折线图 */
+    initProfitChart(chartData) {
+      this.myChart = EChart.init(this.$refs.myChart);
+      this.myChart.clear();
+      const optionLineTwo = {
+        grid: {
+          top: '12px',
+          left: '55px',
+          right: '10px',
+          bottom: '45px',
+        },
+        color: ['#EA772A', '#5294D4'],
+        legend: {
+          itemHeight: 4,
+          data: ['仅持有BTC的收益率', '用BTC购买该基金的收益率（以USD计价）'],
+          icon: 'roundRect',
+          bottom: 'bottom',
+          textStyle: {
+            color: '#F8E39E',
+            padding: [4, 0, 3, 0],
+            fontSize: 10,
+          },
+          formatter(name) {
+            if (name === '仅持有BTC的收益率') {
+              return '买BTC收益率';
+            }
+            return '买基金（USD）收益率';
+          },
+          tooltip: {
+            show: true,
+          },
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: (params) => {
+            this.profitDate = params[0].axisValue;
+            this.profitBTC = `${Math.floor(params[0].value * 10000) / 100}%`;
+            this.profitUSD = `${Math.floor(params[1].value * 10000) / 100}%`;
+            return '';
+          },
+          // formatter: params => `<div>${params[0].seriesName}:${Math.floor(params[0].value * 10000) / 100}%</div><div>${params[1].seriesName}:${Math.floor(params[1].value * 10000) / 100}%</div>`,
+        },
+        xAxis: {
+          type: 'category',
+          axisLine: {
+            show: false,
+          },
+          axisLabel: {
+            color: '#F8E39E',
+            margin: 10,
+            fontSize: 10,
+            formatter: (value) => {
+              const newValue = value.substring(5);
+              return newValue;
+            },
+          },
+          axisTick: {
+            show: false,
+          },
+          data: chartData.xData,
+        },
+        yAxis: {
+          type: 'value',
+          // min: (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2),
+          // max: (chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1),
+          // interval: ((chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1)-(chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2))/5,
+          // min:-0.2,
+          // max:0.6,
+          // interval:0.2,
+          min: Math.floor(chartData.minNum * 10) / 10,
+          max: Math.ceil(chartData.maxNum * 10) / 10,
+          interval: (Math.ceil(chartData.maxNum * 10) / 10 - Math.floor(chartData.minNum * 10) / 10) / 5,
+          nameGap: '70px',
+          axisLine: {
+            show: false,
+          },
+          axisLabel: {
+            color: '#F8E39E',
+            margin: 12,
+            fontSize: 10,
+            formatter: (value) => {
+              let newValue = (Math.floor(value * 10000) / 100);
+              if (newValue >= 0) {
+                newValue = newValue.toString();
+                if (newValue.length === 1) {
+                  newValue += '.00';
+                  newValue += '%';
+                } else if (newValue.length === 2) {
+                  newValue += '.00';
+                  newValue += '%';
+                } else if (newValue.length === 3) {
+                  newValue += '.00';
+                  newValue += '%';
+                } else if (newValue.length === 4) {
+                  if (newValue - 10 > 0) {
+                    newValue += '0';
+                    newValue += '%';
+                  } else {
+                    newValue += '%';
+                  }
+                } else if (newValue.length === 5) {
+                  newValue += '%';
+                } else if (newValue.length === 6) {
+                  newValue += '%';
+                }
+              }
+              if (newValue < 0) {
+                newValue = newValue.toString();
+                if (newValue.length === 2) {
+                  newValue += '.00';
+                  newValue += '%';
+                } else if (newValue.length === 3) {
+                  newValue += '.00';
+                  newValue += '%';
+                } else if (newValue.length === 4) {
+                  newValue += '.00';
+                  newValue += '%';
+                } else if (newValue.length === 5) {
+                  newValue += '0';
+                  newValue += '%';
+                } else if (newValue.length === 6) {
+                  newValue += '%';
+                } else if (newValue.length === 7) {
+                  newValue += '%';
+                }
+              }
+              return newValue;
+            },
+          },
+          splitLine: {
+            lineStyle: {
+              color: '#2C2C2C',
+            },
+          },
+        },
+        series: [{
+          name: '仅持有BTC的收益率',
+          data: chartData.yOne,
+          type: 'line',
+          smooth: true,
+          symbol: 'none',
+          lineStyle: {
+            color: '#EA772A',
+            width: 0.8,
+          },
+        },
+        {
+          name: '用BTC购买该基金的收益率（以USD计价）',
+          data: chartData.yTwo,
+          type: 'line',
+          smooth: true,
+          symbol: 'none',
+          lineStyle: {
+            color: '#5294D4',
+            width: 0.8,
+          },
+        },
+        ],
+      };
+      this.myChart.setOption(optionLineTwo);
+    },
+
   },
   mounted() {
-    this.getRaceDetail(1).then(
+    this.getRaceDetail(10).then(
       () => {
         try {
           /* 初始化净值走势图表 */
           this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 365));
-          /* 初始化净值走势展示数据 */
-          // this.initChartShowData('netWorth', this.teamDetailInfo.nav_data);
         } catch (e) {
           throw new Error(e);
         }
@@ -365,6 +528,23 @@ export default {
             background-color: #2A55E7;
           }
         }
+      }
+    }
+    /*展示数据*/
+    .showSingleData{
+      margin: auto;
+      width: 315px;
+      display: flex;
+      flex-direction: column;
+      span{
+        font-size:8px;
+        font-weight:200;
+        color:rgba(255,255,255,1);
+      }
+      >div{
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
       }
     }
     .chart{
