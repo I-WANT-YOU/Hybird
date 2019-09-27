@@ -166,29 +166,29 @@ const router = new Router({
       component: () => import('../views/staticViews/SafetySecurity.vue'),
     },
     // 比赛详情页面
-    {
-      path: '/raceDetail/:id',
-      name: 'RaceDetail',
-      component: () => import('../views/trading-competition/RaceDetail.vue'),
-    },
+    // {
+    //   path: '/raceDetail/:id',
+    //   name: 'RaceDetail',
+    //   component: () => import('../views/trading-competition/RaceDetail.vue'),
+    // },
     // 交易大赛
-    {
-      path: '/trading_competition',
-      name: 'tradingCompetition',
-      component: () => import('../views/trading-competition/TradingCompetition.vue'),
-    },
+    // {
+    //   path: '/trading_competition',
+    //   name: 'tradingCompetition',
+    //   component: () => import('../views/trading-competition/TradingCompetition.vue'),
+    // },
     // 第一赛季排行
-    {
-      path: '/rank-history',
-      name: 'RankHistory',
-      component: () => import('../views/trading-competition/RankHistory.vue'),
-    },
-    // 第一赛季排行
-    {
-      path: '/history-detail/:id',
-      name: 'HistoryDetail',
-      component: () => import('../views/trading-competition/HistoryDetail.vue'),
-    },
+    // {
+    //   path: '/rank-history',
+    //   name: 'RankHistory',
+    //   component: () => import('../views/trading-competition/RankHistory.vue'),
+    // },
+    // // 第一赛季排行
+    // {
+    //   path: '/history-detail/:id',
+    //   name: 'HistoryDetail',
+    //   component: () => import('../views/trading-competition/HistoryDetail.vue'),
+    // },
     // CTA母基金
     {
       path: '/CTAMotherFund',

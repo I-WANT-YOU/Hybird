@@ -22,7 +22,10 @@
         </tr>
       </thead>
       <tbody class="table-tbody">
-        <tr v-for="(tr,key) in tableArr" :key="`${tr.product_name}${key}`" class="tr-line">
+        <tr v-for="(tr,key) in tableArr" :key="`${tr.product_name}${key}`" class="tr-line"
+        @click="()=>{
+        $router.push({name:'RaceDetailTwo',query:{id:tr.product_id}})}"
+        >
           <td class="table-rank">
             <span>{{tr.rank}}</span>
             <img
