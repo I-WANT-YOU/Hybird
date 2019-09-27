@@ -1,7 +1,8 @@
 <template>
   <div class="history-wrap">
+    <!-- <BgainNavBar title="历史榜单"/> -->
     <div class="con">
-      <div class="title">历史榜单</div>
+      <div class="title">第一赛季排行榜</div>
       <div class="trading-competition-history-table-wrap">
         <div class="trading-competition-history-table-bg">
           <div class="header"></div>
@@ -59,12 +60,15 @@
 import { createNamespacedHelpers } from 'vuex';
 import Footer from './components/home/TradingFooter.vue';
 import Table from './components/home/HistoryTable.vue';
+// import BgainNavBar from '@component/BgainNavBar.vue';
+
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
 
 export default {
   name: 'TradingCompetitionHistory',
   components: {
+    // BgainNavBar,
     Table,
     Footer,
   },
@@ -111,11 +115,7 @@ export default {
 
 <style lang="scss" scoped>
 .history-wrap {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
 
@@ -124,7 +124,6 @@ export default {
     background: url("../../assets/images/trading-competition-two/history/wrap-bg.png")
       no-repeat;
     background-size: 375px 100%;
-    padding-bottom: 74px;
     position: relative;
 
     .trading-competition-history-table-wrap {
@@ -208,7 +207,7 @@ export default {
       font-size: 14px;
       font-family: PingFang SC;
       color: rgba(42, 85, 231, 1);
-      line-height: 39px;
+      line-height: 43px;
 
       background: linear-gradient(
         0deg,
