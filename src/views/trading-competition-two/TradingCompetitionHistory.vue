@@ -58,16 +58,17 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import BgainNavBar from '@component/BgainNavBar.vue';
-import Footer from './components/TradingFooter.vue';
-import Table from './components/HistoryTable.vue';
+import Footer from './components/home/TradingFooter.vue';
+import Table from './components/home/HistoryTable.vue';
+// import BgainNavBar from '@component/BgainNavBar.vue';
+
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
 
 export default {
   name: 'TradingCompetitionHistory',
   components: {
-    BgainNavBar,
+    // BgainNavBar,
     Table,
     Footer,
   },

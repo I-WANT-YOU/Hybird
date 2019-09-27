@@ -2,11 +2,11 @@
     <div class="raceDetailTeamInfo">
       <p class="title">团队详情</p>
       <div class="teamInfo">
-        <van-image class="logo-icon" :src="teamIntroduction.team_logo" alt=""/>
+        <van-image class="logo-icon" :src="profile.team_logo" alt=""/>
         <div class="info-detail">
-          <p class="teamName">{{teamIntroduction.team_name}}</p>
-          <p>管理人：{{teamIntroduction.manager_name}}</p>
-          <p>{{teamIntroduction.team_introduction}}</p>
+          <p class="teamName">{{profile.team_name}}</p>
+          <p>管理人：{{profile.manager_name}}</p>
+          <p>{{profile.team_introduction}}</p>
         </div>
       </div>
       <div class="buttons">
@@ -26,7 +26,7 @@ export default {
     'van-image': Image,
   },
   computed: {
-    ...mapGetters('race/raceInfo', ['teamIntroduction']),
+    ...mapGetters('race/raceInfo', ['profile']),
   },
 };
 </script>
@@ -37,7 +37,7 @@ export default {
       margin: 0;
     }
     font-family:PingFang SC sans-serif;
-    background: url("../../../assets/images/trading-competition-two/detail/content/bg-three.png");
+    background: url("../../../../assets/images/trading-competition-two/detail/content/bg-three.png");
     color: white;
     .title{
      margin-left: 25px;

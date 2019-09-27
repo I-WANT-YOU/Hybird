@@ -20,22 +20,31 @@
     <div class="latest-info">
       <div class="netWorth">
         <div>
-          <span>1.0923</span>
-          <img :src="up" alt="" class="arrow-icon"/>
+          <span>{{nav}}</span>
+          <img :src="nav-0>0?up:down" alt="" class="arrow-icon"/>
         </div>
         <span>最新净值</span>
       </div>
       <div class="netWorth referenceValue">
-        <span>1.0923</span>
-        <span>基准值</span>
+        <span>{{roiSeason}}</span>
+        <span>赛季ROI</span>
       </div>
     </div>
     <div class="recent-info">
-      <div class="recent-info-item" v-for="(item,index) in recentInfo" :key="index">
+      <div class="recent-info-item" v-for="(item,index) in recentData" :key="index">
         <div class="recent-info-item-name">
           <span>{{item.name}}</span>
           <span>{{item.time}}</span>
-          <img class="hasTip" alt="" :src="tip"/>
+          <el-popover
+            placement="top"
+            title=''
+            width="170"
+            trigger="click">
+            <span class="tipOne"
+                  style="font-size: 12px;border: none;color:white">近1周净值涨跌幅及相应排名</span>
+            <img slot="reference"
+                 class="hasTip" alt="" :src="tip"  style="outline:none;border:none" />
+          </el-popover>
         </div>
         <div class="recent-info-item-value">
           <span>{{item.value}}</span>
@@ -43,15 +52,15 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import up from '../../../assets/images/trading-competition-two/detail/header/up.png';
-import down from '../../../assets/images/trading-competition-two/detail/header/down.png';
-import tip from '../../../assets/images/trading-competition-two/detail/header/tip.png';
+import { Popover } from 'element-ui';
+import up from '../../../../assets/images/trading-competition-two/detail/header/up.png';
+import down from '../../../../assets/images/trading-competition-two/detail/header/down.png';
+import tip from '../../../../assets/images/trading-competition-two/detail/header/tip.png';
 
 const { mapGetters } = createNamespacedHelpers('race/raceInfo');
 
@@ -62,29 +71,6 @@ export default {
       up,
       down,
       tip,
-      recentInfo: [
-        {
-          name: '近一周',
-          value: '10.32',
-          symbol: '%',
-          time: '01./12',
-          tips: 'ddddddd',
-        },
-        {
-          name: '近一月',
-          value: '10.32',
-          symbol: '%',
-          time: '01/12',
-          tips: 'ddddddd',
-        },
-        {
-          name: '成立以来',
-          value: '14.99',
-          symbol: '%',
-          time: '02/12',
-          tips: 'ddddddd',
-        },
-      ],
     };
   },
   computed: {
@@ -110,6 +96,35 @@ export default {
       'countWholePeriod',
       'margin',
       'maxDrawDownRate']),
+    recentData() {
+      const recentInfo = [
+        {
+          name: '近一周',
+          value: this.ror7Days,
+          symbol: '%',
+          time: `${this.rank7Days}/${this.count7Days}`,
+          tips: 'ddddddd',
+        },
+        {
+          name: '近一月',
+          value: this.ror28Days,
+          symbol: '%',
+          time: `${this.rank28Days}/${this.count28Days}`,
+          tips: 'ddddddd',
+        },
+        {
+          name: '成立以来',
+          value: this.ror,
+          symbol: '%',
+          time: `${this.rank}/${this.countWholePeriod}`,
+          tips: 'ddddddd',
+        },
+      ];
+      return recentInfo;
+    },
+  },
+  components: {
+    'el-popover': Popover,
   },
 };
 </script>
@@ -118,7 +133,7 @@ export default {
   .raceDetailHeader{
     width: 375px;
     height: 192px;
-    background: url("../../../assets/images/trading-competition-two/detail/header/bg.png");
+    background: url("../../../../assets/images/trading-competition-two/detail/header/bg.png");
     background-size: 375px 192px;
     font-family:PingFang SC sans-serif;
     /*标题*/
@@ -160,7 +175,7 @@ export default {
               margin-left: 3.8px;
               width: 7.5px;
               height: 11.5px;
-              background: url("../../../assets/images/trading-competition-two/detail/header/right-arrow.png") no-repeat;
+              background: url("../../../../assets/images/trading-competition-two/detail/header/right-arrow.png") no-repeat;
               background-size: 7.5px 11.5px;
             }
           }
@@ -185,7 +200,7 @@ export default {
         width:103px;
         height:63px;
         margin: 0 9px;
-        background: url("../../../assets/images/trading-competition-two/detail/header/big-text-bg.png");
+        background: url("../../../../assets/images/trading-competition-two/detail/header/big-text-bg.png");
         background-size:103px 63px ;
       }
       /*最新净值*/
@@ -245,7 +260,7 @@ export default {
         display: flex;
         justify-content: space-around;
         align-items: center;
-        background: url("../../../assets/images/trading-competition-two/detail/header/small-text-bg.png");
+        background: url("../../../../assets/images/trading-competition-two/detail/header/small-text-bg.png");
         background-size: 84px 41px;
         border-radius:8px;
         font-size: 10px;
@@ -263,6 +278,19 @@ export default {
             display: block;
             width: 7px;
             height: 7px;
+            >img{
+              width: 7px!important;
+              height: 7px!important;
+            }
+          }
+          .tipOne{
+            display: inline-block;
+            width: 160px;
+            color: #FFFFFF;
+            background: rgba(0,0,0,0.8);
+            font-size: 12px;
+            margin-left: 70px;
+            border: none;
           }
           >span{
             padding: 2px 0;

@@ -246,8 +246,9 @@ import { Toast } from 'vant';
 import { formatDate } from '@utils/tools';
 // import BgainNavBar from '@component/BgainNavBar.vue';
 import Bridge from '@/config/bridge';
-import TradingFooter from './components/TradingFooter.vue';
-import HomeTable from './components/TradingCompetitionTwoHomeTable.vue';
+import TradingFooter from './components/home/TradingFooter.vue';
+// import FundCard from './components/home/FundCard.vue';
+import HomeTable from './components/home/TradingCompetitionTwoHomeTable.vue';
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
 

@@ -10,13 +10,13 @@
 </template>
 
 <script>
-import { mapActions, state } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import BgainNavBar from '../../components/BgainNavBar.vue';
-import RaceDetailHeader from './components/RaceDetailHeader.vue';
-import RaceDetailCollapse from './components/RaceDetailCollapse.vue';
-import RaceDetailPerformanceAnalysis from './components/RaceDetailPerformanceAnalysis.vue';
-import RaceDetailTeamInfo from './components/RaceDetailTeamInfo.vue';
-import TradingFooter from './components/TradingFooter.vue';
+import RaceDetailHeader from './components/detail/RaceDetailHeader.vue';
+import RaceDetailCollapse from './components/detail/RaceDetailCollapse.vue';
+import RaceDetailPerformanceAnalysis from './components/detail/RaceDetailPerformanceAnalysis.vue';
+import RaceDetailTeamInfo from './components/detail/RaceDetailTeamInfo.vue';
+import TradingFooter from './components/home/TradingFooter.vue';
 
 export default {
   name: 'RaceDetailTwo',
@@ -35,7 +35,7 @@ export default {
     ...mapActions('race/raceInfo', ['getRaceDetail']),
   },
   mounted() {
-    this.getRaceDetail(1);
+    // this.getRaceDetail(1);
   },
 };
 </script>

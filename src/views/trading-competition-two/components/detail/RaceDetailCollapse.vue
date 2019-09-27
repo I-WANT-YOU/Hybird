@@ -1,7 +1,7 @@
 <template>
   <div class="raceDetailCollapse">
     <div class="defaultShow">
-      <div class="defaultShow-item" v-for="(item,index) in infoList" :key="index" v-show="index<8">
+      <div class="defaultShow-item" v-for="(item,index) in recentData" :key="index" v-show="index<8">
         <div>
           <span>{{item.name}}</span>
           <span>{{item.value}}</span>
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div  :class ="{collapseShow: showCollapse,hideCollapseShow:!showCollapse}">
-      <div class="collapseShow-item" v-for="(item,index) in infoList" :key="index"  v-show="index>=8">
+      <div class="collapseShow-item" v-for="(item,index) in recentData" :key="index"  v-show="index>=8">
         <div>
           <span>{{item.name}}</span>
           <span>{{item.value}}</span>
@@ -17,15 +17,18 @@
       </div>
     </div>
     <div class="clickCollapse">
-      <span @click="toggleShow">收起</span>
-      <img :src="doubleDown" @click="toggleShow" alt=""/>
+      <span @click="toggleShow">{{showCollapse?'收起':'展开'}}</span>
+      <img :src="!showCollapse?doubleDown:doubleUp" @click="toggleShow" alt=""/>
     </div>
   </div>
 </template>
 
 <script>
-import doubleDown from '../../../assets/images/trading-competition-two/detail/content/doubleDown.png';
-import doubleUp from '../../../assets/images/trading-competition-two/detail/content/doubleUp.png';
+import { createNamespacedHelpers } from 'vuex';
+import doubleDown from '../../../../assets/images/trading-competition-two/detail/content/doubleDown.png';
+import doubleUp from '../../../../assets/images/trading-competition-two/detail/content/doubleUp.png';
+
+const { mapGetters } = createNamespacedHelpers('race/raceInfo');
 
 export default {
   name: 'raceDetailCollapse',
@@ -34,65 +37,96 @@ export default {
       doubleDown,
       doubleUp,
       showCollapse: false, // false 隐藏 true 展示
-      infoList: [
+    };
+  },
+  computed: {
+    ...mapGetters(['createDate',
+      'size',
+      'productName',
+      'sharpeRatio',
+      'calmarRatio',
+      'benchmarkNav',
+      'nav',
+      'change',
+      'pnl',
+      'roiSeason',
+      'roiAnnual',
+      'ror7Days',
+      'rank7Days',
+      'count7Days',
+      'ror28Days',
+      'rank28Days',
+      'count28Days',
+      'ror',
+      'rank',
+      'countWholePeriod',
+      'margin',
+      'maxDrawDownRate']),
+    recentData() {
+      const infoList = [
         {
-          name: '综合得分',
-          value: '83.23',
+          name: '成立日期',
+          value: this.createDate,
+        },
+        {
+          name: '成立天数',
+          value: '哇哈哈',
         },
         {
           name: '当前规模',
-          value: '83.23',
-        },
-        {
-          name: '夏普率',
-          value: '83.23',
-        },
-        {
-          name: '卡玛比',
-          value: '83.23',
-        },
-        {
-          name: '年化收益率',
-          value: '83.23',
-        },
-        {
-          name: '日增长率',
-          value: '83.23',
-        },
-        {
-          name: '日增长率(CNY)',
-          value: '83.23',
-        },
-        {
-          name: '成立以来',
-          value: '83.23',
-        },
-        {
-          name: '最大回撤',
-          value: '83.23',
-        },
-        {
-          name: '净值',
-          value: '83.23',
-        },
-        {
-          name: '赛季ROI',
-          value: '83.23',
+          value: this.size,
         },
         {
           name: '赛季净盈亏',
-          value: '83.23',
+          value: this.pnl,
         },
         {
-          name: '当前净杠杆',
-          value: '83.23',
+          name: '历史ROI',
+          value: '我是水娃',
         },
         {
-          name: '成立日期',
-          value: '83.23',
+          name: '年化收益率',
+          value: this.roiAnnual,
         },
-      ],
-    };
+        {
+          name: '最大回撤',
+          value: this.maxDrawDownRate,
+        },
+        {
+          name: '最大回撤天数',
+          value: '我是爷爷',
+        },
+        {
+          name: '卡玛比',
+          value: this.calmarRatio,
+        },
+        {
+          name: '夏普率',
+          value: this.sharpeRatio,
+        },
+        {
+          name: '波动率',
+          value: '我是葫芦小金刚',
+        },
+        {
+          name: '索提诺比',
+          value: '我是七娃',
+        },
+        {
+          name: '赛季最低ROI',
+          value: '我是蝴蝶',
+        },
+        {
+          name: '赛季最大回撤',
+          value: '我是蝴蝶',
+        },
+        {
+          name: '赛季最大当前净杠杆',
+          value: '蛇精病',
+        },
+      ];
+      return infoList;
+    },
   },
   methods: {
     toggleShow() {
@@ -104,11 +138,13 @@ export default {
 
 <style lang="scss" scoped>
   .raceDetailCollapse{
+    overflow: hidden;
     font-family:SourceHanSansCN sans-serif;
-    background: url("../../../assets/images/trading-competition-two/detail/header/bg-two.png") no-repeat;
-    background-size: 375px 100%;
+    background: url("../../../../assets/images/trading-competition-two/detail/header/bg-two.png") no-repeat;
+    background-size: 375px 246px;
     /*默认显示*/
     .defaultShow{
+      min-height: 110px;
       display: flex;
       flex-wrap: wrap;
       margin: 0 10px;
@@ -162,13 +198,14 @@ export default {
     }
     /*折叠部分*/
     .hideCollapseShow{
+      /*min-height: 110px;*/
       overflow: hidden;
       display: flex;
       height: 0;
       flex-wrap: wrap;
       margin: 0 10px;
       padding: 0 30px;
-      transition: 8s;
+      transition: 1s;
       .collapseShow-item{
         position: relative;
         width: 25%;
@@ -232,11 +269,11 @@ export default {
     .collapseShow{
       overflow: hidden;
       display: flex;
-      height: 100px;
+      height: 110px;
       flex-wrap: wrap;
       margin: 0 10px;
       padding: 0 30px;
-      transition: 8s;
+      transition: 1s;
       .collapseShow-item{
         position: relative;
         width: 25%;
@@ -300,7 +337,7 @@ export default {
     /*展开标识*/
     .clickCollapse{
       width: 100%;
-      padding: 17px 0 7px;
+      padding: 10px 0 0;
       display: flex;
       align-items: center;
       justify-content: center;
