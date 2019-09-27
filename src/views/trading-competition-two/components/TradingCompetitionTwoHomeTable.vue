@@ -9,6 +9,7 @@
             <span class="b" @click="onToast('排名根据赛季ROI')"></span>
           </th>
           <th class="name-wrap">基金名称</th>
+          <th>赛季ROI</th>
           <th>
             <span>净值</span>
             <span :class="['i', nav === '1' ? 'active' : '']" @click="sort('nav')"></span>
@@ -18,11 +19,10 @@
             <span :class="['i', ror === '1' ? 'active' : '']" @click="sort('ror')"></span>
             <span class="b" @click="onToast('成立以来净值涨跌幅')"></span>
           </th>
-          <th>赛季ROI</th>
         </tr>
       </thead>
       <tbody class="table-tbody">
-        <tr v-for="(tr,key) in tableArr" :key="key" class="tr-line">
+        <tr v-for="(tr,key) in tableArr" :key="`${tr.product_name}${key}`" class="tr-line">
           <td class="table-rank">
             <span>{{tr.rank}}</span>
             <img
@@ -40,11 +40,11 @@
             <div v-else class="table-rank-img" />
           </td>
           <td>{{tr.product_name}}</td>
+          <td>{{tr.roi_season ? tr.roi_season + '%' : '--'}}</td>
           <td>{{tr.nav}}</td>
           <td>{{tr.ror}}%</td>
-          <td>{{tr.roi_season ? tr.roi_season + '%' : '--'}}</td>
         </tr>
-        <tr v-for="(tr,key) in failedData" :key="key" class="failed-team">
+        <tr v-for="(tr,key) in failedData" :key="`${tr.product_name}${key}`" class="failed-team">
           <td class="table-rank">
             <span>--</span>
             <img
@@ -66,14 +66,14 @@
           <td>--</td>
           <td>--</td>
         </tr>
-        <tr v-for="tr in benchmark" :key="tr.product_name" class="benchmark">
+        <tr v-for="(tr,key) in benchmark" :key="`${tr.product_name}${key}`" class="benchmark">
           <td colspan="2">
-            <span>基准参考值</span>
-            <span class="b b1" @click="onToast('基准参考值为Bgain联合市场中多个优秀量化投资管理人共同打造的数字资产量化投资系列指数。')"></span>
+            <span>{{activeText}}</span>
+            <span class="b b1" @click="onToast(`${activeText}为Bgain联合市场中多个优秀量化投资管理人共同打造的数字资产量化投资系列指数。`)"></span>
           </td>
-          <td>{{tr.nav}}</td>
-          <td></td>
           <td>{{tr.roi_season}}{{tr.roi_season ? '%' : ''}}</td>
+          <td>{{tr.nav}}</td>
+          <td>{{tr.ror}}{{tr.ror ? '%' : ''}}</td>
         </tr>
       </tbody>
     </table>
@@ -101,6 +101,10 @@ export default {
     failedData: {
       type: Array,
     },
+    activeStatu: {
+      type: String,
+      default: 'cat',
+    },
   },
   watch: {
     tableData(newData) {
@@ -119,6 +123,15 @@ export default {
         return 'roi_season';
       }
       return 'rank';
+    },
+    activeText() {
+      if (this.activeStatu === 'cta') {
+        return 'Bgain CTA指数';
+      }
+      if (this.activeStatu === 'mid') {
+        return 'Bgain对冲指数';
+      }
+      return 'Bgain交易指数';
     },
   },
   methods: {
@@ -177,6 +190,10 @@ export default {
       td {
         height: 41px;
       }
+    }
+
+    .name-wrap{
+      width: 100px;
     }
 
     .table-tbody {

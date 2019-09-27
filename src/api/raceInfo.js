@@ -1,4 +1,5 @@
 import request from '@utils/request';
+import requestV2 from '@utils/requestV2';
 import { handlerResponse } from '@utils/auth';
 
 class AssetsService {
@@ -9,7 +10,7 @@ class AssetsService {
         url: `/fcat/get-team-detail-end/${teamId}`,
         method: 'get',
       };
-      const response = await request(requestOptions);
+      const response = await requestV2(requestOptions);
       return handlerResponse(response);
     } catch (error) {
       throw new Error(error);
@@ -88,7 +89,7 @@ class AssetsService {
           date: '2019-08-23',
         },
       };
-      const response = await request(requestOptions);
+      const response = await requestV2(requestOptions);
       return handlerResponse(response);
     } catch (error) {
       throw new Error(error);
