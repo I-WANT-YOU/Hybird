@@ -42,7 +42,8 @@
 import EChart from 'echarts';
 import { mapActions, mapState, mapGetters } from 'vuex';
 import pulicMethods from '@utils/publicMethods';
-import bg from '../../../assets/images/trading-competition-two/detail/content/bg-three.png';
+import { Toast } from 'vant';
+import bg from '../../../../assets/images/trading-competition-two/detail/content/bg-three.png';
 
 export default {
   name: 'RaceDetailPerformanceAnalysis',
@@ -82,10 +83,21 @@ export default {
     /* 改变类型 */
     changeType(index) {
       this.typeTabSelected = index;
+      this.timeTabSelected = 3;
       if (index === 0) {
         this.initTrendChart(this.formatNetWorthChartData(this.raceDetail.nav_data, 365));
+        this.dataKeys = {
+          date: '日期',
+          value1: '当日净值',
+          value2: '基准净值',
+        };
       } else {
         this.initProfitChart(this.formatNetWorthChartData(this.allYearDataTwo));
+        this.dataKeys = {
+          date: '日期',
+          value1: '该基金收益率(USD)',
+          value2: '持有BTC收益率',
+        };
       }
     },
     /* 改变时间轴 */
@@ -131,9 +143,8 @@ export default {
     formatChartYearData(date) {
       return pulicMethods.formatChartYearData(date);
     },
-    /* 格式表格数据 */
+    /* 格式图表数据 */
     formatNetWorthChartData(data, times) {
-      console.log(data);
       const currentData = {
         xData: [],
         yOne: [],
@@ -157,11 +168,74 @@ export default {
       const y2min = Math.min.apply(null, currentData.yTwo);
       currentData.maxNum = y1max > y2max ? y1max : y2max;
       currentData.minNum = y1min > y2min ? y2min : y1min;
+      // 判断数据为null的情况
+      console.log('这里有数据为null的情况需要后期处理');
+      if (currentData.yTwo[0] === null) {
+        currentData.minNum = y1min;
+      }
       return currentData;
+    },
+    /* 收益率取位方法 */
+    formatProfitNumber(value) {
+      let returnValue = value;
+      if (returnValue - 0 >= 10) {
+        returnValue = returnValue.substring(0, 5);
+      } else if (returnValue - 0 > 0) {
+        returnValue = returnValue.substring(0, 4);
+      } else if (returnValue - 0 === 0) {
+        returnValue = '0.00';
+      } else if (returnValue - (-10) < 0) {
+        returnValue = returnValue.substring(0, 6);
+      } else if (returnValue - 0 < 0) {
+        returnValue = returnValue.substring(0, 5);
+      }
+      returnValue += '%';
+      return returnValue;
+    },
+    /* 格式化当前显示数据 */
+    formatCurrentShowData(paramsData, type) {
+      if (type === 'trend') {
+        const date = paramsData[0].axisValue; // 日期
+        const current = paramsData[0].value; // 当前净值
+        let basic = '';
+        if (!paramsData[1]) {
+          basic = '--'; // 基准净值
+        } else {
+          basic = paramsData[1].value; // 基准净值
+        }
+        this.dataValues = {
+          date,
+          value1: current,
+          value2: basic || '--',
+        };
+      } else {
+        const date = paramsData[0].axisValue; // 日期
+        console.log(date);
+        const usdt = this.formatProfitNumber(paramsData[0].value);
+        const btc = this.formatProfitNumber(paramsData[1].value);
+        this.dataValues = {
+          date,
+          value1: usdt,
+          value2: btc,
+        };
+      }
     },
     /* 净值走势折线图 */
     initTrendChart(chartData) {
-      // 最大值和最小值为0时候的判断
+      // 初始化第一次显示数据(去最后一次数据显示)
+      const trendShowData = this.formatNetWorthChartData(this.raceDetail.nav_data, 365);
+      const { xData } = trendShowData;
+      const { yOne } = trendShowData;
+      const { yTwo } = trendShowData;
+      const lastIndex = xData.length - 1;
+      const date = xData[lastIndex]; // 日期
+      const current = yOne[lastIndex];
+      const basic = yTwo[lastIndex];
+      this.dataValues = {
+        date,
+        value1: current,
+        value2: basic || '--',
+      };
       this.myChart = EChart.init(this.$refs.myChart);
       this.myChart.clear();
       const optionLineOne = {
@@ -171,7 +245,7 @@ export default {
           right: '10px',
           bottom: '45px',
         },
-        color: ['#EA772A'],
+        color: ['#5294D4', '#2A55E7'],
         legend: {
           data: ['Bgain指数', 'nav'],
           itemHeight: 4,
@@ -179,7 +253,7 @@ export default {
           icon: 'roundRect',
           bottom: 'bottom',
           textStyle: {
-            color: '#F8E39E',
+            color: '#ffffff',
             padding: [4, 0, 3, 0],
             fontSize: 8,
           },
@@ -187,17 +261,19 @@ export default {
         tooltip: {
           trigger: 'axis',
           formatter: (params) => {
-            this.netWorthValue = params[0].value;
-            if (params[0].value.toString().length === 1) {
-              this.netWorthValue = `${params[0].value.toString()}.000`;
-            } else if (params[0].value.toString().length === 3) {
-              this.netWorthValue = `${params[0].value.toString()}00`;
-            } else if (params[0].value.toString().length === 4) {
-              this.netWorthValue = `${params[0].value.toString()}0`;
-            }
-            this.netWorthDate = params[0].axisValue;
-            return '';
-          },
+            this.formatCurrentShowData(params, 'trend');
+          }
+          // this.netWorthValue = params[0].value;
+          // if (params[0].value.toString().length === 1) {
+          //   this.netWorthValue = `${params[0].value.toString()}.000`;
+          // } else if (params[0].value.toString().length === 3) {
+          //   this.netWorthValue = `${params[0].value.toString()}00`;
+          // } else if (params[0].value.toString().length === 4) {
+          //   this.netWorthValue = `${params[0].value.toString()}0`;
+          // }
+          // this.netWorthDate = params[0].axisValue;
+
+          ,
           // formatter: params => `<div>${params[0].seriesName}:${Math.floor(params[0].value * 10000) / 100}%</div><div>${params[1].seriesName}:${Math.floor(params[1].value * 10000) / 100}%</div>`,
         },
         xAxis: {
@@ -222,9 +298,9 @@ export default {
         },
         yAxis: {
           type: 'value',
-          min: chartData.minNum,
-          max: chartData.maxNum,
-          interval: (chartData.maxNum - chartData.minNum) / 5,
+          min: Math.floor(chartData.minNum * 10) / 10,
+          max: Math.ceil(chartData.maxNum * 10) / 10,
+          interval: (Math.ceil(chartData.maxNum * 10) / 10 - Math.floor(chartData.minNum * 10) / 10) / 5,
           nameGap: '70px',
           axisLine: {
             show: false,
@@ -251,52 +327,67 @@ export default {
             },
           },
         },
-        series: [{
-          name: 'Bgain指数',
-          data: chartData.yOne,
-          type: 'line',
-          animationEasing: 'liner',
-          smooth: true,
-          symbol: 'none',
-          lineStyle: {
-            color: '#EA772A',
-            width: 0.8,
+        series: [
+          {
+            name: 'Bgain指数',
+            data: chartData.yOne,
+            type: 'line',
+            animationEasing: 'liner',
+            smooth: true,
+            symbol: 'none',
+            lineStyle: {
+              color: '#5294D4',
+              width: 0.8,
+            },
           },
-        },
-        {
-          name: 'nav',
-          data: chartData.yTwo,
-          type: 'line',
-          animationEasing: 'liner',
-          smooth: true,
-          symbol: 'none',
-          lineStyle: {
-            color: '#EA772A',
-            width: 0.8,
-          },
-        }],
+          {
+            name: 'nav',
+            data: chartData.yTwo,
+            type: 'line',
+            animationEasing: 'liner',
+            smooth: true,
+            symbol: 'none',
+            lineStyle: {
+              color: '#2A55E7',
+              width: 0.8,
+            },
+          }],
       };
       this.myChart.setOption(optionLineOne);
     },
     /* 收益率折线图 */
     initProfitChart(chartData) {
+      // 初始化第一次显示数据(去最后一次数据显示)
+      const profitShowData = this.formatNetWorthChartData(this.allYearDataTwo);
+      const { xData } = profitShowData;
+      const { yOne } = profitShowData;
+      const { yTwo } = profitShowData;
+      const lastIndex = xData.length - 1;
+      const date = xData[lastIndex]; // 日期
+      const usdt = this.formatProfitNumber(yOne[lastIndex]);
+      const btc = this.formatProfitNumber(yTwo[lastIndex]);
+      this.dataValues = {
+        date,
+        value1: usdt,
+        value2: btc,
+      };
       this.myChart = EChart.init(this.$refs.myChart);
       this.myChart.clear();
       const optionLineTwo = {
         grid: {
           top: '12px',
-          left: '55px',
+          left: '40px',
           right: '10px',
           bottom: '45px',
         },
-        color: ['#EA772A', '#5294D4'],
+        color: ['#5294D4', '#2A55E7'],
         legend: {
           itemHeight: 4,
           data: ['仅持有BTC的收益率', '用BTC购买该基金的收益率（以USD计价）'],
           icon: 'roundRect',
           bottom: 'bottom',
           textStyle: {
-            color: '#F8E39E',
+            color: '#FFFFFF',
             padding: [4, 0, 3, 0],
             fontSize: 10,
           },
@@ -313,12 +404,8 @@ export default {
         tooltip: {
           trigger: 'axis',
           formatter: (params) => {
-            this.profitDate = params[0].axisValue;
-            this.profitBTC = `${Math.floor(params[0].value * 10000) / 100}%`;
-            this.profitUSD = `${Math.floor(params[1].value * 10000) / 100}%`;
-            return '';
+            this.formatCurrentShowData(params, 'profit');
           },
-          // formatter: params => `<div>${params[0].seriesName}:${Math.floor(params[0].value * 10000) / 100}%</div><div>${params[1].seriesName}:${Math.floor(params[1].value * 10000) / 100}%</div>`,
         },
         xAxis: {
           type: 'category',
@@ -326,9 +413,9 @@ export default {
             show: false,
           },
           axisLabel: {
-            color: '#F8E39E',
+            color: '#ffffff',
             margin: 10,
-            fontSize: 10,
+            fontSize: 8,
             formatter: (value) => {
               const newValue = value.substring(5);
               return newValue;
@@ -344,68 +431,21 @@ export default {
           // min: (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2),
           // max: (chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1),
           // interval: ((chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1)-(chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2))/5,
-          // min:-0.2,
-          // max:0.6,
-          // interval:0.2,
-          min: Math.floor(chartData.minNum * 10) / 10,
-          max: Math.ceil(chartData.maxNum * 10) / 10,
-          interval: (Math.ceil(chartData.maxNum * 10) / 10 - Math.floor(chartData.minNum * 10) / 10) / 5,
+          // min: Math.floor(chartData.minNum * 10) / 10,
+          // max: Math.ceil(chartData.maxNum * 10) / 10,
+          // interval: (Math.ceil(chartData.maxNum * 10) / 10 - Math.floor(chartData.minNum * 10) / 10) / 5,
+          min: Math.floor(chartData.minNum * 1000) / 1000,
+          max: Math.ceil(chartData.maxNum * 1000) / 1000,
+          interval: (Math.ceil(chartData.maxNum * 100) - Math.floor(chartData.minNum * 100)) / 500,
           nameGap: '70px',
           axisLine: {
             show: false,
           },
           axisLabel: {
-            color: '#F8E39E',
+            color: '#ffffff',
             margin: 12,
-            fontSize: 10,
-            formatter: (value) => {
-              let newValue = (Math.floor(value * 10000) / 100);
-              if (newValue >= 0) {
-                newValue = newValue.toString();
-                if (newValue.length === 1) {
-                  newValue += '.00';
-                  newValue += '%';
-                } else if (newValue.length === 2) {
-                  newValue += '.00';
-                  newValue += '%';
-                } else if (newValue.length === 3) {
-                  newValue += '.00';
-                  newValue += '%';
-                } else if (newValue.length === 4) {
-                  if (newValue - 10 > 0) {
-                    newValue += '0';
-                    newValue += '%';
-                  } else {
-                    newValue += '%';
-                  }
-                } else if (newValue.length === 5) {
-                  newValue += '%';
-                } else if (newValue.length === 6) {
-                  newValue += '%';
-                }
-              }
-              if (newValue < 0) {
-                newValue = newValue.toString();
-                if (newValue.length === 2) {
-                  newValue += '.00';
-                  newValue += '%';
-                } else if (newValue.length === 3) {
-                  newValue += '.00';
-                  newValue += '%';
-                } else if (newValue.length === 4) {
-                  newValue += '.00';
-                  newValue += '%';
-                } else if (newValue.length === 5) {
-                  newValue += '0';
-                  newValue += '%';
-                } else if (newValue.length === 6) {
-                  newValue += '%';
-                } else if (newValue.length === 7) {
-                  newValue += '%';
-                }
-              }
-              return newValue;
-            },
+            fontSize: 8,
+            formatter: value => this.formatProfitNumber(value.toString()),
           },
           splitLine: {
             lineStyle: {
@@ -420,7 +460,7 @@ export default {
           smooth: true,
           symbol: 'none',
           lineStyle: {
-            color: '#EA772A',
+            color: '#5294D4',
             width: 0.8,
           },
         },
@@ -431,7 +471,7 @@ export default {
           smooth: true,
           symbol: 'none',
           lineStyle: {
-            color: '#5294D4',
+            color: '#2A55E7',
             width: 0.8,
           },
         },
@@ -439,10 +479,9 @@ export default {
       };
       this.myChart.setOption(optionLineTwo);
     },
-
   },
   mounted() {
-    this.getRaceDetail(10).then(
+    this.getRaceDetail(19).then(
       () => {
         try {
           /* 初始化净值走势图表 */
@@ -451,10 +490,8 @@ export default {
           throw new Error(e);
         }
       },
-      (error) => {
-        if (error.status) {
-        } else {
-        }
+      () => {
+        Toast('网络错误');
       },
     );
   },
@@ -464,7 +501,7 @@ export default {
 <style lang="scss" scoped>
   .raceDetailPerformanceAnalysis{
     font-family:PingFang SC sans-serif;
-    background: url("../../../assets/images/trading-competition-two/detail/content/bg-three.png");
+    background: url("../../../../assets/images/trading-competition-two/detail/content/bg-three.png");
     background-size: 375px 100%;
     padding-top: 20px;
     .title{

@@ -27,13 +27,13 @@
             <span>{{tr.rank}}</span>
             <img
               v-if="tr.change * 1 === 1"
-              src="../../../assets/images/trading-competition-two/home/rank-up.png"
+              src="../../../../assets/images/trading-competition-two/home/rank-up.png"
               alt
               class="table-rank-img"
             />
             <img
               v-else-if="tr.change * 1 === -1"
-              src="../../../assets/images/trading-competition-two/home/rank-down.png"
+              src="../../../../assets/images/trading-competition-two/home/rank-down.png"
               alt
               class="table-rank-img"
             />
@@ -49,13 +49,13 @@
             <span>--</span>
             <img
               v-if="tr.change * 1 === 1"
-              src="../../../assets/images/trading-competition-two/home/rank-up.png"
+              src="../../../../assets/images/trading-competition-two/home/rank-up.png"
               alt
               class="table-rank-img"
             />
             <img
               v-else-if="tr.change * 1 === -1"
-              src="../../../assets/images/trading-competition-two/home/rank-down.png"
+              src="../../../../assets/images/trading-competition-two/home/rank-down.png"
               alt
               class="table-rank-img"
             />
@@ -216,11 +216,11 @@ export default {
     width: 5px;
     min-width: 5px;
     height: 3px;
-    background: url("../../../assets/images/trading-competition-two/home/down.png");
+    background: url("../../../../assets/images/trading-competition-two/home/down.png");
     background-size: 5px 3px;
     margin-left: 5px;
     &.active {
-      background: url("../../../assets/images/trading-competition-two/home/up.png");
+      background: url("../../../../assets/images/trading-competition-two/home/up.png");
       background-size: 5px 3px;
     }
   }
@@ -232,13 +232,13 @@ export default {
     width: 7px;
     height: 9px;
     border-radius: 50%;
-    background: url("../../../assets/images/trading-competition-two/home/an.png")
+    background: url("../../../../assets/images/trading-competition-two/home/an.png")
       no-repeat;
     background-size: 7px 7px;
   }
 
   .b1 {
-    background: url("../../../assets/images/trading-competition-two/home/an2.png")
+    background: url("../../../../assets/images/trading-competition-two/home/an2.png")
       no-repeat;
     width: 7px;
     height: 9px;

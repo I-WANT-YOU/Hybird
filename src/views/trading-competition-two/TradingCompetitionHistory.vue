@@ -57,8 +57,8 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import Footer from './components/TradingFooter.vue';
-import Table from './components/HistoryTable.vue';
+import Footer from './components/home/TradingFooter.vue';
+import Table from './components/home/HistoryTable.vue';
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
 

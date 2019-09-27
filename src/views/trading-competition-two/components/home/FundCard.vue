@@ -6,7 +6,7 @@
     <div class="fund-name linear">{{fundDetail.product_name}}</div>
     <div v-if="fundDetail.status === 'INITIAL'" class="initial">
       <img
-        src="../../../assets/images/trading-competition-two/home/initial.png"
+        src="../../../../assets/images/trading-competition-two/home/initial.png"
         class="initial-icon"
       />
       <div class="time">
@@ -88,7 +88,7 @@ export default {
 .fund-card {
   width: 137px;
   height: 97px;
-  background: url("../../../assets/images/trading-competition-two/home/fund-card-bg.png")
+  background: url("../../../../assets/images/trading-competition-two/home/fund-card-bg.png")
     no-repeat;
   background-size: 137px 97px;
   border-radius: 8px;
@@ -102,7 +102,7 @@ export default {
     position: absolute;
     top: 0;
     right: -1px;
-    background: url("../../../assets/images/trading-competition-two/home/currency.png")
+    background: url("../../../../assets/images/trading-competition-two/home/currency.png")
       no-repeat;
     background-size: 37px 28px;
     .icon {
@@ -194,13 +194,13 @@ export default {
       border-radius: 10px;
 
       &.buy {
-        background: url("../../../assets/images/trading-competition-two/home/start.png")
+        background: url("../../../../assets/images/trading-competition-two/home/start.png")
           no-repeat;
         background-size: 54px 20px;
       }
 
       &.start {
-        background: url("../../../assets/images/trading-competition-two/home/start.png")
+        background: url("../../../../assets/images/trading-competition-two/home/start.png")
           no-repeat;
         background-size: 54px 20px;
       }
@@ -213,7 +213,7 @@ export default {
     right: 0;
     bottom: 25px;
     height: 42px;
-    background: url("../../../assets/images/trading-competition-two/home/echarts.png")
+    background: url("../../../../assets/images/trading-competition-two/home/echarts.png")
       no-repeat;
     background-size: 137px 42px;
   }
