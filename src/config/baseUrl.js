@@ -6,7 +6,8 @@
 
 // const prod = 'http://dev.xjetry.top:8081';
 // // const dev = 'http://dev.xjetry.top:8081';
-// const dev = 'http://dev.xjetry.top:7777';
+// const dev = 'http://dev.xjetry.top:7788';
+// const prod = 'http://dev.xjetry.top:7788';
 
 const prod = 'http://dev-hk.xjetry.top:8080';
 const dev = 'http://dev-hk.xjetry.top:8080';
