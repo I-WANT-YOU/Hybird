@@ -1,6 +1,6 @@
 <template>
     <div class="raceDetailTeamInfo">
-      <p class="title">团队详情</p>
+      <p class="title">团队介绍</p>
       <div class="teamInfo">
         <van-image class="logo-icon" :src="profile.team_logo" alt=""/>
         <div class="info-detail">
@@ -9,10 +9,10 @@
           <p>{{profile.team_introduction}}</p>
         </div>
       </div>
-      <div class="buttons">
-        <button>咨询</button>
-        <button>跟投</button>
-      </div>
+      <!--<div class="buttons">-->
+        <!--<button>咨询</button>-->
+        <!--<button>跟投</button>-->
+      <!--</div>-->
     </div>
 </template>
 
@@ -52,7 +52,7 @@ export default {
    }
     .teamInfo{
       display: flex;
-      margin-top: 18px;
+      margin: 18px 0 30px;
       .logo-icon{
         margin-left: 38px;
         width: 63px;

@@ -6,15 +6,15 @@
       </div>
       <div class="title-info">
         <div>
-          <span>违规品种交易</span>
-          <span>高杠杆</span>
-          <span>高回撤</span>
+          <!--<span>违规品种交易</span>-->
+          <span v-show="lables[0] === 2">高杠杆</span>
+          <span v-show="lables[0] === 1">高回撤</span>
         </div>
-        <div>
-          <span>跟投最多</span>
-          <span>停业</span>
-          <span>高回撤</span>
-        </div>
+        <!--<div>-->
+          <!--<span>跟投最多</span>-->
+          <!--<span>停业</span>-->
+          <!--<span>高回撤</span>-->
+        <!--</div>-->
       </div>
     </div>
     <div class="latest-info">
@@ -33,17 +33,23 @@
     <div class="recent-info">
       <div class="recent-info-item" v-for="(item,index) in recentData" :key="index">
         <div class="recent-info-item-name">
-          <span>{{item.name}}</span>
-          <span>{{item.time}}</span>
+          <!--<span>{{item.name}}</span>-->
+          <!--<span>{{item.time}}</span>-->
           <el-popover
             placement="top"
             title=''
             width="170"
-            trigger="click">
+            trigger="click"
+            class="el-style"
+          >
             <span class="tipOne"
-                  style="font-size: 12px;border: none;color:white">近1周净值涨跌幅及相应排名</span>
-            <img slot="reference"
-                 class="hasTip" alt="" :src="tip"  style="outline:none;border:none" />
+                  style="font-size: 10px;border: none;color:white;">{{item.tips}}</span>
+            <div slot="reference"  class="recent-info-item-name"  style="outline:none;border:none">
+              <span>{{item.name}}</span>
+              <span>{{item.time}}</span>
+              <img
+                   class="hasTip" alt="" :src="tip"  style="outline:none;border:none" />
+            </div>
           </el-popover>
         </div>
         <div class="recent-info-item-value">
@@ -75,6 +81,7 @@ export default {
   },
   computed: {
     ...mapGetters(['createDate',
+      'lables',
       'size',
       'productName',
       'sharpeRatio',
@@ -103,21 +110,21 @@ export default {
           value: this.ror7Days,
           symbol: '%',
           time: `${this.rank7Days}/${this.count7Days}`,
-          tips: 'ddddddd',
+          tips: '近1周净值涨跌幅及相应排名',
         },
         {
           name: '近一月',
           value: this.ror28Days,
           symbol: '%',
           time: `${this.rank28Days}/${this.count28Days}`,
-          tips: 'ddddddd',
+          tips: '近1月净值涨跌幅及相应排名',
         },
         {
           name: '成立以来',
           value: this.ror,
           symbol: '%',
           time: `${this.rank}/${this.countWholePeriod}`,
-          tips: 'ddddddd',
+          tips: '成立以来净值涨跌幅及相应排名',
         },
       ];
       return recentInfo;
@@ -129,7 +136,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+  .el-popover{
+    outline: none;
+  }
   .raceDetailHeader{
     width: 375px;
     height: 192px;
@@ -271,6 +281,10 @@ export default {
           align-items: center;
           font-family:SourceHanSansCN sans-serif;
           color:rgba(255,255,255,1);
+          .el-popover{
+            border: none;
+            outline: none;
+          }
           .hasTip{
             position: absolute;
             top: -4.5px;

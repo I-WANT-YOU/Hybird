@@ -1,7 +1,8 @@
 <template>
   <div class="raceDetailCollapse">
     <div class="defaultShow">
-      <div class="defaultShow-item" v-for="(item,index) in recentData" :key="index" v-show="index<6">
+      <div class="defaultShow-item"
+           v-for="(item,index) in recentData" :key="index" v-show="index<6">
         <div>
           <span>{{item.name}}</span>
           <span>{{item.value}}</span>
@@ -9,7 +10,8 @@
       </div>
     </div>
     <div  :class ="{collapseShow: showCollapse,hideCollapseShow:!showCollapse}">
-      <div class="collapseShow-item" v-for="(item,index) in recentData" :key="index"  v-show="index>=6">
+      <div class="collapseShow-item"
+           v-for="(item,index) in recentData" :key="index"  v-show="index>=6">
         <div>
           <span>{{item.name}}</span>
           <span>{{item.value}}</span>
@@ -17,7 +19,7 @@
       </div>
     </div>
     <div class="clickCollapse">
-      <span @click="toggleShow">{{showCollapse?'收起':'展开'}}</span>
+      <span @click="toggleShow">{{showCollapse?'收起':'查看更多'}}</span>
       <img :src="!showCollapse?doubleDown:doubleUp" @click="toggleShow" alt=""/>
     </div>
   </div>
@@ -144,19 +146,19 @@ export default {
         },
         {
           name: '最大回撤',
-          value: this.maxDrawDownRate,
+          value: `${this.maxDrawDownRate}%`,
         },
         {
           name: '年化收益率',
-          value: this.roiAnnual,
+          value: `${this.roiAnnual}%`,
         },
         {
           name: '赛季净盈亏',
-          value: this.pnl,
+          value: this.pnl > 0 ? `+${this.pnl}` : (this.pnl < 0 ? `-${this.pnl}` : this.pnl),
         },
         {
           name: '赛季ROI',
-          value: this.roiSeason,
+          value: `${this.roiSeason}%`,
         },
         {
           name: '当前净杠杆',

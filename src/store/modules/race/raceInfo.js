@@ -69,6 +69,7 @@ const getters = {
   monthDataTwo: state => get(state.raceDetail, 'month_data', []), // 月
   halfYearDataTwo: state => get(state.raceDetail, 'halt_year_data', []), // 半年
   allYearDataTwo: state => get(state.raceDetail, 'return_rate_data', []), // 全部
+  lables: state => get(state.raceDetail, 'lables', []), // 标签
 };
 const mutations = {
   [types.GET_TEAM_DETAIL](state, payload) {
