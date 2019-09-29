@@ -40,7 +40,7 @@
 /* eslint-disable max-len */
 
 import EChart from 'echarts';
-import { uniq, slice } from 'lodash';
+import { uniq } from 'lodash';
 import { mapActions, mapState, mapGetters } from 'vuex';
 import pulicMethods from '@utils/publicMethods';
 import { Toast } from 'vant';
