@@ -70,10 +70,7 @@
 
     <div class="steps-wrap">
       <div class="home-con-step">
-        <img
-          src="../../assets/images/trading-competition-two/home/two-step.png"
-          class="home-con-step-title"
-        />
+        <span class="home-con-step-title">第二赛季进程</span>
         <div class="home-con-steps">
           <div class="home-con-steps-title-test">
             <div>
@@ -394,7 +391,7 @@ export default {
     flex-direction: column;
 
     .trading-competition-two-bg-one {
-      height: 223px;
+      height: 233px;
       background: url("../../assets/images/trading-competition-two/home/wrap-bg1.png")
         no-repeat center center;
       background-size: 375px 100%;
@@ -539,8 +536,15 @@ export default {
 
     .home-con-step {
       .home-con-step-title {
-        width: 55px;
-        height: 14px;
+        display: block;
+        height:19px;
+        font-size:14px;
+        font-weight:400;
+        color:rgba(42,85,231,1);
+        line-height:19px;
+        background:linear-gradient(0deg,rgba(45,164,240,1) 0%, rgba(255,255,255,1) 100%);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
         margin-bottom: 10px;
       }
 

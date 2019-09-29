@@ -23,7 +23,7 @@ const publicMethods = {
     if (minute < 10) {
       minute = `0${minute}`;
     }
-    const afterDate = `${year}-${month}-${day}-${hours}:${minute}`;
+    const afterDate = `${year}-${month}-${day} ${hours}:${minute}`;
     return afterDate;
   },
 
