@@ -1,6 +1,6 @@
 <template>
   <div class="history-wrap">
-    <!-- <BgainNavBar title="历史榜单"/> -->
+     <BgainNavBar title="历史榜单"/>
     <div class="con">
       <div class="title">第一赛季排行榜</div>
       <div class="trading-competition-history-table-wrap">
@@ -60,7 +60,7 @@
 import { createNamespacedHelpers } from 'vuex';
 import Footer from './components/home/TradingFooter.vue';
 import Table from './components/home/HistoryTable.vue';
-// import BgainNavBar from '@component/BgainNavBar.vue';
+import BgainNavBar from '@component/BgainNavBar.vue';
 
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
@@ -68,7 +68,7 @@ const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
 export default {
   name: 'TradingCompetitionHistory',
   components: {
-    // BgainNavBar,
+    BgainNavBar,
     Table,
     Footer,
   },
