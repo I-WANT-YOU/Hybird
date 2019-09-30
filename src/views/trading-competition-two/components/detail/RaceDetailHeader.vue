@@ -26,24 +26,22 @@
         <span>最新净值</span>
       </div>
       <div class="netWorth referenceValue">
-        <span>{{roiSeason}}</span>
+        <span>{{roiSeason+'%'}}</span>
         <span>赛季ROI</span>
       </div>
     </div>
     <div class="recent-info">
       <div class="recent-info-item" v-for="(item,index) in recentData" :key="index">
-        <div class="recent-info-item-name">
+        <div class="">
           <!--<span>{{item.name}}</span>-->
           <!--<span>{{item.time}}</span>-->
           <el-popover
             placement="top"
             title=''
-            width="170"
+            width="180"
             trigger="click"
-            class="el-style"
           >
-            <span class="tipOne"
-                  style="font-size: 10px;border: none;color:white;">{{item.tips}}</span>
+            <span class="tipOne">{{item.tips}}</span>
             <div slot="reference"  class="recent-info-item-name"  style="outline:none;border:none">
               <span>{{item.name}}</span>
               <span>{{item.time}}</span>
@@ -139,6 +137,21 @@ export default {
 <style lang="scss" >
   .el-popover{
     outline: none;
+    margin-bottom: 10px;
+    left: -23px;
+    text-align: right;
+    /*left:0!important;*/
+  }
+  .tipOne{
+    display: inline-block;
+    font-size:10px;
+    border: none;
+    margin-left: 20px;
+    background: #303133;
+    color: #FFFFFF;
+    text-align: right;
+    padding: 3px 2px;
+    border-radius: 6px;
   }
   .raceDetailHeader{
     width: 375px;
@@ -297,15 +310,7 @@ export default {
               height: 7px!important;
             }
           }
-          .tipOne{
-            display: inline-block;
-            width: 160px;
-            color: #FFFFFF;
-            background: rgba(0,0,0,0.8);
-            font-size: 12px;
-            margin-left: 70px;
-            border: none;
-          }
+
           >span{
             padding: 2px 0;
             font-weight:200;

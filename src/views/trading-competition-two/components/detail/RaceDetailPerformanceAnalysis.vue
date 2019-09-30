@@ -53,7 +53,7 @@ export default {
       bg,
       typeData: [
         '净值走势',
-        '收益率(USDT计价)',
+        '收益率(USD计价)',
       ],
       timeTabsData: [
         '近一周',
@@ -99,8 +99,8 @@ export default {
         this.initProfitChart(this.formatProfitChartData(this.allYearDataTwo));
         this.dataKeys = {
           date: '日期',
-          value1: '持有BTC',
-          value2: '投资该产品',
+          value1: '投资该产品',
+          value2: '持有BTC',
         };
       }
     },
@@ -160,12 +160,13 @@ export default {
       let filterData = [];
       // 根据天数 去重
       currentData.xData = data.map(item => this.formatChartYearData(item.x)); // 格式化时间
-      const currentDateList = uniq(currentData.xData);
-      if (currentDateList.length <= times) { // 取全部
+      const filterCurrentData = data.map(item => this.formatChartYearData(item.x).substring(0, 11));
+      const filterXData = uniq(data.map(item => this.formatChartYearData(item.x).substring(0, 11)));
+      if (filterXData.length <= times) { // 取全部
         filterData = data;
       } else {
-        const farthestDay = currentDateList[currentDateList.length + 1 - times];
-        const farthestDayIndex = currentData.xData.indexOf(farthestDay);
+        const farthestDay = filterXData[filterXData.length + 1 - times];
+        const farthestDayIndex = filterCurrentData.indexOf(farthestDay);
         filterData = data.slice(farthestDayIndex, data.length);
       }
       currentData.yOne = filterData.map(item => [item.x, item.y1]);
@@ -200,35 +201,6 @@ export default {
       currentData.maxNum = y1max > y2max ? y1max : y2max;
       currentData.minNum = y1min > y2min ? y2min : y1min;
       return currentData;
-      // const currentData = {
-      //   xData: [],
-      //   yOne: [],
-      //   yTwo: [],
-      //   maxNum: '',
-      //   minNum: '',
-      // };
-      // let filterData = [];
-      // if (!!times && times < data.length) { // 不同的日期显示不同数据
-      //   /* 第一遍筛选 */
-      //   filterData = data.filter((item, index) => index >= (data.length - times));
-      // } else {
-      //   filterData = data;
-      // }
-      // currentData.xData = filterData.map(item => this.formatChartYearData(item.x)); // 格式化时间
-      // currentData.yOne = filterData.map(item => item.y1);
-      // currentData.yTwo = filterData.map(item => item.y2);
-      // const y1max = Math.max.apply(null, currentData.yOne);
-      // const y1min = Math.min.apply(null, currentData.yOne);
-      // const y2max = Math.max.apply(null, currentData.yTwo);
-      // const y2min = Math.min.apply(null, currentData.yTwo);
-      // currentData.maxNum = y1max > y2max ? y1max : y2max;
-      // currentData.minNum = y1min > y2min ? y2min : y1min;
-      // // 判断数据为null的情况
-      // console.log('这里有数据为null的情况需要后期处理');
-      // if (currentData.yTwo[0] === null) {
-      //   currentData.minNum = y1min;
-      // }
-      // return currentData;
     },
     /* 收益率取位方法 */
     formatProfitNumber(value) {
@@ -257,13 +229,13 @@ export default {
           currentNum = currentNum.substring(1);
           currentNum = currentNum.split('');
           currentNum.splice(1, 0, '.');
+          currentNum = currentNum.join('');
         } else {
           currentNum = currentNum.split('');
           currentNum.splice(2, 0, '.');
           currentNum = currentNum.join('');
         }
-      }
-      if (currentNum < 0) {
+      } else if (currentNum < 0) {
         currentNum = currentNum.substring(3);
         if (currentNum.charAt(0) === '0') {
           currentNum = currentNum.substring(1);
@@ -281,8 +253,7 @@ export default {
           currentNum = currentNum.join('');
         }
         currentNum = `-${currentNum}`;
-      }
-      if (currentNum === '0') {
+      } else if (currentNum === '0') {
         currentNum = '0.00';
       }
       currentNum += '%';
@@ -318,6 +289,10 @@ export default {
     },
     /* 净值走势折线图 */
     initTrendChart(chartData) {
+      console.log(chartData.yOne[chartData.yOne.length - 1][0]);
+      console.log(chartData.yOne[0][0]);
+      console.log((chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / 6);
+      const standerLength = chartData.yOne.length;
       // 初始化第一次显示数据(去最后一次数据显示)
       const trendShowData = this.formatProfitChartData(this.raceDetail.nav_data, 365);
       const { xData } = trendShowData;
@@ -362,7 +337,11 @@ export default {
         },
         xAxis: {
           type: 'time',
-          minInterval: 3600 * 24 * 1000,
+          max: chartData.yOne[chartData.yOne.length - 1][0],
+          min: chartData.yOne[0][0],
+          interval: (chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / 6,
+          minInterval: 3600 * 24 * 1 * 1000,
+          maxInterval: standerLength < 32 ? 3600 * 24 * 1 * 1000 : null,
           //  nameGap: '170px',
           axisLine: {
             show: true,
@@ -372,11 +351,12 @@ export default {
             margin: 8,
             fontSize: 8,
             formatter: (value) => {
-              if (this.formatChartYearData(value).substring(5) === this.beforeDate) {
-                return '';
-              }
-              this.beforeDate = this.formatChartYearData(value).substring(5);
-              return this.formatChartYearData(value).substring(5);
+              console.log(this.formatChartYearData(value));
+              // if (this.formatChartYearData(value).substring(5, 10) === this.beforeDate) {
+              //   return '';
+              // }
+              this.beforeDate = this.formatChartYearData(value).substring(5, 10);
+              return this.formatChartYearData(value).substring(5, 10);
             },
           },
           axisTick: {
@@ -593,13 +573,13 @@ export default {
         grid: {
           top: '12px',
           left: '40px',
-          right: '10px',
+          right: '20px',
           bottom: '45px',
         },
         color: ['#5294D4', '#2A55E7'],
         legend: {
           itemHeight: 4,
-          data: ['持有BTC', '投资该产品'],
+          data: ['投资该产品', '持有BTC'],
           icon: 'roundRect',
           bottom: 'bottom',
           textStyle: {
@@ -619,6 +599,7 @@ export default {
         },
         xAxis: {
           type: 'time',
+          minInterval: 3600 * 24 * 1000,
           axisLine: {
             show: false,
           },
@@ -630,11 +611,11 @@ export default {
             margin: 10,
             fontSize: 8,
             formatter: (value) => {
-              if (this.formatChartYearData(value).substring(5) === this.beforeDate) {
+              if (this.formatChartYearData(value).substring(5, 10) === this.beforeDate) {
                 return '';
               }
-              this.beforeDate = this.formatChartYearData(value).substring(5);
-              return this.formatChartYearData(value).substring(5);
+              this.beforeDate = this.formatChartYearData(value).substring(5, 10);
+              return this.formatChartYearData(value).substring(5, 10);
             },
           },
           axisTick: {
@@ -669,7 +650,7 @@ export default {
           },
         },
         series: [{
-          name: '持有BTC',
+          name: '投资该产品',
           data: chartData.yOne,
           type: 'line',
           smooth: true,
@@ -680,7 +661,7 @@ export default {
           },
         },
         {
-          name: '投资该产品',
+          name: '持有BTC',
           data: chartData.yTwo,
           type: 'line',
           smooth: true,
@@ -702,7 +683,6 @@ export default {
         () => {
           try {
             /* 初始化净值走势图表 */
-            // this.initTrendChart(this.formatProfitChartData(this.raceDetail.nav_data, 8));
             this.initTrendChart(this.formatTestData(this.raceDetail.nav_data, 365));
             this.loading.clear();
           } catch (e) {
