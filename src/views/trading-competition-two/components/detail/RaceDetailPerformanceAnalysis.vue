@@ -562,6 +562,7 @@ export default {
       const date = xData[lastIndex]; // 日期
       const usdt = this.formatProfitNumber(yOne[lastIndex][1]);
       const btc = this.formatProfitNumber(yTwo[lastIndex][1]);
+      const standerLength = chartData.yOne.length;
       this.dataValues = {
         date,
         value1: usdt,
@@ -599,7 +600,11 @@ export default {
         },
         xAxis: {
           type: 'time',
-          minInterval: 3600 * 24 * 1000,
+          max: chartData.yOne[chartData.yOne.length - 1][0],
+          min: chartData.yOne[0][0],
+          interval: (chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / 6,
+          minInterval: 3600 * 24 * 1 * 1000,
+          maxInterval: standerLength < 32 ? 3600 * 24 * 1 * 1000 : null,
           axisLine: {
             show: false,
           },
