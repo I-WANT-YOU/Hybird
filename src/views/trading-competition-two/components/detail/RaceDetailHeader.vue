@@ -144,7 +144,7 @@ export default {
   }
   .tipOne{
     display: inline-block;
-    font-size:10px;
+    font-size:8px;
     border: none;
     margin-left: 20px;
     background: #303133;
