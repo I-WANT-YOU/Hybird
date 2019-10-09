@@ -105,7 +105,7 @@
                   >
                     <div
                       :class="['line-time-tip',
-                    item === (stepActive && stepActive !== 1)  ? 'active' : '',]"
+                     (item ===stepActive && stepActive !== 1)  ? 'active' : '',]"
                       :ref="item === (stepActive && stepActive !== 1) ? `stepTip` : ''"
                     >
                       <div>还剩{{surplusDateText}}天</div>

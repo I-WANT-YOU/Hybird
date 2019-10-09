@@ -37,7 +37,7 @@
 </template>
 
 <script>
-/* eslint-disable max-len */
+/* eslint-disable max-len,prefer-destructuring */
 
 import EChart from 'echarts';
 import { uniq } from 'lodash';
@@ -289,24 +289,60 @@ export default {
     },
     /* 净值走势折线图 */
     initTrendChart(chartData) {
-      console.log(chartData.yOne[chartData.yOne.length - 1][0]);
-      console.log(chartData.yOne[0][0]);
-      console.log((chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / 6);
-      const standerLength = chartData.yOne.length;
+      // const standerLength = chartData.yOne.length;
       // 初始化第一次显示数据(去最后一次数据显示)
       const trendShowData = this.formatProfitChartData(this.raceDetail.nav_data, 365);
       const { xData } = trendShowData;
       const { yOne } = trendShowData;
-      // const { yTwo } = trendShowData;
       const lastIndex = xData.length - 1;
       const date = xData[lastIndex]; // 日期
       const current = yOne[lastIndex][1];
-      // const basic = yTwo[lastIndex][1];
       this.dataValues = {
         date,
         value1: current,
         value2: '',
       };
+      // 格式化x轴显示
+      const standerLength = uniq(xData.map(item => item.substring(0, 11))).length;
+      let max = null;
+      let min = null;
+      let interval = null;
+      let minInterval = null;
+      let maxInterval = null;
+      if (standerLength === 1) {
+        max = null;
+        min = null;
+        interval = null;
+        minInterval = null;
+        maxInterval = null;
+      } else if (standerLength > 1 && standerLength < 8) {
+        max = chartData.yOne[chartData.yOne.length - 1][0];
+        min = chartData.yOne[0][0];
+        interval = (chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / (standerLength - 1);
+        minInterval = 3600 * 24 * 1 * 1000;
+      } else if (standerLength > 7) {
+        max = chartData.yOne[chartData.yOne.length - 1][0];
+        min = chartData.yOne[0][0];
+        interval = (chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / 6;
+        minInterval = 3600 * 24 * 1 * 1000;
+      }
+      /* 格式化y轴显示 */
+      /* 格式化y轴显示 */
+      let yMin = chartData.minNum * 0.9;
+      let yMax = chartData.maxNum * 1.1;
+      if (chartData.minNum < 0) {
+        yMin = chartData.minNum * 1.1;
+      }
+      if (chartData.maxNum < 0) {
+        yMax = chartData.maxNum * 0.9;
+      }
+      if (chartData.maxNum === 0) {
+        yMax = 0.1;
+      }
+      if (chartData.minNum === 0) {
+        yMin = -0.1;
+      }
+      const yInterval = (yMax - yMin) / 5;
       this.myChart = EChart.init(this.$refs.myChart);
       this.myChart.clear();
       const optionLineOne = {
@@ -337,24 +373,19 @@ export default {
         },
         xAxis: {
           type: 'time',
-          max: chartData.yOne[chartData.yOne.length - 1][0],
-          min: chartData.yOne[0][0],
-          interval: (chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / 6,
-          minInterval: 3600 * 24 * 1 * 1000,
-          maxInterval: standerLength < 32 ? 3600 * 24 * 1 * 1000 : null,
-          //  nameGap: '170px',
+          max,
+          min,
+          interval,
+          minInterval,
+          maxInterval,
           axisLine: {
-            show: true,
+            show: false,
           },
           axisLabel: {
             color: '#ffffff',
             margin: 8,
             fontSize: 8,
             formatter: (value) => {
-              console.log(this.formatChartYearData(value));
-              // if (this.formatChartYearData(value).substring(5, 10) === this.beforeDate) {
-              //   return '';
-              // }
               this.beforeDate = this.formatChartYearData(value).substring(5, 10);
               return this.formatChartYearData(value).substring(5, 10);
             },
@@ -365,13 +396,18 @@ export default {
           splitLine: {
             show: false,
           },
-          // data: chartData.xData,
         },
         yAxis: {
           type: 'value',
-          min: Math.floor(chartData.minNum * 10) / 10,
-          max: Math.ceil(chartData.maxNum * 10) / 10,
-          interval: (Math.ceil(chartData.maxNum * 10) / 10 - Math.floor(chartData.minNum * 10) / 10) / 5,
+          min: yMin,
+          max: yMax,
+          interval: yInterval,
+          // min: Math.floor(chartData.minNum * 10) / 10,
+          // max: Math.ceil(chartData.maxNum * 10) / 10,
+          // interval: (Math.ceil(chartData.maxNum * 10) / 10 - Math.floor(chartData.minNum * 10) / 10) / 5,
+          // min: (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2),
+          // max: (chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1),
+          // interval: ((chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1) - (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2)) / 5,
           nameGap: '70px',
           axisLine: {
             show: false,
@@ -428,146 +464,62 @@ export default {
       };
       this.myChart.setOption(optionLineOne);
     },
-    /* 收益率折线图 */ // 初级版本
-    // initProfitChart(chartData) {
-    //   // 初始化第一次显示数据(去最后一次数据显示)
-    //   const profitShowData = this.formatProfitChartData(this.allYearDataTwo);
-    //   const { xData } = profitShowData;
-    //   const { yOne } = profitShowData;
-    //   const { yTwo } = profitShowData;
-    //   const lastIndex = xData.length - 1;
-    //   const date = xData[lastIndex]; // 日期
-    //   const usdt = this.formatProfitNumber(yOne[lastIndex]);
-    //   const btc = this.formatProfitNumber(yTwo[lastIndex]);
-    //   this.dataValues = {
-    //     date,
-    //     value1: usdt,
-    //     value2: btc,
-    //   };
-    //   this.myChart = EChart.init(this.$refs.myChart);
-    //   this.myChart.clear();
-    //   const optionLineTwo = {
-    //     grid: {
-    //       top: '12px',
-    //       left: '40px',
-    //       right: '10px',
-    //       bottom: '45px',
-    //     },
-    //     color: ['#5294D4', '#2A55E7'],
-    //     legend: {
-    //       itemHeight: 4,
-    //       data: ['仅持有BTC的收益率', '用BTC购买该基金的收益率（以USD计价）'],
-    //       icon: 'roundRect',
-    //       bottom: 'bottom',
-    //       textStyle: {
-    //         color: '#FFFFFF',
-    //         padding: [4, 0, 3, 0],
-    //         fontSize: 8,
-    //       },
-    //       formatter(name) {
-    //         if (name === '仅持有BTC的收益率') {
-    //           return '买BTC收益率';
-    //         }
-    //         return '买基金（USD）收益率';
-    //       },
-    //       tooltip: {
-    //         show: true,
-    //       },
-    //     },
-    //     tooltip: {
-    //       trigger: 'axis',
-    //       formatter: (params) => {
-    //         this.formatCurrentShowData(params, 'profit');
-    //       },
-    //     },
-    //     xAxis: {
-    //       type: 'category',
-    //       axisLine: {
-    //         show: false,
-    //       },
-    //       axisLabel: {
-    //         color: '#ffffff',
-    //         margin: 10,
-    //         fontSize: 8,
-    //         formatter: (value) => {
-    //           const newValue = value.substring(5);
-    //           return newValue;
-    //         },
-    //       },
-    //       axisTick: {
-    //         show: false,
-    //       },
-    //       data: chartData.xData,
-    //     },
-    //     yAxis: {
-    //       type: 'value',
-    //       // min: (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2),
-    //       // max: (chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1),
-    //       // interval: ((chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1)-(chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2))/5,
-    //       // min: Math.floor(chartData.minNum * 10) / 10,
-    //       // max: Math.ceil(chartData.maxNum * 10) / 10,
-    //       // interval: (Math.ceil(chartData.maxNum * 10) / 10 - Math.floor(chartData.minNum * 10) / 10) / 5,
-    //       min: Math.floor(chartData.minNum * 1000) / 1000,
-    //       max: Math.ceil(chartData.maxNum * 1000) / 1000,
-    //       interval: (Math.ceil(chartData.maxNum * 100) - Math.floor(chartData.minNum * 100)) / 500,
-    //       nameGap: '70px',
-    //       axisLine: {
-    //         show: false,
-    //       },
-    //       axisLabel: {
-    //         color: '#ffffff',
-    //         margin: 12,
-    //         fontSize: 8,
-    //         formatter: value => this.formatProfitNumber(value.toString()),
-    //       },
-    //       splitLine: {
-    //         lineStyle: {
-    //           color: '#2C2C2C',
-    //         },
-    //       },
-    //     },
-    //     series: [{
-    //       name: '仅持有BTC的收益率',
-    //       data: chartData.yOne,
-    //       type: 'line',
-    //       smooth: true,
-    //       symbol: 'none',
-    //       lineStyle: {
-    //         color: '#5294D4',
-    //         width: 0.8,
-    //       },
-    //     },
-    //     {
-    //       name: '用BTC购买该基金的收益率（以USD计价）',
-    //       data: chartData.yTwo,
-    //       type: 'line',
-    //       smooth: true,
-    //       symbol: 'none',
-    //       lineStyle: {
-    //         color: '#2A55E7',
-    //         width: 0.8,
-    //       },
-    //     },
-    //     ],
-    //   };
-    //   this.myChart.setOption(optionLineTwo);
-    // },
+    /* 收益率折线图 */
     initProfitChart(chartData) {
       // 初始化第一次显示数据(去最后一次数据显示)
-      const profitShowData = this.formatProfitChartData(this.allYearDataTwo);
+      const profitShowData = chartData;
       const { xData } = profitShowData;
       const { yOne } = profitShowData;
       const { yTwo } = profitShowData;
       const lastIndex = xData.length - 1;
       const date = xData[lastIndex]; // 日期
-      const usdt = this.formatProfitNumber(yOne[lastIndex][1]);
-      const btc = this.formatProfitNumber(yTwo[lastIndex][1]);
-      const standerLength = chartData.yOne.length;
+      const usdt = this.dealWithPrecision(yOne[lastIndex][1]);
+      const btc = this.dealWithPrecision(yTwo[lastIndex][1]);
+      // 格式化x轴显示
+      const standerLength = uniq(xData.map(item => item.substring(0, 11))).length;
+      let max = null;
+      let min = null;
+      let interval = null;
+      let minInterval = null;
+      let maxInterval = null;
+      if (standerLength === 1) {
+        max = null;
+        min = null;
+        interval = null;
+        minInterval = null;
+        maxInterval = null;
+      } else if (standerLength > 1 && standerLength < 8) {
+        max = chartData.yOne[chartData.yOne.length - 1][0];
+        min = chartData.yOne[0][0];
+        interval = (chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / (standerLength - 1);
+        minInterval = 3600 * 24 * 1 * 1000;
+      } else if (standerLength > 7) {
+        max = chartData.yOne[chartData.yOne.length - 1][0];
+        min = chartData.yOne[0][0];
+        interval = (chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / 6;
+        minInterval = 3600 * 24 * 1 * 1000;
+      }
       this.dataValues = {
         date,
         value1: usdt,
         value2: btc,
       };
+      /* 格式化y轴显示 */
+      let yMin = chartData.minNum * 0.9;
+      let yMax = chartData.maxNum * 1.1;
+      if (chartData.minNum < 0) {
+        yMin = chartData.minNum * 1.1;
+      }
+      if (chartData.maxNum < 0) {
+        yMax = chartData.maxNum * 0.9;
+      }
+      if (chartData.maxNum === 0) {
+        yMax = 0.1;
+      }
+      if (chartData.minNum === 0) {
+        yMin = -0.1;
+      }
+      const yInterval = (yMax - yMin) / 5;
       this.myChart = EChart.init(this.$refs.myChart);
       this.myChart.clear();
       const optionLineTwo = {
@@ -600,11 +552,11 @@ export default {
         },
         xAxis: {
           type: 'time',
-          max: chartData.yOne[chartData.yOne.length - 1][0],
-          min: chartData.yOne[0][0],
-          interval: (chartData.yOne[chartData.yOne.length - 1][0] - chartData.yOne[0][0]) / 6,
-          minInterval: 3600 * 24 * 1 * 1000,
-          maxInterval: standerLength < 32 ? 3600 * 24 * 1 * 1000 : null,
+          max,
+          min,
+          interval,
+          minInterval,
+          maxInterval,
           axisLine: {
             show: false,
           },
@@ -631,13 +583,13 @@ export default {
           type: 'value',
           // min: (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2),
           // max: (chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1),
-          // interval: ((chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1)-(chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2))/5,
-          // min: Math.floor(chartData.minNum * 10) / 10,
-          // max: Math.ceil(chartData.maxNum * 10) / 10,
-          // interval: (Math.ceil(chartData.maxNum * 10) / 10 - Math.floor(chartData.minNum * 10) / 10) / 5,
-          min: Math.floor(chartData.minNum * 100) / 100,
-          max: Math.ceil(chartData.maxNum * 100) / 100,
-          interval: (Math.ceil(chartData.maxNum * 100) - Math.floor(chartData.minNum * 100)) / 500,
+          // interval: ((chartData.maxNum + (chartData.maxNum - chartData.minNum) * 1.1) - (chartData.minNum - (chartData.maxNum - chartData.minNum) * 1.2)) / 5,
+          min: yMin,
+          max: yMax,
+          interval: yInterval,
+          // min: Math.floor(chartData.minNum * 100) / 100,
+          // max: Math.ceil(chartData.maxNum * 100) / 100,
+          // interval: (Math.ceil(chartData.maxNum * 100) - Math.floor(chartData.minNum * 100)) / 500,
           nameGap: '70px',
           axisLine: {
             show: false,

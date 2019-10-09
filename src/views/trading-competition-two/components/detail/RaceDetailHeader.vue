@@ -7,8 +7,7 @@
       <div class="title-info">
         <div>
           <!--<span>违规品种交易</span>-->
-          <span v-show="lables[0] === 2">高杠杆</span>
-          <span v-show="lables[0] === 1">高回撤</span>
+          <span v-for="(item,index) in lables" :key="index">{{item === 1 ? '高回撤' : '高杠杆'}}</span>
         </div>
         <!--<div>-->
           <!--<span>跟投最多</span>-->
