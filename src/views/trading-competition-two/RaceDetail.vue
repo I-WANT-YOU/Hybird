@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 import BgainNavBar from '../../components/BgainNavBar.vue';
 import RaceDetailHeader from './components/detail/RaceDetailHeader.vue';
 import RaceDetailCollapse from './components/detail/RaceDetailCollapse.vue';
@@ -36,6 +36,9 @@ export default {
   },
   mounted() {
     // this.getRaceDetail(1);
+  },
+  created() {
+    window.scrollTo(0, 0);
   },
 };
 </script>

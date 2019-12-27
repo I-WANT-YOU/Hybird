@@ -19,7 +19,6 @@
       />
       <div class="none">我的BGP</div>
     </div>
-
     <div class="trading-competition-two-title">
       <div class="league-match">
         <img
@@ -67,6 +66,8 @@
         />
       </div>
     </div>
+    <!--top3 排行榜-->
+    <RankingListOfThree/>
 
     <div class="steps-wrap">
       <div class="home-con-step">
@@ -245,6 +246,7 @@ import { formatDate } from '@utils/tools';
 import Bridge from '@/config/bridge';
 import TradingFooter from './components/home/TradingFooter.vue';
 import HomeTable from './components/home/TradingCompetitionTwoHomeTable.vue';
+import RankingListOfThree from './components/RankingListOfThree.vue';
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
 
@@ -254,6 +256,7 @@ export default {
     // BgainNavBar,
     HomeTable,
     TradingFooter,
+    RankingListOfThree,
   },
   data() {
     return {

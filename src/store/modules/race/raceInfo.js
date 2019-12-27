@@ -78,6 +78,7 @@ const getters = {
   lables: state => get(state.raceDetail, 'lables', []), // 标签
   historyRoi: state => get(state.raceDetail, 'history_roi', []), // 历史ROI
   seasonMaxDrawDown: state => get(state.raceDetail, 'season_max_draw_down', []), // 赛季最大回撤
+  productIcon: state => get(state.raceDetail, 'product_icon', ''), // icon
 };
 const mutations = {
   [types.GET_TEAM_DETAIL](state, payload) {

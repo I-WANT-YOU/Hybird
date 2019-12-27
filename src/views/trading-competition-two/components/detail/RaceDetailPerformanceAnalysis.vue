@@ -663,7 +663,7 @@ export default {
   .raceDetailPerformanceAnalysis{
     font-family:PingFang SC sans-serif;
     background: url("../../../../assets/images/trading-competition-two/detail/content/bg-three.png");
-    background-size: 375px 100%;
+    background-size: 375px 200%;
     padding-top: 20px;
     .title{
       margin: 0;

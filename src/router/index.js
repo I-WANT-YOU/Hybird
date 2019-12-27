@@ -215,7 +215,7 @@ const router = new Router({
     {
       path: '/trading-competition-history',
       name: 'tradingCompetitionHistory',
-      component: () => import('../views/trading-competition-two/TradingCompetitionHistory.vue'),
+      component: () => import('../views/trading-competition-two/rankingList/TradingCompetitionHistory.vue'),
     },
     {
       path: '/trading-competition-history-detail/:id',

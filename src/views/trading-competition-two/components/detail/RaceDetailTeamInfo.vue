@@ -38,6 +38,7 @@ export default {
     }
     font-family:PingFang SC sans-serif;
     background: url("../../../../assets/images/trading-competition-two/detail/content/bg-three.png");
+    background-size: 375px 100%;
     color: white;
     .title{
      margin-left: 25px;
@@ -52,7 +53,7 @@ export default {
    }
     .teamInfo{
       display: flex;
-      margin: 18px 0 30px;
+      padding: 18px 0 30px;
       .logo-icon{
         margin-left: 38px;
         width: 63px;

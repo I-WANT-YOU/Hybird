@@ -139,7 +139,7 @@ export default {
         },
         {
           name: '索提诺比',
-          value: `${this.sortinoRatio}%`,
+          value: this.sortinoRatio,
         },
         /*------------------*/
         {
@@ -171,7 +171,7 @@ export default {
     overflow: hidden;
     font-family:SourceHanSansCN sans-serif;
     background: url("../../../../assets/images/trading-competition-two/detail/header/bg-two.png") no-repeat;
-    background-size: 375px 301px;
+    background-size: 375px 255px;
     /*默认显示*/
     .defaultShow{
       height: 110px;

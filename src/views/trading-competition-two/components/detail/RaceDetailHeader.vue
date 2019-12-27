@@ -2,7 +2,9 @@
   <div class="raceDetailHeader">
     <div class="title">
       <div class="title-text">
+        <img :src="productIcon"/>
         <span>{{productName}}</span>
+        <span>{{profile.team_name}}</span>
       </div>
       <div class="title-info">
         <div>
@@ -20,7 +22,7 @@
       <div class="netWorth">
         <div>
           <span>{{nav}}</span>
-          <img :src="nav-0>0?up:down" alt="" class="arrow-icon"/>
+          <img :src="change * 1===1?up:down" alt="" class="arrow-icon" v-show="change-0 !== 0"/>
         </div>
         <span>最新净值</span>
       </div>
@@ -78,6 +80,7 @@ export default {
   },
   computed: {
     ...mapGetters(['createDate',
+      'productIcon',
       'lables',
       'size',
       'productName',
@@ -99,7 +102,10 @@ export default {
       'rank',
       'countWholePeriod',
       'margin',
-      'maxDrawDownRate']),
+      'maxDrawDownRate',
+      'change',
+      'profile',
+    ]),
     recentData() {
       const recentInfo = [
         {
@@ -163,17 +169,28 @@ export default {
       padding-top: 20px;
       display: flex;
       .title-text{
-        height: 18px;
+        /*height: 18px;*/
         padding: 0 10px 0 26px ;
         display: flex;
         align-items: center;
-        >span{
+        >img{
+          width: 12px;
+          height: 14px;
+          padding-right: 6px;
+        }
+        >span:nth-child(2){
           font-size:14px;
           font-weight:400;
           color:rgba(42,85,231,1);
           background:linear-gradient(0deg,rgba(45,164,240,1) 0%, rgba(255,255,255,1) 100%);
           -webkit-background-clip:text;
           -webkit-text-fill-color:transparent;
+        }
+        >span:nth-child(3){
+          padding-left: 8px;
+          font-size:11px;
+          font-weight:400;
+          color:rgba(255,255,255,1);
         }
       }
       .title-info{
