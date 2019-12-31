@@ -216,9 +216,12 @@ const router = new Router({
       path: '/trading-competition-history',
       name: 'tradingCompetitionHistory',
       component: () => import('../views/trading-competition-two/rankingList/TradingCompetitionHistory.vue'),
+      meta: {
+        keepAlive: true, // 需要被缓存
+      },
     },
     {
-      path: '/trading-competition-history-detail/:id',
+      path: '/trading-competition-history-detail',
       name: 'tradingCompetitionHistoryDetail',
       component: () => import('../views/trading-competition-two/HistoryDetail.vue'),
     },

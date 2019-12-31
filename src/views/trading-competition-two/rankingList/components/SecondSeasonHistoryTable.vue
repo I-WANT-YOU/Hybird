@@ -6,22 +6,22 @@
           <th class="tip-wrap">
             <span>最终排名</span>
           </th>
-          <th class="name-wrap">参赛组名称</th>
+          <th class="name-wrap">基金名称</th>
           <th>
-            <span>综合得分</span>
+            <span>赛季ROI</span>
           </th>
-          <th>赛季ROI</th>
+          <th>赛季最大回撤</th>
           <th>操作</th>
         </tr>
       </thead>
       <tbody class="table-tbody">
-        <tr v-for="(tr,key) in tableData" :key="key" class="tr-line" @click="onSkip(tr.id)">
+        <tr v-for="(tr,key) in tableData" :key="key" class="tr-line" @click="onSkip(tr)" v-show="key!==0">
           <td class="table-rank">
             <span>{{tr.rank}}</span>
           </td>
-          <td>{{tr.name}}</td>
-          <td>{{tr.score}}</td>
-          <td>{{tr.roi}}</td>
+          <td>{{tr.product_name}}</td>
+          <td>{{tr.season_roi+'%'}}</td>
+          <td>{{tr.max_drawdown+'%'}}</td>
           <td>详情</td>
         </tr>
       </tbody>
@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  name: 'HistoryTable',
+  name: 'SecondSeasonHistoryTable',
   props: {
     tableData: {
       type: Array,
@@ -42,7 +42,7 @@ export default {
       this.$router.push({
         path: '/trading-competition-history-detail',
         query: {
-          id: item,
+          data: JSON.stringify(item),
         },
       });
     },

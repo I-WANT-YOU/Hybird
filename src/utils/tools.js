@@ -119,3 +119,4 @@ export const copyText = (text) => {
   input.blur();
   document.body.removeChild(input);
 };
+

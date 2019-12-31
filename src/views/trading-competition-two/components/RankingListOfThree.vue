@@ -5,9 +5,11 @@
         <div class="header-date font-style-color">第二赛季时间：2019.09.23 ～ 2019.12.31</div>
       </div>
       <div class="riskList-body">
-        <div class="date">数据统计于201912.31  18：00</div>
+        <div class="date">数据统计于 2019.12.31  18:00</div>
         <!--card-->
-        <RiskCard v-for="(listInfoItem,listInfoIndex) in listInfo" :key="listInfoIndex" :listInfoItem="listInfoItem" :listInfoIndex="listInfoIndex"/>
+        <RiskCard :listInfo="ctaRankingList" currentType="BTC"   strategyType="CTA"/>
+        <RiskCard :listInfo="marketNeutralRankingList" currentType="BTC" strategyType="市场中性"/>
+        <RiskCard :listInfo="mixedRankingList" currentType="USD" strategyType="不限策略" :showBorder="false"/>
         <!--more-->
         <el-button class="button-style" @click="$router.push('/trading-competition-history')">查看更多</el-button>
       </div>
@@ -16,6 +18,7 @@
 
 <script>
 import { Button } from 'vant';
+import { mapGetters } from 'vuex';
 import RiskCard from './RiskCard.vue';
 
 export default {
@@ -24,89 +27,10 @@ export default {
     RiskCard,
     'el-button': Button,
   },
-  data() {
-    return {
-      listInfo: [
-        {
-          currencyType: 'BTC',
-          titleType: 'CTA',
-          list: [
-            {
-              name: '',
-              maximumDrawDown: '最大回撤',
-              seasonROi: '赛季ROI',
-            },
-            {
-              name: '资本家',
-              maximumDrawDown: '25.33%',
-              seasonROi: '23.00%',
-            },
-            {
-              name: '资本家',
-              maximumDrawDown: '25.33%',
-              seasonROi: '23.00%',
-            },
-            {
-              name: '资本家',
-              maximumDrawDown: '25.33%',
-              seasonROi: '23.00%',
-            },
-          ],
-        },
-        {
-          currencyType: 'BTC',
-          titleType: '市场中性',
-          list: [
-            {
-              name: '',
-              maximumDrawDown: '最大回撤',
-              seasonROi: '赛季ROI',
-            },
-            {
-              name: '资本家',
-              maximumDrawDown: '25.33%',
-              seasonROi: '23.00%',
-            },
-            {
-              name: '资本家',
-              maximumDrawDown: '25.33%',
-              seasonROi: '23.00%',
-            },
-            {
-              name: '资本家',
-              maximumDrawDown: '25.33%',
-              seasonROi: '23.00%',
-            },
-          ],
-        },
-        {
-          currencyType: 'BTC',
-          titleType: '不限策略',
-          list: [
-            {
-              name: '',
-              maximumDrawDown: '最大回撤',
-              seasonROi: '赛季ROI',
-            },
-            {
-              name: '资本家',
-              maximumDrawDown: '25.33%',
-              seasonROi: '23.00%',
-            },
-            {
-              name: '资本家',
-              maximumDrawDown: '25.33%',
-              seasonROi: '23.00%',
-            },
-            {
-              name: '资本家',
-              maximumDrawDown: '25.33%',
-              seasonROi: '23.00%',
-            },
-          ],
-        },
-      ],
-    };
+  computed: {
+    ...mapGetters('race/raceInfo', [
+      'ctaRankingList', 'marketNeutralRankingList', 'mixedRankingList',
+    ]),
   },
 };
 </script>
@@ -130,13 +54,13 @@ export default {
     text-align: center;
     .header-title{
       height:21px;
-      font-size:14px;
+      font-size:15px;
       line-height:21px;
       font-weight: 500;
     }
     .header-date{
       height:25px;
-      font-size:8px;
+      font-size:11px;
       line-height:25px;
     }
   }
@@ -148,8 +72,8 @@ export default {
     text-align: center;
     .date{
       height: 25px;
-      margin: 20px 0 5px 36px;
-      font-size:8px;
+      margin: 20px 0 0 36px;
+      font-size:10px;
      text-align: left;
       color:rgba(255,255,255,1);
       line-height:25px;
@@ -158,10 +82,12 @@ export default {
       -webkit-text-fill-color:transparent;
     }
     .button-style{
-      height:15px;
-      font-size:10px;
+      display: block;
+      margin: 15px auto 0;
+      height:20px;
+      font-size:12px;
       color:rgba(42,85,231,1);
-      line-height:15px;
+      line-height:20px;
       background: none;
       border: none;
     }

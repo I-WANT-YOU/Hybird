@@ -1,22 +1,29 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <div class="currency-container" :style="{textAlign:listInfoIndex===0?'center':'right'}">{{listInfoItem.titleType}}</div>
+      <div class="currency-container" :style="{textAlign:strategyType==='CTA'?'center':'right'}">{{strategyType}}</div>
       <div class="strategy-container">
         <div class="rotate-font-style">
-          {{listInfoItem.currencyType}}
+          {{currentType}}
         </div>
       </div>
     </div>
     <ul class="card-body" >
-      <li class="card-body-item" v-for="(listItem,listIndex) in listInfoItem.list" :key="listIndex">
+      <li class="card-body-item">
+        <span  class="img-style"></span>
+        <span class="name-item font-style-color"></span>
+        <span class="maxDraw-item">最大回撤</span>
+        <span class="roi-item font-style-color">赛季ROI</span>
+      </li>
+      <li class="card-body-item" v-for="(listItem,listIndex) in listInfo" :key="listIndex" v-show="listIndex<4 && listIndex!==0">
         <el-image v-if="listIndex !== 0" class="img-style" :src="imgList[listIndex-1]"/>
         <span v-else class="img-style"></span>
-        <span class="name-item font-style-color">{{listItem.name}}</span>
-        <span class="maxDraw-item">{{listItem.maximumDrawDown}}</span>
-        <span class="roi-item font-style-color">{{listItem.seasonROi}}</span>
+        <span class="name-item font-style-color">{{listItem.team_name}}</span>
+        <span class="maxDraw-item">{{listItem.max_drawdown+'%'}}</span>
+        <span class="roi-item font-style-color">{{listItem.season_roi+'%'}}</span>
       </li>
     </ul>
+    <el-image :src="border" class="border-style" v-show="showBorder"></el-image>
   </div>
 </template>
 
@@ -25,19 +32,28 @@ import { Image } from 'vant';
 import first from '../images/first.png';
 import second from '../images/second.png';
 import third from '../images/third.png';
-import strategyType from '../images/strategy-type.png';
-import currencyType from '../images/currency-type.png';
+import strategyTypeImg from '../images/strategy-type.png';
+import currencyTypeImg from '../images/currency-type.png';
+import border from '../images/border.png';
 
 export default {
   name: 'RiskCard',
   props: {
-    listInfoItem: {
-      type: Object,
-      default: () => {},
+    listInfo: {
+      type: Array,
+      default: () => [],
     },
-    listInfoIndex: {
-      type: Number,
-      default: 0,
+    currentType: {
+      type: String,
+      default: '',
+    },
+    strategyType: {
+      type: String,
+      default: '',
+    },
+    showBorder: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -47,8 +63,9 @@ export default {
         second,
         third,
       ],
-      currencyType,
-      strategyType,
+      strategyTypeImg,
+      currencyTypeImg,
+      border,
     };
   },
   components: {
@@ -60,7 +77,7 @@ export default {
 <style lang="scss" scoped>
   .card{
     font-family:Source Han Sans CN sans-serif;
-    margin: auto;
+    margin: 0 auto 10px;
     .font-style-color{
       color:rgba(255,255,255,1);
       line-height:12px;
@@ -101,9 +118,17 @@ export default {
     }
     .card-body{
       margin: 0 64px 0 50px;
+      >li:first-child{
+        height: 17px;
+        line-height: 17px;
+        font-size: 10px;
+        .roi-item{
+          font-size:10px;
+        }
+      }
       .card-body-item{
         height: 25px;
-        font-size:9px;
+        font-size:11px;
         display: flex;
         align-items: center;
         >span{
@@ -114,20 +139,28 @@ export default {
           height: 18px;
         }
         .name-item{
-          width: 110px;
+          text-align: left;
+          width: 100px;
           margin-left: 15px;
         }
         .maxDraw-item{
-          width: 65px;
+          width: 60px;
           text-align: right;
           color:rgba(164,200,234,1);
           line-height:18px;
         }
         .roi-item{
+          font-size:12px;
           width: 80px;
           text-align: right;
         }
       }
+    }
+    .border-style{
+      display: block;
+      margin: 10px auto 0;
+      width: 303px;
+      height: 1px;
     }
   }
 </style>

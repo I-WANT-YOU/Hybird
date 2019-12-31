@@ -110,6 +110,20 @@ class AssetsService {
     }
   }
 
+  // 二期首页排行榜（包含首页排行榜 历史列表和详情 总共一个接口）
+  static async getRaceRankingList() {
+    try {
+      const requestOptions = {
+        url: '/cat/index/season2',
+        method: 'get',
+      };
+      const response = await request(requestOptions);
+      return handlerResponse(response);
+    } catch (error) {
+      return (error);
+    }
+  }
+
   // 二期详情
   static async getRaceDetail(detailId) {
     try {

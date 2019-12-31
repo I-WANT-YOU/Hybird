@@ -3,8 +3,8 @@
      <BgainNavBar title="历史榜单"/>
     <div class="con">
       <div class="title">
-        <span @click="changeSeasonRiskList('first')">第一赛季排行榜</span>
-        <span @click="changeSeasonRiskList('second')">第二赛季排行榜</span>
+        <span @click="changeSeasonRiskList('second')" :class="{activeSeasonClass:activeSeason==='secondSeason'}">第二赛季排行榜</span>
+        <span @click="changeSeasonRiskList('first')" :class="{activeSeasonClass:activeSeason==='firstSeason'}">第一赛季排行榜</span>
       </div>
       <div class="trading-competition-history-table-wrap">
         <div class="trading-competition-history-table-bg">
@@ -23,45 +23,10 @@
               class="tab-img"
             />
           </div>
-          <!--<div @click="changeTab('CTA')">-->
-            <!--<span :class="{active: tabActive === 'CTA'}">CTA</span>-->
-            <!--<img-->
-              <!--src="../../../assets/images/trading-competition-two/home/table-tab-active.png"-->
-              <!--alt-->
-              <!--v-show="tabActive === 'CTA'"-->
-              <!--class="tab-img"-->
-            <!--/>-->
-          <!--</div>-->
-          <!--<div @click="changeTab('Arbitrage')">-->
-            <!--<span :class="{active: tabActive === 'Arbitrage'}">套利</span>-->
-            <!--<img-->
-              <!--src="../../../assets/images/trading-competition-two/home/table-tab-active.png"-->
-              <!--alt-->
-              <!--v-show="tabActive === 'Arbitrage'"-->
-              <!--class="tab-img"-->
-            <!--/>-->
-          <!--</div>-->
-          <!--<div @click="changeTab('HighFrequency')">-->
-            <!--<span :class="{active: tabActive === 'HighFrequency'}">高频</span>-->
-            <!--<img-->
-              <!--src="../../../assets/images/trading-competition-two/home/table-tab-active.png"-->
-              <!--alt-->
-              <!--v-show="tabActive === 'HighFrequency'"-->
-              <!--class="tab-img"-->
-            <!--/>-->
-          <!--</div>-->
-          <!--<div @click="changeTab('MixedStrategies')">-->
-            <!--<span :class="{active: tabActive === 'MixedStrategies'}">混合</span>-->
-            <!--<img-->
-              <!--src="../../../assets/images/trading-competition-two/home/table-tab-active.png"-->
-              <!--alt-->
-              <!--v-show="tabActive === 'MixedStrategies'"-->
-              <!--class="tab-img"-->
-            <!--/>-->
-          <!--</div>-->
         </div>
         <div class="table-wrap">
-          <Table :tableData="list" />
+          <Table v-if="activeSeason!=='secondSeason'" :tableData="list" />
+          <SecondSeasonHistoryTable v-else  :tableData="list"/>
         </div>
       </div>
     </div>
@@ -74,6 +39,7 @@ import { createNamespacedHelpers } from 'vuex';
 import BgainNavBar from '@component/BgainNavBar.vue';
 import Footer from '../components/home/TradingFooter.vue';
 import Table from '../components/home/HistoryTable.vue';
+import SecondSeasonHistoryTable from './components/SecondSeasonHistoryTable.vue';
 
 
 const { mapActions, mapGetters } = createNamespacedHelpers('race/raceInfo');
@@ -84,13 +50,15 @@ export default {
     BgainNavBar,
     Table,
     Footer,
+    SecondSeasonHistoryTable,
   },
   data() {
     return {
-      tabActive: 'CTA',
+      activeSeason: 'secondSeason', // 赛季tab
+      tabActive: 'cta',
       list: [],
       currentTabList: [], // 当前激活的TabList列表
-      tabOne: [
+      tabOne: [ // 第一赛季
         {
           name: 'CTA',
           value: 'CTA',
@@ -107,34 +75,48 @@ export default {
           name: '混合',
           value: 'MixedStrategies',
         },
-      ], // 第一赛季
-      tabTwo: [
+      ],
+      tabTwo: [ // 第二赛季
         {
           name: 'CTA(BTC)',
-          value: 'CTA',
+          value: 'cta',
         },
         {
           name: '市场中性(BTC)',
-          value: 'MixedStrategies',
+          value: 'marketNeutral',
         },
         {
-          name: '不限策略(USDT)',
-          value: 'HighFrequency',
+          name: '不限策略(USD)',
+          value: 'mixed',
         },
-      ], // 第二赛季
+      ],
     };
   },
-  mounted() {
-    this.currentTabList = this.tabOne;
+  async mounted() {
+    this.currentTabList = this.tabTwo;
     window.scrollTo(0, 0);
-    this.openLoading();
-    this.getApi();
+    await this.getSecondSeasonInfo();
+    this.list = this.ctaRankingList;
   },
   computed: {
-    ...mapGetters(['historyList']),
+    ...mapGetters(['historyList', 'ctaRankingList', 'marketNeutralRankingList', 'mixedRankingList']),
   },
   methods: {
-    ...mapActions(['getRank']),
+    ...mapActions(['getRank', 'getRaceRankingList']),
+
+    /* 接口方法 */
+
+    // 获取第二赛季信息
+    async getSecondSeasonInfo() {
+      try {
+        this.openLoading();
+        await this.getRaceRankingList();
+        this.loading.clear();
+      } catch (errorMessage) {
+        console.log(errorMessage);
+      }
+    },
+
     async getApi() {
       try {
         await this.getRank(this.tabActive);
@@ -152,22 +134,52 @@ export default {
       }
     },
     changeTab(tab) {
-      this.tabActive = tab;
-      this.openLoading();
-      this.getApi();
+      if (this.activeSeason === 'firstSeason') {
+        this.tabActive = tab;
+        this.openLoading();
+        this.getApi();
+      }
+      if (this.activeSeason === 'secondSeason') {
+        this.tabActive = tab;
+        if (this.tabActive === 'cta') {
+          this.list = this.ctaRankingList;
+        }
+        if (this.tabActive === 'marketNeutral') {
+          this.list = this.marketNeutralRankingList;
+        }
+        if (this.tabActive === 'mixed') {
+          this.list = this.mixedRankingList;
+        }
+      }
     },
 
     // 改变tabList列表
     changeSeasonRiskList(val) {
       if (val === 'first') {
+        this.activeSeason = 'firstSeason';
         this.currentTabList = this.tabOne;
         this.tabActive = 'CTA';
+        this.openLoading();
+        this.getApi();
       }
       if (val === 'second') {
+        this.activeSeason = 'secondSeason';
         this.currentTabList = this.tabTwo;
-        this.tabActive = 'CTA';
+        this.tabActive = 'cta';
+        this.list = this.ctaRankingList;
       }
     },
+  },
+  beforeRouteLeave(to, from, next) {
+    // 设置下一个路由的 meta
+    if (to.path !== '/trading-competition-history-detail') {
+      from.meta.keepAlive = false;
+      console.log(from.meta.keepAlive);
+      next();
+    } else {
+      from.meta.keepAlive = true; // B 跳转到 A 时，让 A 缓存，即不刷新
+      next();
+    }
   },
 };
 </script>
@@ -265,20 +277,16 @@ export default {
       margin-top: 10px;
       display: flex;
       justify-content: center;
+      .activeSeasonClass{
+        color: rgba(42, 85, 231, 1);
+      }
      >span{
-      width: 45%;
+       width: 45%;
        font-size: 14px;
-       color: rgba(42, 85, 231, 1);
        line-height: 43px;
        text-align: center;
        border:1px solid #1c7aff;
-       background: linear-gradient(
-           0deg,
-           rgba(45, 164, 240, 1) 0%,
-           rgba(255, 255, 255, 1) 100%
-       );
-       -webkit-background-clip: text;
-       -webkit-text-fill-color: transparent;
+       color: #708090;
      }
     }
   }

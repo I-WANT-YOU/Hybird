@@ -11,12 +11,14 @@
 
     <div class="trading-competition-two-info">
       <div class="none">我的BGP</div>
-      <img src="../../assets/images/trading-competition-two/home/bgain.png" class="bgain-text" alt />
+      <span class="font-colors-style">Bgain Digital</span>
+      <span class="font-colors-style">金色财经</span>
+     <!-- <img src="../../assets/images/trading-competition-two/home/bgain.png" class="bgain-text" alt />
       <img
         src="../../assets/images/trading-competition-two/home/golden.png"
         class="golden-text"
         alt
-      />
+      />-->
       <div class="none">我的BGP</div>
     </div>
     <div class="trading-competition-two-title">
@@ -69,7 +71,7 @@
     <!--top3 排行榜-->
     <RankingListOfThree/>
 
-    <div class="steps-wrap">
+ <!--   <div class="steps-wrap">
       <div class="home-con-step">
         <span class="home-con-step-title">第二赛季进程</span>
         <div class="home-con-steps">
@@ -123,7 +125,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
 
     <div class="trading-competition-two-table-title">
       <img
@@ -284,20 +286,20 @@ export default {
     this.openLoading();
     try {
       await this.getRaceHome();
+      await this.getRaceRankingList();
       this.tableData = this.rankingCTA;
       this.upDateTime = formatDate(this.upDate, 'YYYY.MM.DD HH:mm');
-      this.loading.clear();
+      this.destroyed();
     } catch (error) {
+      this.destroyed();
       Toast('网络错误');
-      this.loading.clear();
-      throw error;
     }
   },
   methods: {
-    ...mapActions(['getRaceHome']),
+    ...mapActions(['getRaceHome', 'getRaceRankingList']),
+
     changeStep() {
-      const lastDay = new Date(this.setpTime.getFullYear(),
-        this.setpTime.getMonth() + 1, 0).getDate();
+      const lastDay = new Date(this.setpTime.getFullYear(), this.setpTime.getMonth() + 1, 0).getDate();
       this.stagesTotalDay = lastDay;
       this.surplusDate = this.setpTime.getDate();
       this.surplusDateText = this.stagesTotalDay - this.surplusDate;
@@ -374,6 +376,11 @@ export default {
 
       return date.concat(this.tableData.find(item => item.compare_to_benchmark * 1 === 0));
     },
+  },
+  beforeRouteLeave(to, from, next) {
+    // 设置下一个路由的 meta
+    to.meta.keepAlive = false;
+    next();
   },
 };
 </script>
@@ -695,7 +702,7 @@ export default {
   }
 
   .trading-competition-two-table-title {
-    margin: 90px 0 10px;
+    margin: 40px 0 10px;
     padding: 0 16px 0 23px;
     display: flex;
     font-size: 9px;
@@ -891,6 +898,19 @@ export default {
 
   .footer {
     margin-bottom: -40px;
+  }
+  /*公共类*/
+  .font-colors-style {
+    display: block;
+    height:25px;
+    font-size:20px;
+    font-weight:400;
+    color:rgba(42,85,231,1);
+    line-height:19px;
+    background:linear-gradient(0deg,rgba(45,164,240,1) 0%, rgba(255,255,255,1) 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom: 10px;
   }
 }
 </style>

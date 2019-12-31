@@ -1,7 +1,8 @@
 <template>
   <div class="wrap">
-     <BgainNavBar title="团队详情" />
-    <div class="con">
+    <BgainNavBar title="团队详情" />
+    <div v-if="activeTable==='first'" class="con">
+      <!--团队简介-->
       <div class="name">
         <div class="name-wrap">
           <i class="icon none">{{teamDetailInfo.rank_all}}</i>
@@ -13,6 +14,7 @@
         <div class="title">管理人 : {{teamDetailInfo.administrator}}</div>
         <div class="more-info">{{teamDetailInfo.team_introduction}}</div>
       </div>
+      <!--最终成绩-->
       <div class="results">
         <div class="title">最终成绩</div>
         <div class="result-card-wrap">
@@ -55,6 +57,62 @@
         </div>
       </div>
     </div>
+    <div v-else class="con">
+      <!--团队简介-->
+      <div class="name">
+        <div class="name-wrap">
+          <i class="icon none">{{showData.rank}}</i>
+          <span>{{showData.product_name}}</span>
+          <i class="icon none"></i>
+        </div>
+      </div>
+      <div class="info">
+        <div class="title">管理人 : {{showData.team_name}}</div>
+        <div class="more-info">{{showData.team_profile}}</div>
+      </div>
+      <!--最终成绩-->
+      <div class="results">
+        <div class="title">最终成绩</div>
+        <div class="result-card-wrap">
+          <div class="result-card">
+            <div>赛季ROI</div>
+            <div>{{showData.season_roi +'%'}}</div>
+          </div>
+          <div class="result-card">
+            <div>赛终净值</div>
+            <div>{{showData.nav}}</div>
+          </div>
+          <div class="result-card">
+            <div>赛季最大回撤</div>
+            <div>{{showData.max_drawdown+'%'}}</div>
+          </div>
+          <div class="result-card">
+            <div>赛季最大杠杆</div>
+            <div>{{showData.max_margin}}</div>
+          </div>
+          <div class="result-card">
+            <div>赛终规模</div>
+            <div>{{showData.asset}}</div>
+          </div>
+          <div class="result-card">
+            <div>净盈亏</div>
+            <div>{{showData.pnl}}</div>
+          </div>
+          <div class="result-card">
+            <div>年化收益率</div>
+            <div>{{showData.annulized_roi+'%'}}</div>
+          </div>
+          <div class="result-card">
+            <div>卡玛比</div>
+            <div>{{showData.calmar_ratio}}</div>
+          </div>
+          <div class="result-card">
+            <div>夏普率</div>
+            <div>{{showData.sharpe_ratio}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <Footer />
   </div>
 </template>
@@ -72,6 +130,12 @@ export default {
     Footer,
     BgainNavBar,
   },
+  data() {
+    return {
+      activeTable: '',
+      showData: {},
+    };
+  },
   methods: {
     ...mapActions(['getTeamDetailInfo']),
   },
@@ -79,13 +143,20 @@ export default {
     ...mapState(['teamDetailInfo']),
   },
   async mounted() {
-    this.openLoading();
-    try {
-      await this.getTeamDetailInfo(this.$route.params.id);
-      this.loading.clear();
-    } catch (error) {
-      this.loading.clear();
-      throw error;
+    if (this.$route.query.data) {
+      this.activeTable = 'second';
+      this.showData = JSON.parse(this.$route.query.data);
+    }
+    if (this.$route.query.id) {
+      this.activeTable = 'first';
+      this.openLoading();
+      try {
+        await this.getTeamDetailInfo(this.$route.query.id);
+        this.loading.clear();
+      } catch (error) {
+        this.loading.clear();
+        throw error;
+      }
     }
   },
 };

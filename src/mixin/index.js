@@ -14,10 +14,11 @@ export default {
         message: '加载中...',
       });
     },
+    destroyed() {
+      if (this.loading) {
+        this.loading.clear();
+      }
+    },
   },
-  destroyed() {
-    if (this.loading) {
-      this.loading.clear();
-    }
-  },
+
 };

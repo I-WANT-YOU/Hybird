@@ -16,6 +16,8 @@ export const setClientType = appType => localStorage.setItem(APP_KEY, appType);
 export const handlerResponse = (response) => {
   const data = response && response.data;
   if (response.status !== 200) {
+    console.log(response);
+    console.log('response');
     const error = (data && data.error) || response.statusText;
     return Promise.reject(error);
   }

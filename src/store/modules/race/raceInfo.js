@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, sortBy } from 'lodash';
 import { formatDate } from '@utils/tools';
 import raceService from '@/api/raceInfo';
 import { handlerSuccessResponse, handlerSuccessResponseV2 } from '@/utils/auth';
@@ -18,6 +18,7 @@ const state = {
   rankList: {},
   // 二期
   raceHome: {},
+  raceRankingList: {}, // 二期结束
   raceDetail: {},
 };
 // sorted_list
@@ -79,7 +80,18 @@ const getters = {
   historyRoi: state => get(state.raceDetail, 'history_roi', []), // 历史ROI
   seasonMaxDrawDown: state => get(state.raceDetail, 'season_max_draw_down', []), // 赛季最大回撤
   productIcon: state => get(state.raceDetail, 'product_icon', ''), // icon
+
+  /* 二期比赛结束 */
+  // CTA排行耪
+  ctaRankingList: state => sortBy(get(state.raceRankingList, 'cta', []), item => item.rank),
+
+  // 市场中性排行耪
+  marketNeutralRankingList: state => sortBy(get(state.raceRankingList, 'market_neutral', []), item => item.rank),
+
+  // 不限策略排行耪
+  mixedRankingList: state => sortBy(get(state.raceRankingList, 'mixed', []), item => item.rank),
 };
+
 const mutations = {
   [types.GET_TEAM_DETAIL](state, payload) {
     state.teamDetailInfo = { ...payload };
@@ -103,10 +115,14 @@ const mutations = {
   [types.GET_RACE_HOME](state, payload) {
     state.raceHome = { ...payload };
   },
+  [types.GET_RACE_RANKING_LIST](state, payload) {
+    state.raceRankingList = { ...payload };
+  },
   [types.GET_RACE_DETAIL](state, payload) {
     state.raceDetail = { ...payload };
   },
 };
+
 
 const actions = {
   // 获取团队详细信息
@@ -177,8 +193,21 @@ const actions = {
       const response = await raceService.getRaceHome();
       const data = await handlerSuccessResponseV2(response);
       commit(types.GET_RACE_HOME, data);
-    } catch (error) {
-      throw error;
+      return true;
+    } catch (errorMessage) {
+      return Promise.reject(errorMessage);
+    }
+  },
+
+  // 二期首页排行榜（包含首页排行榜 历史列表和详情 总共一个接口）
+  async getRaceRankingList({ commit }) {
+    try {
+      const response = await raceService.getRaceRankingList();
+      const data = await handlerSuccessResponseV2(response);
+      commit(types.GET_RACE_RANKING_LIST, data);
+      return true;
+    } catch (errorMessage) {
+      return Promise.reject(errorMessage);
     }
   },
 
@@ -188,8 +217,9 @@ const actions = {
       const response = await raceService.getRaceDetail(detailId);
       const data = await handlerSuccessResponseV2(response);
       commit(types.GET_RACE_DETAIL, data);
-    } catch (error) {
-      throw error;
+      return true;
+    } catch (errorMessage) {
+      return Promise.reject(errorMessage);
     }
   },
 };
